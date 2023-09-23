@@ -1,0 +1,2697 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	{% include '_meta.html' %}
+
+</head>
+
+<body class="flex flex-col color_theme_bg">
+	{% include '_nav_bar.html' %}
+	<main class="flex flex-row h-full">
+		<div class="container h-full p-4 mx-auto rounded-lg ">
+
+			<div class="mb-4 border-b border-gray-200 dark:border-gray-700">
+				<ul class="flex flex-wrap -mb-px text-sm font-medium text-center" data-tabs-toggle="#page_TabContent" role="tablist">
+					<li class="mr-2" role="presentation">
+						<button class="inline-block p-4 border-b-2 rounded-t-lg" id="member_type_manager_btn" onclick="build_member_type_table()"
+							data-tabs-target="#member_type_manager_tab_target" type="button" role="tab" aria-controls="member_type_tab_content" aria-selected="false"><i
+								class="mr-2 fa-solid fa-xl fa-receipt"></i>ข้อมูลรายการประเภท</button>
+					</li>
+					<li class="mr-2" role="presentation">
+						<button class="inline-block p-4 border-b-2 rounded-t-lg" id="permission_role_manager_btn" onclick="init_info_permission_role()"
+							data-tabs-target="#permission_role_tab_target" type="button" role="tab" aria-controls="permission_role_tab_content" aria-selected="false"><i
+								class="mr-2 fa-solid fa-xl fa-receipt"></i>ข้อมูลรายการอนุญาต ประเภทบัตร<br>(กำหนดช่วง เวลา-วัน)</button>
+					</li>
+					<li class="mr-2" role="presentation">
+						<button class="inline-block p-4 border-b-2 rounded-t-lg" id="member_user_permission_manager_btn" onclick="init_info_member_user_permission()"
+							data-tabs-target="#member_user_permission_tab_target" type="button" role="tab" aria-controls="member_user_permission_tab_content"
+							aria-selected="false"><i class="mr-2 fa-solid fa-xl fa-receipt"></i>ข้อมูลรายการอนุญาต สิทธิ์สมาชิก<br>(กำหนดจำนวนการใช้บัตร)</button>
+					</li>
+					<li class="mr-2" role="presentation">
+						<button class="inline-block p-4 border-b-2 rounded-t-lg" id="member_manager_user_btn" onclick="build_member_user_table()"
+							data-tabs-target="#member_user_manager_tab_target" type="button" role="tab" aria-controls="member_user_manager_tab_content" aria-selected="false"><i
+								class="mr-2 fa-solid fa-xl fa-users-gear"></i>ข้อมูลรายชื่อ สมาชิก</button>
+					</li>
+					<li class="mr-2" role="presentation">
+						<button class="inline-block p-4 border-b-2 rounded-t-lg" id="member_manager_btn" onclick="build_member_table()"
+							data-tabs-target="#member_manager_tab_target" type="button" role="tab" aria-controls="member_manager_tab_content" aria-selected="false"><i
+								class="mr-2 fa-solid fa-xl fa-users-gear"></i>ข้อมูลรายการบัตร</button>
+					</li>
+
+
+
+				</ul>
+			</div>
+			<div id="page_TabContent">
+
+				<div class="hidden p-4 rounded-lg " id="member_manager_tab_target" role="tabpanel" aria-labelledby="member_manager_btn">
+					<div class="text-gray-500 shadow-md sm:rounded-lg">
+						<div>
+							<ul id="build_member_table_controller"
+								class="items-center w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg sm:flex dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+
+								<li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
+									<div class="flex items-center pl-3">
+										<input checked id="horizontal-list-radio-all_member" type="radio" value=0 name="list-radio" onchange="build_member_table()"
+											class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+										<label for="horizontal-list-radio-all_member" class="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">ทุกประเภท
+										</label>
+									</div>
+
+								</li>
+
+								{% for m in member_types %}
+								<li class="w-full p-2 border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
+									<div class="flex items-center pl-3">
+										<input id="horizontal-list-radio_member_{{m.Member_Type.id}}" type="radio" value={{m.Member_Type.id}} name="list-radio"
+											onchange="build_member_table()"
+											class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+										<label for="horizontal-list-radio_member_{{m.Member_Type.id}}"
+											class="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">{{m.Member_Type.name}}
+
+										</label>
+									</div>
+									<button class="w-full px-4 text-teal-500 btn_block" onclick="add_member_by_type('{{m.Member_Type.id}}')"><i
+											class="mr-2 fa-regular fa-calendar-plus"></i>{{m.Member_Type.name}}</button>
+
+								</li>
+								{% endfor %}
+
+							</ul>
+							<dev class="flex flex-row p-2">
+								<div class="mx-4 mt-2 font-medium text-gray-900 w-fit dark:text-white">เลือก:</div>
+								<select id="select_member_valid" onchange="build_member_table()" class=" bg-gray-50 border border-gray-300 text-gray-900 mb-6 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700
+								dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+									<option value=0 selected>ทั้งหมด</option>
+									<option value=1>สามารถใช้งานได้</option>
+									<option value=2 class="text-orange-400">หมดอายุการใช้งาน</option>
+									<option value=3>ยังไม่เรื่มการใช้งาน</option>
+									<option value=4 class="text-red-400 ">ระงับการใช้งาน</option>
+								</select>
+							</dev>
+
+							<div class="inline-flex rounded-md shadow-sm" role="group">
+								<button type="button" onclick="member_table_selete(1)"
+									class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-l-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-blue-500 dark:focus:text-white">
+									<i class="fa-solid fa-check-double"></i>
+									เลือกทั้งหมด
+								</button>
+								<button type="button" onclick="member_table_selete(0)"
+									class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-white border-t border-b border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-blue-500 dark:focus:text-white">
+									<i class="fa-solid fa-check-double"></i>
+									ไม่เลือกทั้งหมด
+								</button>
+								<button type="button" onclick="member_table_selete_cheng_owner()"
+									class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-r-md hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-blue-500 dark:focus:text-white">
+									<i class="fa-solid fa-check-double"></i>
+									เปลี่ยนผู้ใช้งานบัตร
+								</button>
+								<button type="button" onclick="member_table_selete_remove()"
+									class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-r-md hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-blue-500 dark:focus:text-white">
+									<i class="fa-solid fa-check-double"></i>
+									ลบรายการที่เลือก
+								</button>
+								<button type="button" onclick="member_table_selete_enable(true)"
+									class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-r-md hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-blue-500 dark:focus:text-white">
+									<i class="fa-solid fa-check-double"></i>
+									เปิดการใช้งาน
+								</button>
+								<button type="button" onclick="member_table_selete_enable(false)"
+									class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-r-md hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-blue-500 dark:focus:text-white">
+									<i class="fa-solid fa-check-double"></i>
+									ระงับการใช้งาน
+								</button>
+							</div>
+						</div>
+						<table id="member_table" class="text-sm text-gray-500 dark:text-gray-400 display compact">
+
+						</table>
+
+					</div>
+				</div>
+
+				<div class="hidden p-4 rounded-lg " id="member_user_manager_tab_target" role="tabpanel" aria-labelledby="member_user_manager_btn">
+					<div class="text-gray-500 shadow-md sm:rounded-lg">
+						<div>
+							<button type="button" onclick="manager_member_user(0)"
+								class="w-full px-4 py-2 text-sm font-medium text-center text-gray-900 bg-white border border-gray-200 rounded-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-blue-500 dark:focus:text-white">
+								<i class="fa-solid fa-check-double"></i>
+								เพื่มรายการผู้ใช้งานบัตร
+							</button>
+							<table id="member_user_table" class="w-full text-sm text-gray-500 dark:text-gray-400 display">
+
+							</table>
+						</div>
+					</div>
+				</div>
+
+				<div class="hidden p-4 rounded-lg " id="member_type_manager_tab_target" role="tabpanel" aria-labelledby="member_type_manager_btn">
+					<div class="text-gray-500 shadow-md sm:rounded-lg">
+						<div>
+							<div class="flex justify-center gap-2 pt-4 my-2 border border-red-600 rounded-lg">
+								<label class="relative inline-flex items-center mb-5 cursor-pointer">
+									<input type="checkbox" id="toggle_app_configurations_allow_not_register_member_sw" value="true" disabled class="sr-only peer">
+									<div
+										class="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-red-600">
+									</div>
+									<span class="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300">เปิดใช้งงานบัตรไม่ลงทะเบียน <a role="button"
+											onclick="toggle_app_configurations_allow_not_register_member()" class="p-4 text-sm dark:text-blue-500 hover:underline"><i
+												class="text-teal-500 fa-regular fa-pen-to-square"></i>
+											แก้ไข</a></span>
+
+								</label>
+
+							</div>
+
+							<button type="button" onclick="manager_member_type(0)"
+								class="w-full px-4 py-2 text-sm font-medium text-center text-gray-900 bg-white border border-gray-200 rounded-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-blue-500 dark:focus:text-white">
+								<i class="fa-solid fa-check-double"></i>
+								เพื่มรายการประเภทบัตร
+							</button>
+							<table id="member_type_table" class="w-full text-sm text-gray-500 dark:text-gray-400 display">
+
+							</table>
+						</div>
+					</div>
+				</div>
+
+				<div class="hidden p-4 rounded-lg " id="permission_role_tab_target" role="tabpanel" aria-labelledby="permission_role_manager_btn">
+					<div class="text-gray-500 shadow-md sm:rounded-lg">
+						<div class="p-4 mb-4 text-blue-900 border border-blue-300 rounded-lg dark:text-blue-400 dark:border-blue-800" role="alert">
+							<div class="flex items-center">
+								<svg aria-hidden="true" class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+									<path fill-rule="evenodd"
+										d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+										clip-rule="evenodd"></path>
+								</svg>
+								<span class="sr-only">ข้อมูลรายการอนุญาต(กำหนดช่วง เวลา-วัน)</span>
+								<h3 class="text-lg font-medium">ข้อมูลรายการอนุญาต(กำหนดช่วง เวลา-วัน)</h3>
+								<button type="button" onclick="history.back()" data-tooltip-target="tooltip-bottom" data-tooltip-placement="bottom"
+									class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white">
+									<i class="mr-2 text-red-500 fa-solid fa-circle-chevron-left"></i> กลับ
+								</button>
+								<div id="tooltip-bottom" role="tooltip"
+									class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+									กลับไปหน้าตั้งค่า
+									<div class="tooltip-arrow" data-popper-arrow></div>
+								</div>
+							</div>
+
+							<div class="mt-2 mb-4 text-sm">
+								ปรับตั้งค่าข้อมูลข้อมูลรายการอนุญาต
+							</div>
+							<a role="button" onclick="add_permission_role()" class="text-center dark:text-blue-500 hover:underline"><i
+									class="text-teal-500 fa-regular fa-square-plus"></i> สร้าง ข้อมูลรายการอนุญาต(กำหนดช่วง เวลา-วัน)</a>
+						</div>
+
+
+						<div id="box_of_permission_role" class="grid gap-8 p-4 border-4 border-orange-500 rounded-lg md:grid-cols-3">
+
+						</div>
+
+					</div>
+				</div>
+
+				<div class="hidden p-4 rounded-lg " id="member_user_permission_tab_target" role="tabpanel" aria-labelledby="member_user_permission_manager_btn">
+					<div class="text-gray-500 shadow-md sm:rounded-lg">
+						<div class="p-4 mb-4 text-blue-900 border border-blue-300 rounded-lg dark:text-blue-400 dark:border-blue-800" role="alert">
+							<div class="flex items-center">
+								<svg aria-hidden="true" class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+									<path fill-rule="evenodd"
+										d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+										clip-rule="evenodd"></path>
+								</svg>
+								<span class="sr-only">ข้อมูลรายการอนุญาต สิทธิ์สมาชิก(กำหนดจำนวนการใช้บัตร)</span>
+								<h3 class="text-lg font-medium">ข้อมูลรายการอนุญาต สิทธิ์สมาชิก(กำหนดจำนวนการใช้บัตร)</h3>
+								<button type="button" onclick="history.back()" data-tooltip-target="tooltip-bottom" data-tooltip-placement="bottom"
+									class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white">
+									<i class="mr-2 text-red-500 fa-solid fa-circle-chevron-left"></i> กลับ
+								</button>
+								<div id="tooltip-bottom" role="tooltip"
+									class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+									กลับไปหน้าตั้งค่า
+									<div class="tooltip-arrow" data-popper-arrow></div>
+								</div>
+							</div>
+
+							<div class="mt-2 mb-4 text-sm">
+								ปรับตั้งค่าข้อมูลข้อมูลรายการอนุญาต สิทธิ์สมาชิก จำกัดการใช้บัตร
+							</div>
+							<a role="button" onclick="add_member_user_permission()" class="text-center dark:text-blue-500 hover:underline"><i
+									class="text-teal-500 fa-regular fa-square-plus"></i> สร้าง ข้อมูลรายการอนุญาต สิทธิ์สมาชิก(กำหนดจำนวนการใช้บัตร)</a>
+						</div>
+
+
+						<div id="box_of_member_user_permission" class="grid gap-8 p-4 border-4 border-orange-500 rounded-lg md:grid-cols-3">
+
+						</div>
+
+					</div>
+				</div>
+			</div>
+
+	</main>
+
+	<!-- **NOTE -   Modal_Permission_Role-->
+	<div id="Modal_Permission_Role" tabindex="-1" aria-hidden="true"
+		class="fixed top-0 left-0 right-0 z-50 items-center justify-center hidden w-full overflow-x-hidden overflow-y-auto md:inset-0 h-modal md:h-full">
+		<div class="relative w-full h-full max-w-2xl p-4 md:h-auto">
+			<!-- Modal content -->
+			<div class="relative p-4 bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5">
+				<!-- Modal header -->
+				<div class="flex items-center justify-between pb-4 mb-4 border-b rounded-t sm:mb-5 dark:border-gray-600">
+					<h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+						Modal_Permission_Role
+					</h3>
+					<button type="button" id="btn_Modal_Permission_Role_toggle"
+						class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+						data-modal-toggle="Modal_Permission_Role">
+						<svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+							<path fill-rule="evenodd"
+								d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+								clip-rule="evenodd"></path>
+						</svg>
+						<span class="sr-only">Close modal</span>
+					</button>
+
+				</div>
+				<!-- Modal body -->
+				<div>
+					<form id="submit_apply_permission_role_form" class="grid gap-4 mb-4 sm:grid-cols-2">
+
+						<div class="sm:col-span-2">
+							<label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ชื่อ-ข้อมูลรายการอนุญาต</label>
+							<input type="text" autocomplete="off" name="name" class="input_box_form" placeholder="ชื่อ-ข้อมูลรายการอนุญาต" required>
+						</div>
+						<div class="sm:col-span-2">
+							<label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ประเภทการอนุญาต</label>
+							<select name="type" required
+								class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+								<option value="IN">✅ เข้า</option>
+								<option value="IN-OUT">✅ เข้า-ออก</option>
+								<option value="OUT">✅ ออก</option>
+							</select>
+						</div>
+
+						<div class="sm:col-span-2">
+							<label for="remark" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">รายละเอียด</label>
+							<textarea name="remark" required rows="4" class="input_box_form" placeholder="รายละเอียด"></textarea>
+						</div>
+					</form>
+					<div class="flex justify-between">
+						<button type="button" onclick="submit_apply_permission_role()" class="w-32 border-blue-500 btn_block text_primary">
+							<i class="fa fa-circle-check"></i>
+							<span class="ml-2">ตกลง</span>
+						</button>
+						<button type="button" id="submit_apply_permission_role_form_remove_btn" onclick="remove_permission_role()"
+							class="w-32 border-red-500 btn_block text_primary">
+							<i class="text-red-600 fa-solid fa-eraser"></i>
+							<span class="ml-2">ลบรายการข้อมูลนี้</span>
+						</button>
+						<button type="button" class="w-32 border-blue-500 btn_block text_danger" data-modal-toggle="Modal_Permission_Role">
+							<i class="fa fa-arrow-right-from-bracket"></i>
+							<span class="ml-2">กลับ</span>
+						</button>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- **NOTE -   Modal_Permission_Role_List-->
+	<div id="Modal_Permission_Role_List" tabindex="-1" aria-hidden="true"
+		class="fixed top-0 left-0 right-0 z-50 items-center justify-center hidden w-full overflow-x-hidden overflow-y-auto md:inset-0 h-modal md:h-full">
+		<div class="relative w-full h-full max-w-2xl p-4 md:h-auto">
+			<!-- Modal content -->
+			<div class="relative p-4 bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5">
+				<!-- Modal header -->
+				<div class="flex items-center justify-between pb-4 mb-4 border-b rounded-t sm:mb-5 dark:border-gray-600">
+					<h3 class="text-lg font-semibold text-gray-900 dark:text-white" id="Modal_Permission_Role_List_title">
+
+					</h3>
+					<button type="button" id="Modal_Permission_Role_list_btn"
+						class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+						data-modal-toggle="Modal_Permission_Role_List">
+						<svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+							<path fill-rule="evenodd"
+								d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+								clip-rule="evenodd"></path>
+						</svg>
+						<span class="sr-only">Close modal</span>
+					</button>
+
+				</div>
+				<!-- Modal body -->
+				<div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+					<template id="template_permission_role_list">
+						<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 ">
+							<th scope="row" class="flex items-center px-6 py-2 text-gray-900 whitespace-nowrap dark:text-white">
+								<i class="mr-2 text-blue-400 fa-solid fa-clock-rotate-left fa-2x"></i>
+								<div contenteditable="false" name="permission_role_list_condition_key" class="text-base font-semibold">00</div>
+							</th>
+
+							<td class="py-2 pl-8">
+								<div contenteditable="true" name="permission_role_list_condition_value" class="text-base font-semibold">00</div>
+							</td>
+
+							<td class="py-2" name="permission_role_list_control_btn">
+							</td>
+						</tr>
+					</template>
+					<template id="template_permission_role_list_control_btn">
+						<div class="flex flex-col gap-1">
+							<a role="button" onclick="apply_permission_role_list(this.parentElement.parentElement.parentElement)" class=" dark:text-blue-500 hover:underline"><i
+									class="text-teal-500 fa-regular fa-pen-to-square"></i> แก้ไขข้อมูล</a>
+							<a role="button" onclick="remove_permission_role_list(this.parentElement.parentElement.parentElement)" class=" dark:text-blue-500 hover:underline"><i
+									class="text-red-500 fa-regular fa-square-minus"></i>
+								ลบรายการ</a>
+						</div>
+					</template>
+					<template id="template_permission_role_list_submit_btn">
+						<div class="flex flex-col gap-1">
+							<a role="button" onclick="apply_permission_role_list(this.parentElement.parentElement.parentElement)" class=" dark:text-blue-500 hover:underline"><i
+									class="text-teal-500 fa-regular fa-pen-to-square"></i> บันทึกข้อมูล</a>
+							<a role="button" onclick="remove_permission_role_list(this.parentElement.parentElement.parentElement)" class=" dark:text-blue-500 hover:underline"><i
+									class="text-orange-500 fa-regular fa-trash-can"></i>
+								ยกเลิกรายการ</a>
+						</div>
+					</template>
+
+					<table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+						<thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+							<tr>
+								<th scope="col" class="px-6 py-3 rounded-l-md">
+									<i class="fa-solid fa-list"></i>
+								</th>
+								<th scope="col" class="px-6 py-3 ">
+									เงื่อนไขการข้อมูลรายการอนุญาต
+								</th>
+								<th scope="col" class="px-6 py-3 rounded-r-md">
+									การจัดการ
+								</th>
+							</tr>
+						</thead>
+						<tbody id="tbody_permission_role_list">
+						</tbody>
+
+					</table>
+					<div class="p-4 text-center">
+						<a role="button" id="btn_calculate_list_add_item" onclick="add_permission_role_list()" class="text-center dark:text-blue-500 hover:underline"><i
+								class="text-teal-500 fa-regular fa-square-plus"></i> สร้าง รายการ</a>
+					</div>
+
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- **NOTE - Template Content of permission_Role -->
+	<template id="template_content_permission_role">
+		<div class="min-w-full text-center card color_widget_theme_bg">
+			<div class="block p-2">
+				<i class="text-orange-500 fa-solid fa-hand fa-3x"></i>
+				<span class="ml-4 text-blue-500 text-md ">ข้อมูลรายการอนุญาต</span>
+			</div>
+			<div class="block p-2" name="service_fee_name">
+			</div>
+			<table class="mx-auto text-sm text-left text-gray-500 w-fit dark:text-gray-400">
+				<tbody>
+					<tr class="">
+						<th scope="row" class="font-medium whitespace-nowrap d">
+							<i class="mx-2 text-teal-500 fa-solid fa-person-circle-check fa-2x"></i>
+						</th>
+						<td class="px-6 py-4" name="permission_role_name">
+						</td>
+					</tr>
+					<tr class="">
+						<th scope="row" class="font-medium whitespace-nowrap d">
+							<i class="mx-2 text-teal-500 fa-solid fa-right-to-bracket fa-2x"></i>
+						</th>
+						<td class="px-6 py-4" name="permission_role_type">
+						</td>
+					</tr>
+
+				</tbody>
+			</table>
+			<p class="p-2 text-blue-400" name="permission_role_remark"></p>
+			<a role="button" class="block p-4 text-center dark:text-blue-500 hover:underline " name="permission_role_list"><i class="text-teal-500 fa-regular fa-pen-to-square"></i>
+				แก้ไขข้อมูลรายการอนุญาต</a>
+			<a role="button" class="block p-4 text-center dark:text-blue-500 hover:underline " name="permission_role_edit"><i class="text-teal-500 fa-regular fa-pen-to-square"></i>
+				แก้ไขข้อมูล</a>
+
+		</div>
+	</template>
+
+
+	<!-- **NOTE - Template Content of member_user_permission -->
+	<template id="template_content_member_user_permission">
+		<div class="min-w-full text-center card color_widget_theme_bg">
+			<div class="block p-2">
+				<i class="text-orange-500 fa-solid fa-hand fa-3x"></i>
+				<span class="ml-4 text-blue-500 text-md ">ข้อมูลรายการสิทธิ์สมาชิก</span>
+			</div>
+			<div class="block p-2" name="service_fee_name">
+			</div>
+			<table class="mx-auto text-sm text-left text-gray-500 w-fit dark:text-gray-400">
+				<tbody>
+					<tr class="">
+						<th scope="row" class="font-medium whitespace-nowrap d">
+							<i class="mx-2 text-teal-500 fa-solid fa-person-circle-check fa-2x"></i> ชื่อสิทธิ์สมาชิก
+						</th>
+						<td class="px-4 py-4" name="member_user_permission_name">
+						</td>
+					</tr>
+					<tr class="">
+						<th scope="row" class="font-medium whitespace-nowrap d">
+							<i class="mx-2 text-teal-500 fa-solid fa-person-circle-check fa-2x"></i> จำกัดการใช้บัตร
+						</th>
+						<td class="px-4 py-4" name="member_user_permission_limit">
+						</td>
+					</tr>
+					<tr class="">
+						<th scope="row" class="font-medium whitespace-nowrap d">
+							<i class="mx-2 text-teal-500 fa-solid fa-person-circle-check fa-2x"></i> สถานะการใช้งาน
+						</th>
+						<td class="px-4 py-4" name="member_user_permission_status">
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<div class="p-4">
+				<textarea readonly rows="2" class="p-2 text-orange-500 text_box_form" name="member_user_permission_detail"></textarea>
+
+			</div>
+
+			<a role="button" class="block p-4 text-center dark:text-blue-500 hover:underline " name="member_user_permission_edit"><i
+					class="text-teal-500 fa-regular fa-pen-to-square"></i>
+				แก้ไขข้อมูล</a>
+
+		</div>
+	</template>
+
+
+	<!-- **NOTE -   Modal_Member_User_Permission-->
+	<div id="Modal_Member_User_Permission" tabindex="-1" aria-hidden="true"
+		class="fixed top-0 left-0 right-0 z-50 items-center justify-center hidden w-full overflow-x-hidden overflow-y-auto md:inset-0 h-modal md:h-full">
+		<div class="relative w-full h-full max-w-2xl p-4 md:h-auto">
+			<!-- Modal content -->
+			<div class="relative p-4 bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5">
+				<!-- Modal header -->
+				<div class="flex items-center justify-between pb-4 mb-4 border-b rounded-t sm:mb-5 dark:border-gray-600">
+					<h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+						Member_User_Permission
+					</h3>
+					<button type="button" id="btn_Member_User_Permission_toggle"
+						class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+						data-modal-toggle="Modal_Member_User_Permission">
+						<svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+							<path fill-rule="evenodd"
+								d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+								clip-rule="evenodd"></path>
+						</svg>
+						<span class="sr-only">Close modal</span>
+					</button>
+
+				</div>
+				<!-- Modal body -->
+				<div>
+					<form id="submit_apply_member_user_permission_form" class="grid gap-4 mb-4 sm:grid-cols-2">
+
+						<div class="sm:col-span-2">
+							<label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ชื่อ-ข้อมูลรายการสิทธิ์สมาชิก</label>
+							<input type="text" autocomplete="off" name="name" class="input_box_form" placeholder="ชื่อ-ข้อมูลรายการสิทธิ์สมาชิก" required>
+						</div>
+						<div class="sm:col-span-2">
+							<label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">จำกัดการใช้บัตร(สูงสุด)</label>
+							<input type="number" autocomplete="off" min="1" max="10" name="limit" class="input_box_form" placeholder="1" required>
+						</div>
+						<div class="sm:col-span-2">
+							<label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">สถานะการใช้งาน</label>
+							<select name="status" required
+								class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+								<option value="Enable">✅ Enable</option>
+								<option value="Disable">✅ Disable</option>
+							</select>
+						</div>
+
+						<div class="sm:col-span-2">
+							<label for="detail" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">รายละเอียด</label>
+							<textarea name="detail" required rows="4" class="p-4 input_box_form" placeholder="รายละเอียด"></textarea>
+						</div>
+					</form>
+					<div class="flex justify-between">
+						<button type="button" onclick="submit_apply_member_user_permission()" class="w-32 border-blue-500 btn_block text_primary">
+							<i class="fa fa-circle-check"></i>
+							<span class="ml-2">ตกลง</span>
+						</button>
+						<button type="button" id="submit_apply_member_user_permission_form_remove_btn" onclick="remove_member_user_permission()"
+							class="w-32 border-red-500 btn_block text_primary">
+							<i class="text-red-600 fa-solid fa-eraser"></i>
+							<span class="ml-2">ลบรายการข้อมูลนี้</span>
+						</button>
+						<button type="button" class="w-32 border-blue-500 btn_block text_danger" data-modal-toggle="Modal_Member_User_Permission">
+							<i class="fa fa-arrow-right-from-bracket"></i>
+							<span class="ml-2">กลับ</span>
+						</button>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- **NOTE -  Modal_Member-->
+	<div id="Modal_Member" tabindex="-1" aria-hidden="true"
+		class="fixed top-0 left-0 right-0 z-50 items-center justify-center hidden w-full overflow-x-hidden overflow-y-auto md:inset-0 h-modal md:h-full">
+		<div class="relative w-full h-full max-w-2xl p-4 md:h-auto">
+			<!-- Modal content -->
+			<div class="relative p-4 bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5">
+				<!-- Modal header -->
+				<div class="flex items-center justify-between pb-4 mb-4 border-b rounded-t sm:mb-5 dark:border-gray-600">
+					<h3 id="Modal_Member_title" class="text-lg font-semibold text-gray-900 dark:text-white">
+						Modal_Member
+					</h3>
+					<button type="button" id="btn_Modal_Member_toggle"
+						class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+						data-modal-toggle="Modal_Member">
+						<svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+							<path fill-rule="evenodd"
+								d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+								clip-rule="evenodd"></path>
+						</svg>
+						<span class="sr-only">Close modal</span>
+					</button>
+
+				</div>
+				<!-- Modal body -->
+				<div>
+					<form id="submit_apply_member_form" class="grid gap-4 mb-4 sm:grid-cols-2">
+
+						<div>
+							<label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">หมายเลขบัตร
+								<a role="button" class="text-orange-500 hover:underline " name="member_card_id_edit"><i class="mx-2 fa-regular fa-pen-to-square"></i>แก้ไข</a>
+							</label>
+							<input type="text" readonly autocomplete="off" name="card_id" class="input_box_form" placeholder="หมายเลขบัตร">
+
+						</div>
+						<div>
+							<label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ชื่อ-ผู้ใช้
+								<a role="button" class="text-orange-500 hover:underline" name="member_owner_edit"><i class="mx-2 fa-regular fa-pen-to-square"></i>แก้ไข</a>
+							</label>
+							<input type="text" readonly autocomplete="off" name="member_owner" class="input_box_form" placeholder="ชื่อ-ผู้ใช้">
+
+						</div>
+
+						<div>
+							<label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ผู้ออกบัตร</label>
+							<input type="text" readonly autocomplete="off" name="create_by" class="input_box_form" placeholder="ผู้ออกบัตร">
+						</div>
+						<div>
+							<label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">วันที่ ออกบัตร</label>
+							<input type="text" readonly autocomplete="off" name="create_date_time" class="input_box_form" placeholder="วันที่ ออกบัตร">
+						</div>
+
+						<div>
+							<label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">วัน-เรื่มใช้งาน</label>
+							<input type="text" readonly autocomplete="off" name="start_date_time" class="input_box_form" placeholder="วัน-เรื่มใช้งาน">
+						</div>
+						<div>
+							<label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">วัน-หมดอายุ</label>
+							<input type="text" readonly autocomplete="off" name="expire_date_time" class="input_box_form" placeholder="วัน-หมดอายุ">
+						</div>
+
+						<div>
+							<div>
+								<label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ประเภท</label>
+								<input type="text" readonly autocomplete="off" name="type" class="input_box_form" placeholder="ประเภท">
+							</div>
+						</div>
+						<div>
+							<label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">สถานะการใช้งาน</label>
+							<select name="status"
+								class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+								<option value="NORMAL">✅ ใช้งานปกติ</option>
+								<option value="DISABLE">⛔ ระงับการใช้งาน</option>
+							</select>
+						</div>
+
+						<div class="sm:col-span-2">
+							<label for="remark" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">รายละเอียด</label>
+							<textarea name="remark" rows="4" class="input_box_form" placeholder="รายละเอียด"></textarea>
+						</div>
+					</form>
+					<div class="flex justify-between">
+						<button type="button" onclick="submit_apply_member()" class="w-32 border-blue-500 btn_block text_primary">
+							<i class="fa fa-circle-check"></i>
+							<span class="ml-2">ตกลง</span>
+						</button>
+
+						<button type="button" id="submit_apply_member_form_remove_btn" onclick="remove_member()" class="w-32 border-red-500 btn_block text_primary">
+							<i class="text-red-600 fa-solid fa-eraser"></i>
+							<span class="ml-2">ลบรายการข้อมูลนี้</span>
+						</button>
+						<button type="button" class="w-32 border-blue-500 btn_block text_danger" data-modal-toggle="Modal_Member">
+							<i class="fa fa-arrow-right-from-bracket"></i>
+							<span class="ml-2">กลับ</span>
+						</button>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- **NOTE -  Modal_Member_Add-->
+	<div id="Modal_Member_Add" tabindex="-1" aria-hidden="true"
+		class="fixed top-0 left-0 right-0 z-50 items-center justify-center hidden w-full overflow-x-hidden overflow-y-auto md:inset-0 h-modal md:h-full">
+		<div class="relative w-full h-full max-w-2xl p-4 md:h-auto">
+			<!-- Modal content -->
+			<div class="relative p-4 bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5">
+				<!-- Modal header -->
+				<div class="flex items-center justify-between pb-4 mb-4 border-b rounded-t sm:mb-5 dark:border-gray-600">
+					<h3 id="Modal_Member_Add_title" class="text-lg font-semibold text-gray-900 dark:text-white">
+						Modal_Member_Add
+					</h3>
+					<button type="button" id="btn_Modal_Member_Add_toggle"
+						class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+						data-modal-toggle="Modal_Member_Add">
+						<svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+							<path fill-rule="evenodd"
+								d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+								clip-rule="evenodd"></path>
+						</svg>
+						<span class="sr-only">Close modal</span>
+					</button>
+
+				</div>
+				<!-- Modal body -->
+				<div>
+					<form id="submit_apply_member_add_form" class="grid gap-4 mb-4 sm:grid-cols-2">
+
+						<div>
+							<label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">หมายเลขบัตร
+								(<span id="ids_count_for_add_member"
+									class="inline-flex items-center justify-center w-4 h-4 ml-2 text-xs font-semibold text-blue-800 bg-blue-200 rounded-full">0</span> รายการ )
+							</label>
+							<textarea name="card_ids" autocomplete="off" rows="5" class="input_box_form" onkeyup="onkeyup_card_ids(event,this)"
+								placeholder="หมายเลขบัตร"></textarea>
+
+						</div>
+						<div>
+							<label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ชื่อ-ผู้ใช้
+								<a role="button" class="text-orange-500 hover:underline" onclick="dialog_add_member_owner()"><i
+										class="mx-2 fa-regular fa-pen-to-square"></i>เลือกผู้ใช้งานบัตร</a>
+							</label>
+							<input type="text" readonly autocomplete="off" name="member_owner" class="input_box_form" placeholder="ชื่อ-ผู้ใช้">
+
+						</div>
+
+						<div>
+							<label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">วัน-เรื่มใช้งาน</label>
+							<input type="text" readonly autocomplete="off" id="start_date_time_for_add_member" class="input_box_form" placeholder="วัน-เรื่มใช้งาน">
+						</div>
+						<div>
+							<label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">วัน-หมดอายุ
+								(<span name="member_type_expire_day"></span> วัน)
+							</label>
+							<input type="text" readonly autocomplete="off" id="expire_date_time_for_add_member" class="input_box_form" placeholder="วัน-หมดอายุ">
+						</div>
+
+						<div>
+							<div>
+								<label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ประเภท</label>
+								<input type="text" readonly autocomplete="off" name="type" class="input_box_form" placeholder="ประเภท">
+							</div>
+						</div>
+						<div>
+							<label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">สถานะการใช้งาน</label>
+							<select name="status"
+								class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+								<option value="NORMAL">✅ ใช้งานปกติ</option>
+								<option value="DISABLE">⛔ ระงับการใช้งาน</option>
+							</select>
+						</div>
+
+						<div class="sm:col-span-2">
+							<label for="remark" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">รายละเอียด</label>
+							<textarea name="remark" rows="4" class="input_box_form" placeholder="รายละเอียด"></textarea>
+						</div>
+					</form>
+					<div class="flex justify-between">
+						<button type="button" onclick="submit_add_member()" class="w-32 border-blue-500 btn_block text_primary">
+							<i class="fa fa-circle-check"></i>
+							<span class="ml-2">ตกลง</span>
+						</button>
+
+						<button type="button" class="w-32 border-blue-500 btn_block text_danger" data-modal-toggle="Modal_Member_Add">
+							<i class="fa fa-arrow-right-from-bracket"></i>
+							<span class="ml-2">ยกเลิก</span>
+						</button>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- **NOTE -  Modal_Member_Type-->
+	<div id="Modal_Member_Type" tabindex="-1" aria-hidden="true"
+		class="fixed top-0 left-0 right-0 z-50 items-center justify-center hidden w-full overflow-x-hidden overflow-y-auto md:inset-0 h-modal md:h-full">
+		<div class="relative w-full h-full max-w-2xl p-4 md:h-auto">
+			<!-- Modal content -->
+			<div class="relative p-4 bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5">
+				<!-- Modal header -->
+				<div class="flex items-center justify-between pb-4 mb-4 border-b rounded-t sm:mb-5 dark:border-gray-600">
+					<h3 id="Modal_Member_Type_title" class="text-lg font-semibold text-gray-900 dark:text-white">
+						Modal_Member_Type
+					</h3>
+					<button type="button" id="btn_Modal_Member_Type_toggle"
+						class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+						data-modal-toggle="Modal_Member_Type">
+						<svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+							<path fill-rule="evenodd"
+								d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+								clip-rule="evenodd"></path>
+						</svg>
+						<span class="sr-only">Close modal</span>
+					</button>
+
+				</div>
+				<!-- Modal body -->
+				<div>
+					<form id="submit_apply_member_type_form" class="grid gap-4 mb-4 sm:grid-cols-2">
+
+						<div class="sm:col-span-2">
+							<label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ชื่อ-ประเภทบัตร
+							</label>
+							<input type="text" autocomplete="off" name="member_type_name" class="input_box_form" placeholder="ประเภทบัตร">
+
+						</div>
+
+						<div>
+							<label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">อายุการใช้งาน(วัน)</label>
+							<input type="number" autocomplete="off" name="member_type_expire_day" class="input_box_form" placeholder="อายุการใช้งาน">
+						</div>
+						<div>
+							<label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ค่าบริการออกบัตร</label>
+							<input type="number" autocomplete="off" name="member_type_amount" class="input_box_form" placeholder="ค่าบริการออกบัตร">
+						</div>
+
+						<div class="sm:col-span-2">
+							<label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ค่าบริการ(service fee)</label>
+							<select name="member_type_service_fees_id" id="member_type_service_fees_id"
+								class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+								<option value="NORMAL">✅ ใช้งานปกติ</option>
+							</select>
+						</div>
+
+						<div class="sm:col-span-2">
+							<label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ข้อมูลรายการอนุญาต</label>
+							<select name="member_type_permission_role_id" id="member_type_permission_role_id"
+								class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+								<option value="NORMAL">✅ ใช้งานปกติ</option>
+							</select>
+						</div>
+
+						<div class="sm:col-span-2">
+							<label for="remark" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">รายละเอียด</label>
+							<textarea name="remark" rows="4" class="input_box_form" placeholder="รายละเอียด"></textarea>
+						</div>
+					</form>
+					<div class="flex justify-between">
+						<button type="button" onclick="submit_apply_member_type()" class="w-32 border-blue-500 btn_block text_primary">
+							<i class="fa fa-circle-check"></i>
+							<span class="ml-2">ตกลง</span>
+						</button>
+
+						<button type="button" id="submit_apply_member_type_form_remove_btn" onclick="remove_member_type(0)" class="w-32 border-red-500 btn_block text_primary">
+							<i class="text-red-600 fa-solid fa-eraser"></i>
+							<span class="ml-2">ลบรายการข้อมูลนี้</span>
+						</button>
+						<button type="button" class="w-32 border-blue-500 btn_block text_danger" data-modal-toggle="Modal_Member_Type">
+							<i class="fa fa-arrow-right-from-bracket"></i>
+							<span class="ml-2">กลับ</span>
+						</button>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- **NOTE -  Modal_Member_User-->
+	<div id="Modal_Member_User" tabindex="-1" aria-hidden="true"
+		class="fixed top-0 left-0 right-0 z-50 items-center justify-center hidden w-full overflow-x-hidden overflow-y-auto md:inset-0 h-modal md:h-full">
+		<div class="relative w-full h-full max-w-2xl p-4 md:h-auto">
+			<!-- Modal content -->
+			<div class="relative p-4 bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5">
+				<!-- Modal header -->
+				<div class="flex items-center justify-between pb-4 mb-4 border-b rounded-t sm:mb-5 dark:border-gray-600">
+					<h3 id="Modal_Member_User_title" class="text-lg font-semibold text-gray-900 dark:text-white">
+						Modal_Member_User
+					</h3>
+					<button type="button" id="btn_Modal_Member_User_toggle"
+						class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+						data-modal-toggle="Modal_Member_User">
+						<svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+							<path fill-rule="evenodd"
+								d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+								clip-rule="evenodd"></path>
+						</svg>
+						<span class="sr-only">Close modal</span>
+					</button>
+
+				</div>
+				<!-- Modal body -->
+				<div>
+					<form id="submit_apply_member_user_form" class="grid gap-4 mb-4 sm:grid-cols-2">
+
+						<div class="">
+							<label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ชื่อ-ผู้ใช้งานบัตร
+							</label>
+							<input type="text" autocomplete="off" name="member_user_name" class="input_box_form" placeholder="ผู้ใช้งานบัตร">
+
+						</div>
+
+						<div class="">
+							<label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">สถานะ</label>
+							<select name="status" id="member_type_permission_role_id"
+								class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+								<option value="NORMAL">✅ ใช้งานปกติ</option>
+								<option value="NOTIFY">✅ แจ้งเตือนการใช้งาน</option>
+							</select>
+						</div>
+
+						<div class="sm:col-span-2">
+							<label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">กำหนดข้อมูลข้อมูลรายการสิทธิ์สมาชิก
+								<a role="button" class="text-orange-500 hover:underline" onclick="dialog_edit_member_user_permission()"><i
+										class="mx-2 fa-regular fa-pen-to-square"></i>เลือกข้อมูลรายการสิทธิ์สมาชิก</a>
+							</label>
+							<input type="text" readonly autocomplete="off" name="member_user_permission_name" class="input_box_form" placeholder="ข้อมูลรายการสิทธิ์สมาชิก">
+
+						</div>
+
+						<div class="sm:col-span-2">
+							<label for="remark" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ที่อยู่(ข้อมูลติดต่อ)</label>
+							<textarea name="address" rows="4" class="p-4 input_box_form" placeholder="ข้อมูลติดต่อ"></textarea>
+						</div>
+
+						<div class="sm:col-span-2">
+							<label for="remark" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">รายละเอียด</label>
+							<textarea name="remark" rows="4" class="p-4 input_box_form" placeholder="รายละเอียด"></textarea>
+						</div>
+					</form>
+					<div class="flex justify-between">
+						<button type="button" onclick="submit_apply_member_user()" class="w-32 border-blue-500 btn_block text_primary">
+							<i class="fa fa-circle-check"></i>
+							<span class="ml-2">ตกลง</span>
+						</button>
+
+						<button type="button" id="submit_apply_member_user_form_remove_btn" onclick="remove_member_user(0)" class="w-32 border-red-500 btn_block text_primary">
+							<i class="text-red-600 fa-solid fa-eraser"></i>
+							<span class="ml-2">ลบรายการข้อมูลนี้</span>
+						</button>
+						<button type="button" class="w-32 border-blue-500 btn_block text_danger" data-modal-toggle="Modal_Member_User">
+							<i class="fa fa-arrow-right-from-bracket"></i>
+							<span class="ml-2">กลับ</span>
+						</button>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+	{% include '_footer.html' %}
+</body>
+{% include '_script.html' %}
+
+
+<script>
+
+	let PAGE_LENGTH = 10;
+	debug('PAGE_LENGTH : ' + localStorage.getItem('PAGE_LENGTH'));
+	if (localStorage.getItem('PAGE_LENGTH') == undefined) {
+		localStorage.setItem('PAGE_LENGTH', 10);
+	} else {
+		PAGE_LENGTH = localStorage.getItem('PAGE_LENGTH');
+	}
+	let member_table = null;
+
+	async function get_radio_select() {
+		const ele = document.getElementsByName('list-radio');
+
+		for (i = 0; i < ele.length; i++) {
+			if (ele[i].checked)
+				return ele[i].value
+		}
+		return "";
+	}
+
+	async function set_radio_select(v) {
+		const ele = document.getElementsByName('list-radio');
+		for (i = 0; i < ele.length; i++) {
+			if (ele[i].value == v) {
+				ele[i].checked = true;
+				return true;
+			}
+		}
+	}
+
+	async function build_member_table(oSearch = null) {
+		if (typeof build_member_table.oSearch == 'undefined') {
+			build_member_table.oSearch = oSearch;
+		}
+		if (oSearch != "oSearch") {
+			build_member_table.oSearch = oSearch;
+		}
+
+		const select_data = await get_radio_select();
+		//debug(select_data);
+		const _now = moment();
+		const columns_table = [
+			{
+				data: "Member.id",
+				title: "จัดการ",
+				orderable: false,
+				render: function (data, type, row) {
+					return `<div class="inline-flex p-1 border border-blue-600 rounded-md shadow-sm" role="group">
+								<a class="btn_tool" onclick="manager_member(${data})"> <i class="fas fa-user-edit"></i></a>
+							</div>`;
+				},
+			},
+			{
+				data: "Member.card_id",
+				title: "เลขบัตร",
+				render: function (data, type) {
+					//return String(data).padStart(6, "0");
+					return String(data);
+				},
+			},
+			{
+				data: "Member_User",
+				title: "ชื่อ",
+				render: function (data, type) {
+					if (data) {
+						return data.name;
+					}
+					return `<span class="badge_warning">ไม่มีชื่อผู้ใช้งานบัตร</span>`;
+
+				},
+			},
+
+			{
+				data: "Member.create_date_time",
+				title: "วันทำรายการ",
+				render: function (data, type) {
+					const _d = dateTimeToStr(data, "YYYY/MM/DD@HH:mm:ss");
+					const datetime = _d.split("@");
+					const warp_datatime = `<div class="flex flex-col gap-1"><div class="badge_info">${datetime[0]}</div>`
+					return warp_datatime;
+				},
+			},
+			{
+				data: "Member.start_date_time",
+				title: "วัน-เรื่ม",
+				render: function (data, type) {
+					const _d = dateTimeToStr(data, "YYYY/MM/DD@HH:mm:ss");
+					if (_d == "") {
+						return `<span class="badge_danger">ยังอยู่ในลานจอด</span>`;
+					}
+					const datetime = _d.split("@");
+					const warp_datatime = `<div class="flex flex-col gap-1"><div class="badge_success">${datetime[0]}</div>`
+					return warp_datatime;
+				},
+			},
+			{
+				data: "Member.expire_date_time",
+				title: "วัน-หมดอายุ",
+				render: function (data, type) {
+					const _d = dateTimeToStr(data, "YYYY/MM/DD@HH:mm:ss");
+					if (_d == "") {
+						return `<span class="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">ยังอยู่ในลานจอด</span>`;
+					}
+					const datetime = _d.split("@");
+					const warp_datatime = `<div class="flex flex-col gap-1"><div class="badge_danger">${datetime[0]}</div>`
+					return warp_datatime;
+				},
+			},
+			{
+				data: {},
+				title: "วันใช้งานคงเหลือ",
+				render: function (data, type) {
+					const _d_end = moment(data.Member.expire_date_time, "YYYY/MM/DD HH:mm:ss");
+					if (_d_end - _now > 0) {
+						//const _u = moment.utc(_d_end - _now).format("DDD");
+						const _u = _d_end.diff(_now, "day");
+
+						if (_u > data.Member_Type.expire_day) {
+							const _s = _u - data.Member_Type.expire_day;
+							return `<span class="badge_warning">เรื่มใช้งานในอีก :${_s} วัน</span>`;
+						} else {
+							//const _end_in = _d_end.from(_now);
+							let _expire_date_time = _u;
+							if (_expire_date_time < 1) {
+								_expire_date_time = `${_d_end.diff(_now, "hour")} ชั่วโมง`;
+							}
+							return `<span class="badge_success">${_expire_date_time}</span>`;
+						}
+					}
+					return `<span class="badge_danger">หมดอายุ</span>`;
+
+				},
+			},
+			{
+				data: "Member.status",
+				title: "สถานะ",
+				render: function (data, type) {
+					if (data == "NORMAL") {
+						return `<span class="badge_success">${data}</span>`;
+
+					} else {
+						return `<span class="badge_danger">${data}</span>`;
+
+
+					}
+				},
+			},
+			{
+				data: "Member_Type.name",
+				title: "ประเภท",
+				render: function (data, type) {
+					return data;
+				},
+			},
+		];
+
+		//debug(columns_table)
+		headers = await get_headers();
+
+		member_table = $("#member_table").DataTable({
+			//dom: "Blfip",
+			dom: '<"top"iB>rt<"bottom"flp><"clear">',
+			language: {
+				"infoEmpty": "ไม่มีรายการข้อมูล",
+				"info": "แสดง หน้าข้อมูล _PAGE_ ใน _PAGES_ จากทั้งหมด _TOTAL_ รายการ",
+				"infoFiltered": "(ข้อมูลทั้งหมด _MAX_ รายการ)",
+			},
+			oSearch: { "sSearch": build_member_table.oSearch },
+			buttons: [
+				"csv",
+				'excel',
+				"print",
+				"colvis",
+			],
+			columnDefs: columnDefs,
+			destroy: true,
+			autoWidth: false,
+			lengthMenu: lengthMenu,
+			pageLength: PAGE_LENGTH,
+			scrollY: "50vh",
+			scrollCollapse: true,
+			sScrollX: "100%",
+			// "paging": false
+			columns: columns_table,
+			order: [[1, "desc"]],
+			processing: true,
+			serverSide: true,
+			search: {
+				return: false,
+			},
+
+			ajax: {
+				headers: headers,
+				type: "GET",
+				url: `/api/member/datatable`,
+				data: function (d) {
+					d.table = "member_table";
+					if (!oSearch) {
+						d.data_filter = select_data;
+						d.select_member_valid = document.getElementById("select_member_valid").value;
+					}
+
+				},
+				error: function (xhr, textStatus, errorThrown) {
+					window.location.reload();
+				},
+			},
+			select: true,
+		});
+
+		$('#member_table').on('length.dt', function (e, settings, len) {
+			PAGE_LENGTH = len;
+			localStorage.setItem('PAGE_LENGTH', len);
+		});
+	}
+
+	async function member_table_selete(v) {
+		if (v) {
+			member_table.rows().select();
+		} else {
+			member_table.rows().deselect();
+
+		}
+	}
+
+	async function member_table_selete_enable(v) {
+		const c = member_table.rows({ selected: true }).count();
+		if (c) {
+			const result = await Swal.fire({
+				background: "#1F2937",
+				title: 'ยืนยันการดำเนินการ?',
+				text: "การดำเนินการนี้มีผลต่อข้อมูลหลายรายการโปรดใช้ความระมัดระวังในการจัดการ",
+				showDenyButton: true,
+				confirmButtonText: 'ยืนยันการดำเนินการ?',
+				denyButtonText: `ยกเลิกการดำเนินการ`,
+			});
+			if (result.isConfirmed) {
+
+				let ids = "";
+				for (let i = 0; i < c; i++) {
+					const items = await member_table.rows({ selected: true }).data()[i].Member.id
+					ids += `${items},`
+				}
+				//debug(ids)
+				const formData = new FormData();
+				formData.append("ids", ids);
+				if (v) {
+					formData.append("value", "status=NORMAL");
+				} else {
+					formData.append("value", "status=DISABLE");
+				}
+				const _reply = await fetchApi("/api/member/set", "post", formData, "json");
+				if (_reply.success) {
+					await Swal.fire({
+						background: "#1F2937",
+						title: 'ดำเนินการเรียบร้อย?',
+						text: `ปรับปรุงข้อมูลสำเร็จ จำนวน ${_reply.data} รายการ`,
+						confirmButtonText: 'Close',
+
+					});
+					build_member_table();
+				}
+				debug(_reply)
+			}
+
+		} else {
+			toastMixin.fire({
+				title: "กรุณาเลือกชุดข้อมูล",
+				text: "กรุณาเลือกชุดข้อมูล ก่อนดำเนินการ",
+				icon: "info",
+			});
+		}
+
+	}
+
+	async function member_table_selete_cheng_owner() {
+		const c = member_table.rows({ selected: true }).count();
+		if (c) {
+			const result = await Swal.fire({
+				background: "#1F2937",
+				title: 'ยืนยันการดำเนินการ?',
+				text: "การดำเนินการนี้มีผลต่อข้อมูลหลายรายการโปรดใช้ความระมัดระวังในการจัดการ",
+				showDenyButton: true,
+				confirmButtonText: 'ยืนยันการดำเนินการ?',
+				denyButtonText: `ยกเลิกการดำเนินการ`,
+			});
+			if (result.isConfirmed) {
+
+				let ids = "";
+				for (let i = 0; i < c; i++) {
+					const items = await member_table.rows({ selected: true }).data()[i].Member.id
+					ids += `${items},`
+				}
+				let member_owner = "";
+				let _reply = await fetchApi("/api/member/user_list", "get", null, "json");
+				if (_reply.status) {
+					const _m_u_l = _reply.data;
+					const _member_user_list = [];
+					for (const l of _m_u_l) {
+						_member_user_list.push(l.name);
+					}
+					const { value: index } = await Swal.fire({
+						background: '#1F2937',
+						title: 'เลือกผู้ใช้งานบัตร',
+						input: 'select',
+						inputOptions: _member_user_list,
+						utPlaceholder: 'เลือกผู้ใช้งานบัตร',
+						showCancelButton: true,
+					})
+
+					if (index) {
+						member_owner = _member_user_list[index];
+					}
+				}
+
+				//debug(ids)
+
+				const formData = new FormData();
+				formData.append("ids", ids);
+				formData.append("value", `member_owner=${member_owner}`);
+
+				_reply = await fetchApi("/api/member/set", "post", formData, "json");
+				if (_reply.success) {
+					await Swal.fire({
+						background: "#1F2937",
+						title: 'ดำเนินการเรียบร้อย?',
+						text: `ปรับปรุงข้อมูลสำเร็จ จำนวน ${_reply.data} รายการ`,
+						confirmButtonText: 'Close',
+
+					});
+					build_member_table();
+				}
+				debug(_reply)
+			}
+
+		} else {
+			toastMixin.fire({
+				title: "กรุณาเลือกชุดข้อมูล",
+				text: "กรุณาเลือกชุดข้อมูล ก่อนดำเนินการ",
+				icon: "info",
+			});
+		}
+	}
+
+	async function member_table_selete_remove() {
+		const c = member_table.rows({ selected: true }).count();
+		if (c) {
+			if (!(await dialog_confirm())) return;
+			if (!(await dialog_confirm())) return;
+
+			const result = await Swal.fire({
+				background: "#1F2937",
+				title: 'ยืนยันการดำเนินการ?',
+				text: "การดำเนินการนี้มีผลต่อข้อมูลหลายรายการโปรดใช้ความระมัดระวังในการจัดการ",
+				showDenyButton: true,
+				confirmButtonText: 'ยืนยันการดำเนินการ?',
+				denyButtonText: `ยกเลิกการดำเนินการ`,
+			});
+			if (result.isConfirmed) {
+
+				let ids = "";
+				for (let i = 0; i < c; i++) {
+					const items = await member_table.rows({ selected: true }).data()[i].Member.id
+					ids += `${items},`
+				}
+				//debug(ids)
+				const formData = new FormData();
+				formData.append("ids", ids);
+				const _reply = await fetchApi("/api/member/del", "delete", formData, "json");
+				if (_reply.success) {
+					await Swal.fire({
+						background: "#1F2937",
+						title: 'ดำเนินการเรียบร้อย?',
+						text: `ลบข้อมูลสำเร็จ จำนวน ${_reply.data} รายการ`,
+						confirmButtonText: 'Close',
+
+					});
+					build_member_table();
+				}
+				debug(_reply)
+			}
+
+		} else {
+			toastMixin.fire({
+				title: "กรุณาเลือกชุดข้อมูล",
+				text: "กรุณาเลือกชุดข้อมูล ก่อนดำเนินการ",
+				icon: "info",
+			});
+		}
+
+	}
+
+
+	let current_member_id = 0;
+	async function manager_member(id) {
+		debug("Manager:" + id);
+		current_member_id = id;
+		const _reply = await fetchApi("/api/member/?id=" + id, "get", null, "json");
+		if (_reply.success) {
+			const _d = _reply.data[0];
+			debug(_d)
+			const _m = _d.Member;
+			const _m_u = _d.Member_User
+
+			const _m_t = _d.Member_Type;
+			const _s = _d.System_User;
+			const _from_e = document.getElementById("submit_apply_member_form");
+
+			document.getElementById("Modal_Member_title").innerHTML = "แก้ไขข้อมูลรายบัตร";
+			_from_e.querySelectorAll('[name="card_id"]')[0].value = _m.card_id;
+			_from_e.querySelectorAll('[name="member_card_id_edit"]')[0].setAttribute('onclick', `dialog_edit_member_card_id(${_m.id})`)
+			let member_owner = ""
+			if (_m_u) {
+				member_owner = _m_u.name;
+			}
+			_from_e.querySelectorAll('[name="member_owner"]')[0].value = member_owner;
+
+			_from_e.querySelectorAll('[name="member_owner_edit"]')[0].setAttribute('onclick', `dialog_edit_member_owner(${_m.id})`)
+
+			_from_e.querySelectorAll('[name="create_by"]')[0].value = _s.name;
+
+			_from_e.querySelectorAll('[name="create_date_time"]')[0].value = _m.create_date_time;
+			_from_e.querySelectorAll('[name="start_date_time"]')[0].value = _m.start_date_time;
+			_from_e.querySelectorAll('[name="expire_date_time"]')[0].value = _m.expire_date_time;
+
+			_from_e.querySelectorAll('[name="type"]')[0].value = _m_t.name;
+
+			_from_e.querySelectorAll('[name="status"]')[0].value = _m.status;
+			debug(_m.status)
+
+			_from_e.querySelectorAll('[name="remark"]')[0].value = _m.remark;
+
+
+			document.getElementById('btn_Modal_Member_toggle').click();
+
+		} else {
+			debug(_reply)
+			toastMixin.fire({
+				title: JSON.stringify(_reply),
+				icon: "error",
+			});
+		}
+	}
+
+
+	async function submit_apply_member() {
+		debug("submit_apply_member:" + current_member_id);
+		const _from_e = document.getElementById("submit_apply_member_form");
+		const _m = {};
+		_m.card_id = _from_e.querySelectorAll('[name="card_id"]')[0].value;
+		_m.member_owner = _from_e.querySelectorAll('[name="member_owner"]')[0].value;
+		_m.status = _from_e.querySelectorAll('[name="status"]')[0].value;
+		_m.remark = _from_e.querySelectorAll('[name="remark"]')[0].value;
+
+		const formData = new FormData();
+		formData.append("id", current_member_id);
+		formData.append("card_id", _m.card_id);
+		formData.append("member_owner", _m.member_owner);
+		formData.append("status", _m.status);
+		formData.append("remark", _m.remark);
+
+		const _reply = await fetchApi("/api/member/", "post", formData, "json");
+		debug(_reply);
+		if (_reply.success) {
+			await Swal.fire({
+				icon: "info",
+				title: "Successful",
+			});
+
+			debug(_reply.data);
+			build_member_table("oSearch");
+			document.getElementById('btn_Modal_Member_toggle').click();
+		} else {
+			debug(_reply)
+			toastMixin.fire({
+				title: JSON.stringify(_reply),
+				icon: "error",
+			});
+		}
+
+	}
+
+
+	async function remove_member() {
+		if (!(await dialog_confirm())) return;
+		let _reply = await fetchApi("/api/member/?id=" + current_member_id, "delete", null, "json");
+		debug(_reply);
+		if (!!_reply) {
+			if (_reply.success) {
+				Swal.fire({
+					icon: "info",
+					title: "Successful",
+					html: _reply.msg,
+				}).then(() => {
+					build_member_table();
+					document.getElementById('btn_Modal_Member_toggle').click();
+
+				});
+			} else {
+				debug(_reply)
+				toastMixin.fire({
+					title: JSON.stringify(_reply),
+					icon: "error",
+				});
+			}
+		}
+	}
+
+	async function dialog_edit_member_card_id() {
+		const { value: card_id } = await Swal.fire({
+			background: '#1F2937',
+			title: 'ป้อนเลขบัตร',
+			input: 'text',
+			inputLabel: 'หมายเลขบัตร',
+			inputPlaceholder: 'ป้อนเลขบัตร',
+			inputAttributes: {
+				maxlength: 10,
+				autocapitalize: 'off',
+				autocorrect: 'off'
+			}
+		})
+
+		if (card_id) {
+			//Swal.fire(`Entered password: ${card_id}`)
+			const _from_e = document.getElementById("submit_apply_member_form");
+			_from_e.querySelectorAll('[name="card_id"]')[0].value = card_id;
+		}
+
+	}
+	async function dialog_edit_member_owner(id,) {
+		const _reply = await fetchApi("/api/member/user_list", "get", null, "json");
+		if (_reply.status) {
+			const _m_u_l = _reply.data;
+			debug(_m_u_l)
+			const _member_user_list = ["ไม่กำหนด"];
+			for (const l of _m_u_l) {
+				_member_user_list.push(l.name);
+			}
+			const { value: index } = await Swal.fire({
+				background: '#1F2937',
+				title: 'เลือกผู้ใช้งานบัตร',
+				input: 'select',
+				inputOptions: _member_user_list,
+				utPlaceholder: 'เลือกผู้ใช้งานบัตร',
+				showCancelButton: true,
+			})
+
+			if (index) {
+				//Swal.fire(`You selected: ${_member_user_list[index]}`)
+				const _from_e = document.getElementById("submit_apply_member_form");
+				_from_e.querySelectorAll('[name="member_owner"]')[0].value = _member_user_list[index];
+			}
+		}
+
+	}
+
+	async function dialog_add_member_owner(id,) {
+		const _reply = await fetchApi("/api/member/user_list", "get", null, "json");
+		if (_reply.status) {
+			const _m_u_l = _reply.data;
+			debug(_m_u_l)
+			const _member_user_list = ["ไม่กำหนด"];
+			for (const l of _m_u_l) {
+				_member_user_list.push(l.name);
+			}
+			const { value: index } = await Swal.fire({
+				background: '#1F2937',
+				title: 'เลือกผู้ใช้งานบัตร',
+				input: 'select',
+				inputOptions: _member_user_list,
+				utPlaceholder: 'เลือกผู้ใช้งานบัตร',
+				showCancelButton: true,
+			})
+
+			if (index) {
+				//Swal.fire(`You selected: ${_member_user_list[index]}`)
+				const _from_e = document.getElementById("submit_apply_member_add_form");
+				_from_e.querySelectorAll('[name="member_owner"]')[0].value = _member_user_list[index];
+			}
+		}
+
+	}
+
+
+	async function add_member_by_type(type_id) {
+		current_member_type_id = type_id;
+		const _reply = await fetchApi("/api/member/type?id=" + type_id, "get", null, "json");
+		if (_reply.status) {
+			//debug(_reply.data)
+			const _d = _reply.data[0];
+			const _m_t = _d.Member_Type;
+			const _from_e = document.getElementById("submit_apply_member_add_form");
+
+			_from_e.querySelectorAll('[name="type"]')[0].value = _m_t.name;
+			_from_e.querySelectorAll('[name="member_type_expire_day"]')[0].innerHTML = _m_t.expire_day;
+
+			document.getElementById("expire_date_time_for_add_member").value = moment().startOf('hour').add(_m_t.expire_day, 'day').format("YYYY-MM-DD HH:mm");
+
+			$('#start_date_time_for_add_member').daterangepicker({
+				singleDatePicker: true,
+				timePicker: true,
+				timePicker24Hour: true,
+				autoApply: true,
+				startDate: moment().startOf('hour'),
+				minDate: moment().startOf('hour'),
+				maxDate: moment().startOf('hour').add(60, 'day'),
+				locale: {
+					format: 'YYYY-MM-DD HH:mm'
+				},
+			}, function (start, end, label) {
+				console.log('New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')');
+
+				document.getElementById("expire_date_time_for_add_member").value = moment(start.format('YYYY-MM-DD HH:mm')).add(_m_t.expire_day, 'day').format("YYYY-MM-DD HH:mm");
+			});
+
+			document.getElementById('btn_Modal_Member_Add_toggle').click();
+
+
+		}
+	}
+
+	function removeDuplicates(arr) {
+		return arr.filter((item,
+			index) => arr.indexOf(item) === index);
+	}
+
+	async function onkeyup_card_ids(e, t) {
+		if (e.keyCode == 13) {
+			let ids_text = t.value;
+			const ids = ids_text.split("\n");
+			ids.pop();
+			const _ids = removeDuplicates(ids);
+			//debug(_ids)
+			if (_ids.length != ids.length) {
+				let _ids_text = "";
+				for (let i = 0; i < _ids.length; i++) {
+					_ids_text += `${_ids[i]}\n`;
+				}
+				t.value = _ids_text;
+				await toastMixin.fire({
+					title: "รายการเลขซ้ำ",
+					icon: "warning",
+				});
+			}
+			document.getElementById("ids_count_for_add_member").innerText = _ids.length;
+		}
+	}
+
+	async function submit_add_member() {
+		const _from_e = document.getElementById("submit_apply_member_add_form");
+		let ids_data = _from_e.querySelectorAll('[name="card_ids"]')[0].value;
+		const ids = ids_data.split("\n");
+		//ids.pop();
+		const _ids = removeDuplicates(ids);
+		ids_data = "";
+		for (let i = 0; i < _ids.length; i++) {
+			if (_ids[i] != "") {
+				ids_data += `${_ids[i]}:`;
+			}
+
+		}
+		ids_data = ids_data.substring(0, ids_data.length - 1);
+		const member_owner = _from_e.querySelectorAll('[name="member_owner"]')[0].value;
+		const status = _from_e.querySelectorAll('[name="status"]')[0].value;
+		const remark = _from_e.querySelectorAll('[name="remark"]')[0].value;
+		const start_date_time_for_add_member = document.getElementById("start_date_time_for_add_member").value;
+
+		const formData = new FormData();
+		formData.append("id", 0);
+		formData.append("card_id", 0);
+		formData.append("card_ids", ids_data);
+		formData.append("member_owner", member_owner);
+		formData.append("member_type_id", current_member_type_id);
+		formData.append("start_date_time", start_date_time_for_add_member);
+		formData.append("status", status);
+		formData.append("remark", remark);
+		debug_form(formData)
+
+		const _reply = await fetchApi("/api/member/", "post", formData, "json");
+		if (_reply.status) {
+			Swal.fire({
+				icon: "info",
+				title: "Successful",
+				html: _reply.msg,
+			}).then(() => {
+				build_member_table();
+				document.getElementById('btn_Modal_Member_Add_toggle').click();
+
+			});
+		}
+
+	}
+
+	//build_member_table();
+
+	async function toggle_app_configurations_allow_not_register_member() {
+		const result = await Swal.fire({
+			icon: "warning",
+			title: "แก้ไขข้อมูลการอนุญาตใช้งานบัตร",
+			text: "ยืนยันการดำเนินการ?",
+			showDenyButton: true,
+			confirmButtonText: 'ยืนยันการดำเนินการ?',
+			denyButtonText: `ยกเลิกการดำเนินการ`,
+		});
+		if (result.isConfirmed) {
+
+			const _reply = await fetchApi("/api/member/toggle_app_configurations_allow_not_register_member", "post", null, "json");
+			if (_reply.status) {
+				document.getElementById("toggle_app_configurations_allow_not_register_member_sw").checked = _reply.data;
+				Swal.fire({
+					icon: "warning",
+					title: "แก้ไขข้อมูลรายการอนุญาตใช้งานบัตร",
+					html: _reply.msg,
+				})
+			}
+		}
+	}
+
+	async function toggle_app_configurations_allow_not_register_member_get() {
+		const _reply = await fetchApi("/api/member/toggle_app_configurations_allow_not_register_member", "get", null, "json");
+		if (_reply.status) {
+			document.getElementById("toggle_app_configurations_allow_not_register_member_sw").checked = _reply.data;
+		}
+	}
+	toggle_app_configurations_allow_not_register_member_get();
+
+
+</script>
+
+<script>
+	//let Member_Type_Select = null;
+	//set_radio_select
+	function link_tab_build_member_user_table_select_type(id) {
+		debug(id)
+		set_radio_select(id);
+		document.getElementById("member_manager_btn").click();
+		build_member_table();
+	}
+
+
+	async function build_member_type_table(date_range = null) {
+		let _reply = await fetchApi("/api/member/permission_role_list", "get", null, "json");
+		if (_reply.success) {
+			const _ps = _reply.data;
+			let _op_s = "<option value=''>ไม่กำหนด</option>";
+			for (const l of _ps) {
+				const _p = l.Permission_Role;
+				_op_s += `<option value=${_p.id}>${_p.name}</option>`
+			}
+			//debug(_op_s);
+			document.getElementById("member_type_permission_role_id").innerHTML = _op_s;
+		}
+
+		_reply = await fetchApi("/api/service_fees/", "get", null, "json");
+		if (_reply.success) {
+			const _s_fs = _reply.data;
+			let _op_s = "<option value=''>ไม่กำหนด</option>";
+			for (const l of _s_fs) {
+				const _s_f = l.Service_Fees;
+				_op_s += `<option value=${_s_f.id}>${_s_f.name}</option>`
+			}
+			//debug(_op_s);
+			document.getElementById("member_type_service_fees_id").innerHTML = _op_s;
+		}
+
+		const columns_table = [
+			{
+				data: "Member_Type.id",
+				title: "จัดการ",
+				orderable: false,
+				render: function (data, type, row) {
+					return `<div class="inline-flex border border-blue-600 rounded-md shadow-sm" role="group">
+								<a class="btn_tool" onclick="manager_member_type(${data})"> <i class="fas fa-user-edit"></i></a>
+								<a class="btn_tool" onclick="remove_member_type(${data})"><i class="far fa-trash-alt"></i></a>
+							</div>`;
+				},
+			},
+
+			{
+				data: "count",
+				title: "จำนวนบัตร",
+				render: function (data, type, row) {
+					if (data > 0) {
+						return `<a role=button onclick="link_tab_build_member_user_table_select_type(${row.Member_Type.id})"  class="inline-flex items-center font-medium text-blue-600 dark:text-blue-500 hover:underline">
+							${data}
+							<svg aria-hidden="true" class="w-5 h-5 ml-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+							</a>`;
+					}
+					return "<div class='badge_warning'>ไม่มีบัตร</div>";
+				},
+			},
+			{
+				data: "Member_Type.name",
+				title: "ชื่อ",
+				render: function (data, type) {
+					return data;
+				},
+			},
+
+			{
+				data: "Member_Type.expire_day",
+				title: "อายุการใช้งาน(วัน)",
+				render: function (data, type) {
+					return data;
+				},
+			},
+			{
+				data: "Member_Type.amount",
+				title: "ค่าบริการออกบัตร",
+				render: function (data, type) {
+					return data;
+				},
+			},
+			{
+				data: "Member_Type.remark",
+				title: "รายละเอียด",
+				render: function (data, type) {
+					return data;
+				},
+			},
+			{
+				data: "Service_Fees",
+				title: "ค่าบริการตั้งต้น",
+				render: function (data, type) {
+					if (data) {
+						return data.name;
+					}
+					return "ไม่มีค่าบริการ"
+				},
+			},
+			{
+				data: "Permission_Role",
+				title: "ข้อมูลรายการอนุญาต",
+				render: function (data, type) {
+					if (data) {
+						return data.name;
+					}
+					return "ไม่มีการกำหนดข้อมูลจำกัดการใช้งาน"
+
+				},
+			},
+		];
+
+		//debug(columns_table)
+		headers = await get_headers();
+
+		const member_type_table = $("#member_type_table").DataTable({
+			//dom: "Blfip",
+			dom: '<"top"iB>rt<"bottom"flp><"clear">',
+			buttons: [
+				"csv",
+				'excel',
+				"print",
+				"colvis",
+			],
+			language: {
+				"infoEmpty": "ไม่มีรายการข้อมูล",
+				"info": "แสดง หน้าข้อมูล _PAGE_ ใน _PAGES_ จากทั้งหมด _TOTAL_ รายการ",
+				"infoFiltered": "(ข้อมูลทั้งหมด _MAX_ รายการ)",
+			},
+			columnDefs: columnDefs,
+			destroy: true,
+			autoWidth: false,
+			lengthMenu: lengthMenu,
+			pageLength: PAGE_LENGTH,
+			scrollY: "50vh",
+			scrollCollapse: true,
+			sScrollX: "100%",
+			// "paging": false
+			columns: columns_table,
+			order: [[0, "desc"]],
+			processing: true,
+			serverSide: true,
+			search: {
+				return: true,
+			},
+			ajax: {
+				headers: headers,
+				type: "GET",
+				url: `/api/member/type/datatable`,
+				data: function (d) {
+					d.table = "member_type_table";
+				},
+				error: function (xhr, textStatus, errorThrown) {
+					window.location.reload();
+				},
+			},
+		});
+
+		$('#member_type_table').on('length.dt', function (e, settings, len) {
+			PAGE_LENGTH = len;
+			localStorage.setItem('PAGE_LENGTH', len);
+		});
+	}
+
+	let current_member_type_id = 0;
+	async function manager_member_type(id) {
+		debug("Manager:" + id);
+		current_member_type_id = id;
+
+		if (id == 0) {
+			document.getElementById("Modal_Member_Type_title").innerText = "เพื่มรายการประเภทบัตร";
+			document.getElementById("submit_apply_member_type_form_remove_btn").classList.add("hidden");
+			document.getElementById('btn_Modal_Member_Type_toggle').click();
+			return;
+		}
+		const _reply = await fetchApi("/api/member/type?id=" + id, "get", null, "json");
+		if (_reply.success) {
+			const _d = _reply.data[0];
+			debug(_d)
+			const _m_t = _d.Member_Type;
+			const _s_f = _d.Service_Fees;
+			const _p = _d.Permission_Role;
+			document.getElementById("Modal_Member_Type_title").innerText = "แก้ไขรายการประเภทบัตร";
+			document.getElementById("submit_apply_member_type_form_remove_btn").classList.remove("hidden");
+
+			const _from_e = document.getElementById("submit_apply_member_type_form");
+			_from_e.querySelectorAll('[name="member_type_name"]')[0].value = _m_t.name;
+			_from_e.querySelectorAll('[name="member_type_expire_day"]')[0].value = _m_t.expire_day;
+			_from_e.querySelectorAll('[name="member_type_amount"]')[0].value = _m_t.amount;
+
+			if (_s_f) {
+				_from_e.querySelectorAll('[name="member_type_service_fees_id"]')[0].value = _s_f.id;
+			} else {
+				_from_e.querySelectorAll('[name="member_type_service_fees_id"]')[0].value = "";
+			}
+
+			if (_p) {
+				debug(_p.name)
+				_from_e.querySelectorAll('[name="member_type_permission_role_id"]')[0].value = _p.id;
+			} else {
+				_from_e.querySelectorAll('[name="member_type_permission_role_id"]')[0].value = "";
+			}
+
+			_from_e.querySelectorAll('[name="remark"]')[0].value = _m_t.remark;
+
+
+			document.getElementById('btn_Modal_Member_Type_toggle').click();
+
+		} else {
+			debug(_reply)
+			toastMixin.fire({
+				title: JSON.stringify(_reply),
+				icon: "error",
+			});
+		}
+	}
+
+	build_member_type_table();
+	async function submit_apply_member_type() {
+		debug("submit_apply_member_type_form:" + current_member_type_id);
+		const _from_e = document.getElementById("submit_apply_member_type_form");
+		const _m_t = {};
+		_m_t.name = _from_e.querySelectorAll('[name="member_type_name"]')[0].value;
+		_m_t.expire_day = _from_e.querySelectorAll('[name="member_type_expire_day"]')[0].value;
+		_m_t.amount = _from_e.querySelectorAll('[name="member_type_amount"]')[0].value;
+		_m_t.service_fees_id = _from_e.querySelectorAll('[name="member_type_service_fees_id"]')[0].value;
+		_m_t.permission_role_id = _from_e.querySelectorAll('[name="member_type_permission_role_id"]')[0].value;
+		_m_t.remark = _from_e.querySelectorAll('[name="remark"]')[0].value;
+
+
+		const formData = new FormData();
+		formData.append("id", current_member_type_id);
+		formData.append("name", _m_t.name);
+		formData.append("expire_day", _m_t.expire_day);
+		formData.append("amount", _m_t.amount);
+		formData.append("service_fees_id", _m_t.service_fees_id);
+		formData.append("permission_role_id", _m_t.permission_role_id);
+		formData.append("remark", _m_t.remark);
+
+		debug_form(formData)
+
+		const _reply = await fetchApi("/api/member/type", "post", formData, "json");
+		debug(_reply);
+		if (_reply.success) {
+			await Swal.fire({
+				icon: "info",
+				title: "Successful",
+			});
+			window.location.reload();
+			//debug(_reply.data);
+			//build_member_type_table();
+			//document.getElementById('btn_Modal_Member_Type_toggle').click();
+		} else {
+			debug(_reply)
+			toastMixin.fire({
+				title: JSON.stringify(_reply),
+				icon: "error",
+			});
+		}
+
+	}
+
+	async function remove_member_type(id) {
+		if (!(await dialog_confirm())) return;
+
+		const _id = id;
+		if (id == 0) {
+			id = current_member_type_id;
+		}
+		let _reply = await fetchApi("/api/member/type?id=" + id, "delete", null, "json");
+		debug(_reply);
+		if (!!_reply) {
+			if (_reply.success) {
+				Swal.fire({
+					icon: "info",
+					title: "Successful",
+					html: _reply.msg,
+				}).then(() => {
+					window.location.reload();
+				});
+			} else {
+				debug(_reply)
+				toastMixin.fire({
+					title: JSON.stringify(_reply),
+					icon: "error",
+				});
+			}
+		}
+	}
+</script>
+
+<script>
+	function link_tab_build_member_user_table(s) {
+		set_radio_select(0);
+		document.getElementById("member_manager_btn").click();
+		build_member_table(s);
+	}
+	async function build_member_user_table() {
+
+		const columns_table = [
+			{
+				data: "Member_User.id",
+				title: "จัดการ",
+				orderable: false,
+				render: function (data, type, row) {
+					return `<div class="inline-flex border border-blue-600 rounded-md shadow-sm" role="group">
+								<a class="btn_tool" onclick="manager_member_user(${data})"> <i class="fas fa-user-edit"></i></a>
+								<a class="btn_tool" onclick="remove_member_user(${data})"><i class="far fa-trash-alt"></i></a>
+							</div>`;
+				},
+			},
+			{
+				data: "count",
+				title: "จำนวนบัตร",
+				render: function (data, type, row) {
+					if (data > 0) {
+						return `<a role=button onclick="link_tab_build_member_user_table('${row.Member_User.name}')"  class="inline-flex items-center font-medium text-blue-600 dark:text-blue-500 hover:underline">
+							${data}
+							<svg aria-hidden="true" class="w-5 h-5 ml-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+							</a>`;
+					}
+					return "<div class='badge_warning'>ไม่มีบัตร</div>";
+				},
+			},
+			{
+				data: "Member_User.name",
+				title: "ชื่อ",
+				render: function (data, type) {
+					return data;
+				},
+			},
+			{
+				data: "Member_User_Permission.name",
+				title: "สิทธิ์สมาชิก",
+				render: function (data, type) {
+					if (data == null) {
+						return `<span class="badge_warning">ไม่มีการกำหนด</span>`;
+					}
+					return data;
+				},
+			},
+			{
+				data: "Member_User_Permission.limit",
+				title: "สิทธิ์การใช้งาน",
+				render: function (data, type) {
+					if (data == null) {
+						return `<span class="badge_danger">ไม่มีการจำกัด</span>`;
+
+					}
+					return data;
+				},
+			},
+			{
+				data: "Member_User.status",
+				title: "สถานะ",
+				render: function (data, type) {
+					if (data == null) {
+						return "";
+					}
+					return data;
+				},
+			},
+
+			{
+				data: "Member_User.address",
+				title: "ที่อยู่",
+				render: function (data, type) {
+					if (data == null) {
+						return "";
+					}
+					return data;
+				},
+			},
+			{
+				data: "Member_User.remark",
+				title: "รายละเอียด",
+				render: function (data, type) {
+					return data;
+				},
+			},
+		];
+
+		//debug(columns_table)
+		headers = await get_headers();
+
+		const member_type_table = $("#member_user_table").DataTable({
+			//dom: "Blfip",
+			dom: '<"top"iB>rt<"bottom"flp><"clear">',
+			buttons: [
+				"csv",
+				'excel',
+				"print",
+				"colvis",
+			],
+			language: {
+				"infoEmpty": "ไม่มีรายการข้อมูล",
+				"info": "แสดง หน้าข้อมูล _PAGE_ ใน _PAGES_ จากทั้งหมด _TOTAL_ รายการ",
+				"infoFiltered": "(ข้อมูลทั้งหมด _MAX_ รายการ)",
+			},
+			columnDefs: columnDefs,
+			destroy: true,
+			autoWidth: false,
+			lengthMenu: lengthMenu,
+			pageLength: PAGE_LENGTH,
+			scrollY: "50vh",
+			scrollCollapse: true,
+			sScrollX: "100%",
+			// "paging": false
+			columns: columns_table,
+			order: [[0, "desc"]],
+			processing: true,
+			serverSide: true,
+			search: {
+				return: true,
+			},
+			ajax: {
+				headers: headers,
+				type: "GET",
+				url: `/api/member/user/datatable`,
+				data: function (d) {
+					d.table = "member_user_table";
+				},
+				error: function (xhr, textStatus, errorThrown) {
+					window.location.reload();
+				},
+			},
+		});
+
+		$('#member_type_table').on('length.dt', function (e, settings, len) {
+			PAGE_LENGTH = len;
+			localStorage.setItem('PAGE_LENGTH', len);
+		});
+	}
+
+	let current_member_user_id = 0;
+	async function manager_member_user(id) {
+		debug("Manager_User:" + id);
+		current_member_user_id = id;
+
+		if (id == 0) {
+			document.getElementById("Modal_Member_User_title").innerText = "เพื่มรายการผู้ใช้งานบัตร";
+			document.getElementById("submit_apply_member_user_form_remove_btn").classList.add("hidden");
+			document.getElementById('btn_Modal_Member_User_toggle').click();
+			return;
+		}
+		const _reply = await fetchApi("/api/member/user?id=" + id, "get", null, "json");
+		if (_reply.success) {
+			const _d = _reply.data[0];
+			debug(_d)
+			const _m_u = _d.Member_User;
+			const _m_u_p = _d.Member_User_Permission;
+			let member_user_permission_name = "ไม่มีการกำหนดสิทธิ์สมาชิก";
+			if (_m_u_p) {
+				member_user_permission_name = _m_u_p.name;
+			}
+			document.getElementById("Modal_Member_User_title").innerText = "แก้ไขรายการผู้ใช้งานบัตร";
+			document.getElementById("submit_apply_member_user_form_remove_btn").classList.remove("hidden");
+
+			const _from_e = document.getElementById("submit_apply_member_user_form");
+			_from_e.querySelectorAll('[name="member_user_name"]')[0].value = _m_u.name;
+
+			_from_e.querySelectorAll('[name="status"]')[0].value = _m_u.status;
+			_from_e.querySelectorAll('[name="member_user_permission_name"]')[0].value = member_user_permission_name;
+			_from_e.querySelectorAll('[name="address"]')[0].value = _m_u.address;
+			_from_e.querySelectorAll('[name="remark"]')[0].value = _m_u.remark;
+
+
+
+			document.getElementById('btn_Modal_Member_User_toggle').click();
+
+		} else {
+			debug(_reply)
+			toastMixin.fire({
+				title: JSON.stringify(_reply),
+				icon: "error",
+			});
+		}
+	}
+
+	async function dialog_edit_member_user_permission(id,) {
+		const _reply = await fetchApi("/api/member/user_permission_list", "get", null, "json");
+		if (_reply.status) {
+			const _m_u_p = _reply.data;
+			debug(_m_u_p)
+			const _member_user_permission_list = ["ไม่กำหนด"];
+			for (const l of _m_u_p) {
+				debug(l)
+				_member_user_permission_list.push(l.Member_User_Permission.name);
+			}
+			const { value: index } = await Swal.fire({
+				background: '#1F2937',
+				title: 'เลือกข้อมูลรายการสิทธิ์สมาชิก',
+				input: 'select',
+				inputOptions: _member_user_permission_list,
+				utPlaceholder: 'เลือกข้อมูลรายการสิทธิ์สมาชิก',
+				showCancelButton: true,
+			})
+
+			if (index) {
+				const _from_e = document.getElementById("submit_apply_member_user_form");
+				_from_e.querySelectorAll('[name="member_user_permission_name"]')[0].value = _member_user_permission_list[index];
+			}
+		}
+
+	}
+	//build_member_user_table();
+	async function submit_apply_member_user() {
+		debug("submit_apply_member_user_form:" + current_member_user_id);
+		const _from_e = document.getElementById("submit_apply_member_user_form");
+		const _m_u = {};
+		_m_u.name = _from_e.querySelectorAll('[name="member_user_name"]')[0].value;
+		_m_u.status = _from_e.querySelectorAll('[name="status"]')[0].value;
+		_m_u.member_user_permission_name = _from_e.querySelectorAll('[name="member_user_permission_name"]')[0].value;
+		_m_u.address = _from_e.querySelectorAll('[name="address"]')[0].value;
+		_m_u.remark = _from_e.querySelectorAll('[name="remark"]')[0].value;
+
+
+		const formData = new FormData();
+		formData.append("id", current_member_user_id);
+		formData.append("name", _m_u.name);
+		formData.append("status", _m_u.status);
+		formData.append("member_user_permission_name", _m_u.member_user_permission_name);
+		formData.append("address", _m_u.address);
+		formData.append("remark", _m_u.remark);
+
+		debug_form(formData)
+
+		const _reply = await fetchApi("/api/member/user", "post", formData, "json");
+		debug(_reply);
+		if (_reply.success) {
+			await Swal.fire({
+				icon: "info",
+				title: "Successful",
+			});
+			build_member_user_table();
+			document.getElementById('btn_Modal_Member_User_toggle').click();
+		} else {
+			debug(_reply)
+			toastMixin.fire({
+				title: JSON.stringify(_reply),
+				icon: "error",
+			});
+		}
+
+	}
+
+	async function remove_member_user(id) {
+		if (!(await dialog_confirm())) return;
+
+		const _id = id;
+		if (id == 0) {
+			id = current_member_user_id;
+		}
+		let _reply = await fetchApi("/api/member/user?id=" + id, "delete", null, "json");
+		debug(_reply);
+		if (!!_reply) {
+			if (_reply.success) {
+				Swal.fire({
+					icon: "info",
+					title: "Successful",
+					html: _reply.msg,
+				}).then(() => {
+					build_member_user_table();
+				});
+			} else {
+				debug(_reply)
+				toastMixin.fire({
+					title: JSON.stringify(_reply),
+					icon: "error",
+				});
+			}
+		}
+	}
+</script>
+
+<script>
+	let current_permission_role_id = 0;
+	async function init_info_permission_role() {
+		current_permission_role_id = 0;
+		const _reply = await fetchApi("/api/member/permission_role_list", "get", null, "json");
+		if (!!_reply) {
+			if (_reply.success) {
+				const box_of_permission_role = document.getElementById("box_of_permission_role");
+				box_of_permission_role.innerHTML = "";
+				const temp = document.getElementById("template_content_permission_role");
+
+				const permission_roles = _reply.data;
+				//debug(permission_roles);
+				for (const permission_role of permission_roles) {
+
+					const _p = permission_role.Permission_Role;
+					//debug(_p)
+					const _c = temp.content.cloneNode(true);
+					_c.querySelectorAll('[name="permission_role_name"]')[0].innerText = _p.name;
+					_c.querySelectorAll('[name="permission_role_type"]')[0].innerText = _p.type;
+					_c.querySelectorAll('[name="permission_role_remark"]')[0].innerText = _p.remark;
+
+					_c.querySelectorAll('[name="permission_role_list"]')[0].setAttribute('onclick', `show_dialog_permission_role_list(${_p.id})`)
+					_c.querySelectorAll('[name="permission_role_edit"]')[0].setAttribute('onclick', `show_dialog_permission_role_edit(${_p.id})`)
+
+
+					box_of_permission_role.appendChild(_c);
+				}
+			}
+
+		} else {
+			debug(_reply)
+			toastMixin.fire({
+				title: JSON.stringify(_reply),
+				icon: "error",
+			});
+		}
+	}
+
+	//init_info_permission_role();
+
+	async function show_dialog_permission_role_edit(permission_role_id) {
+		current_permission_role_id = permission_role_id;
+
+		const _from_e = document.getElementById("submit_apply_permission_role_form");
+		const submit_apply_permission_role_form_remove_btn = document.getElementById("submit_apply_permission_role_form_remove_btn");
+
+		if (permission_role_id) {
+			const _reply = await fetchApi("/api/member/permission_role_list?id=" + permission_role_id, "get", null, "json");
+			if (_reply.success) {
+				const _p = _reply.data[0].Permission_Role;
+				for (let i = 0; i < _from_e.elements.length; i++) {
+					let _f_e = _from_e.elements[i];
+					if (_f_e.name != "") {
+						_f_e.value = _p[_f_e.name];
+					}
+				}
+				submit_apply_permission_role_form_remove_btn.classList.remove("hidden");
+
+			}
+		} else {
+			//for (let i = 0; i < _from_e.elements.length; i++) {
+			//    let _f_e = _from_e.elements[i];
+			//    if (_f_e.name != "") {
+			//        let k = _f_e.name;
+			//        let v = "";
+			//        _f_e.value = v;
+			//    }
+			//}
+			submit_apply_permission_role_form_remove_btn.classList.add("hidden");
+
+		}
+
+
+		document.getElementById('btn_Modal_Permission_Role_toggle').click();
+	}
+
+	async function submit_apply_permission_role() {
+		const _from_e = document.getElementById("submit_apply_permission_role_form");
+		const formData = new FormData();
+		formData.append("id", current_permission_role_id);
+		for (let i = 0; i < _from_e.elements.length; i++) {
+			let _f_e = _from_e.elements[i];
+			if (_f_e.name != "") {
+				let k = _f_e.name;
+				let v = _f_e.value;
+				formData.append(k, v);
+				if (_f_e.required & !v) {
+					toastMixin.fire({
+						title: "ข้อมูลไม่ครบ",
+						icon: "warning",
+					});
+					return false;
+				}
+			}
+		}
+		let _reply = await fetchApi("/api/member/permission_role", "post", formData, "json");
+		debug(_reply);
+		if (!!_reply) {
+			if (_reply.success == true) {
+				Swal.fire({
+					icon: "info",
+					title: "Successful",
+					html: _reply.msg,
+				}).then(() => {
+					init_info_permission_role();
+					document.getElementById('btn_Modal_Permission_Role_toggle').click();
+
+				});
+			} else {
+				debug(_reply)
+				toastMixin.fire({
+					title: JSON.stringify(_reply),
+					icon: "error",
+				});
+			}
+		}
+	}
+
+	async function remove_permission_role() {
+		if (!(await dialog_confirm())) return;
+		let _reply = await fetchApi("/api/member/permission_role?id=" + current_permission_role_id, "delete", null, "json");
+		debug(_reply);
+		if (!!_reply) {
+			if (_reply.success) {
+				Swal.fire({
+					icon: "info",
+					title: "Successful",
+					html: _reply.msg,
+				}).then(() => {
+					init_info_permission_role();
+					document.getElementById('btn_Modal_Permission_Role_toggle').click();
+
+				});
+			} else {
+				debug(_reply)
+				toastMixin.fire({
+					title: JSON.stringify(_reply),
+					icon: "error",
+				});
+			}
+		}
+	}
+
+	async function add_permission_role() {
+		const _from_e = document.getElementById("submit_apply_permission_role_form");
+		for (let i = 0; i < _from_e.elements.length; i++) {
+			let _f_e = _from_e.elements[i];
+			if (_f_e.name != "") {
+				let k = _f_e.name;
+				let v = "";
+				_f_e.value = v;
+			}
+		}
+
+		document.getElementById('submit_apply_permission_role_form_remove_btn').classList.add("hidden");
+		document.getElementById('btn_Modal_Permission_Role_toggle').click();
+
+		current_permission_role_id = 0
+
+	}
+
+	let permission_allow = "";
+	let permission_role_list_add_mode = false;
+
+	async function build_tbody_permission_role_list(_permission_allow = "") {
+		permission_role_list_add_mode = false;
+		if (_permission_allow) {
+			permission_allow = _permission_allow;
+		}
+		const permission_allow_list = permission_allow.split(",");
+		debug(permission_allow_list)
+		const tbody = document.getElementById("tbody_permission_role_list");
+		tbody.innerHTML = "";
+		const temp = document.getElementById("template_permission_role_list");
+
+		for (const _d of permission_allow_list) {
+			if (_d) {
+				const _p_list = _d.split("@");
+				const _c = temp.content.cloneNode(true);
+				debug(_p_list)
+
+				_c.querySelectorAll('[name="permission_role_list_condition_key"]')[0].innerText = _p_list[0];
+				_c.querySelectorAll('[name="permission_role_list_condition_value"]')[0].innerText = _p_list[1];
+
+				const temp_btn_control = document.getElementById("template_permission_role_list_control_btn");
+				const _c_btn_control = temp_btn_control.content.cloneNode(true);
+
+				_c.querySelectorAll('[name="permission_role_list_control_btn"]')[0].appendChild(_c_btn_control);
+
+				tbody.appendChild(_c);
+			}
+		}
+	}
+
+	async function show_dialog_permission_role_list(id, name_of_permission_role) {
+		current_permission_role_id = id;
+		if (id) {
+			const _reply = await fetchApi("/api/member/permission_role_list?id=" + id, "get", null, "json");
+			if (_reply.success) {
+				const _p = _reply.data[0].Permission_Role
+				build_tbody_permission_role_list(_p.permission_allow);
+				document.getElementById('Modal_Permission_Role_List_title').innerText = _p.name;
+
+			}
+		} else {
+
+		}
+
+		document.getElementById('Modal_Permission_Role_list_btn').click();
+	}
+
+
+	async function add_permission_role_list() {
+		if (!permission_role_list_add_mode) {
+
+			const tbody = document.getElementById("tbody_permission_role_list");
+			const temp = document.getElementById("template_permission_role_list");
+			const _c = temp.content.cloneNode(true);
+
+			_c.querySelectorAll('[name="permission_role_list_condition_key"]')[0].innerText = "*";
+			_c.querySelectorAll('[name="permission_role_list_condition_value"]')[0].innerText = "condition";
+
+			const temp_btn_control = document.getElementById("template_permission_role_list_submit_btn");
+			const _c_btn_control = temp_btn_control.content.cloneNode(true);
+
+			_c.querySelectorAll('[name="permission_role_list_control_btn"]')[0].appendChild(_c_btn_control);
+
+			tbody.appendChild(_c);
+			permission_role_list_add_mode = true;
+		} else {
+			await toastMixin.fire({
+				title: "คำแนะนำ",
+				icon: "warning",
+				text: "มีรายการที่อยู่ระหว่างการดำเนินการ!",
+			});
+		}
+	}
+
+	async function apply_permission_role_list(row) {
+		const _k = row.querySelectorAll('[name="permission_role_list_condition_key"]')[0].innerText;
+		const _v = row.querySelectorAll('[name="permission_role_list_condition_value"]')[0].innerText;
+
+		const formData = new FormData();
+		formData.append("id", current_permission_role_id);
+		formData.append("key", _k);
+		formData.append("value", _v);
+
+		const _reply = await fetchApi("/api/member/permission_role/permission_allow", "post", formData, "json");
+		debug(_reply);
+		if (!!_reply) {
+			if (_reply.success) {
+				Swal.fire({
+					icon: "info",
+					title: "Successful",
+				}).then(() => {
+					const _p = _reply.data;
+					build_tbody_permission_role_list(_p.permission_allow);
+				});
+			} else {
+				debug(_reply)
+				toastMixin.fire({
+					title: JSON.stringify(_reply),
+					icon: "error",
+				});
+			}
+		}
+	}
+
+	async function remove_permission_role_list(row) {
+		const _k = row.querySelectorAll('[name="permission_role_list_condition_key"]')[0].innerText;
+		const _v = row.querySelectorAll('[name="permission_role_list_condition_value"]')[0].innerText;
+
+		const formData = new FormData();
+		formData.append("id", current_permission_role_id);
+		formData.append("key", _k);
+		formData.append("value", _v);
+
+		const _reply = await fetchApi("/api/member/permission_role/permission_allow", "delete", formData, "json");
+		debug(_reply);
+		if (!!_reply) {
+			if (_reply.success) {
+				Swal.fire({
+					icon: "info",
+					title: "Successful",
+				}).then(() => {
+					const _p = _reply.data;
+					build_tbody_permission_role_list(_p.permission_allow);
+				});
+			} else {
+				debug(_reply)
+				toastMixin.fire({
+					title: JSON.stringify(_reply),
+					icon: "error",
+				});
+				window.location.reload();
+			}
+		}
+	}
+
+</script>
+
+<script>
+	let current_member_user_permission_id = 0;
+	async function init_info_member_user_permission() {
+		current_member_user_permission_id = 0;
+		const _reply = await fetchApi("/api/member/user_permission_list", "get", null, "json");
+		const box_of_member_user_permission = document.getElementById("box_of_member_user_permission");
+		box_of_member_user_permission.innerHTML = "";
+		if (!!_reply) {
+			if (_reply.success) {
+
+				const temp = document.getElementById("template_content_member_user_permission");
+
+				const member_user_permissions = _reply.data;
+				debug(member_user_permissions);
+				for (const member_user_permission of member_user_permissions) {
+					const _p = member_user_permission.Member_User_Permission;
+					//debug(_p)
+					const _c = temp.content.cloneNode(true);
+					_c.querySelectorAll('[name="member_user_permission_name"]')[0].innerText = _p.name;
+					_c.querySelectorAll('[name="member_user_permission_limit"]')[0].innerText = _p.limit;
+					_c.querySelectorAll('[name="member_user_permission_status"]')[0].innerText = _p.status;
+					_c.querySelectorAll('[name="member_user_permission_detail"]')[0].value = _p.detail;
+
+					_c.querySelectorAll('[name="member_user_permission_edit"]')[0].setAttribute('onclick', `show_dialog_member_user_permission_edit(${_p.id})`)
+
+
+					box_of_member_user_permission.appendChild(_c);
+				}
+			}
+
+		} else {
+			debug(_reply)
+			toastMixin.fire({
+				title: JSON.stringify(_reply),
+				icon: "error",
+			});
+		}
+	}
+
+	//init_info_member_user_permission();
+
+	async function show_dialog_member_user_permission_edit(member_user_permission_id) {
+		current_member_user_permission_id = member_user_permission_id;
+
+		const _from_e = document.getElementById("submit_apply_member_user_permission_form");
+		const submit_apply_member_user_permission_form_remove_btn = document.getElementById("submit_apply_member_user_permission_form_remove_btn");
+
+		if (member_user_permission_id) {
+			const _reply = await fetchApi("/api/member/user_permission_list?id=" + member_user_permission_id, "get", null, "json");
+			if (_reply.success) {
+				const _p = _reply.data[0].Member_User_Permission;
+				debug(_p)
+				for (let i = 0; i < _from_e.elements.length; i++) {
+					let _f_e = _from_e.elements[i];
+					if (_f_e.name != "") {
+						_f_e.value = _p[_f_e.name];
+					}
+				}
+				submit_apply_member_user_permission_form_remove_btn.classList.remove("hidden");
+
+			}
+		} else {
+			submit_apply_member_user_permission_form_remove_btn.classList.add("hidden");
+
+		}
+
+
+		document.getElementById('btn_Member_User_Permission_toggle').click();
+	}
+
+	async function submit_apply_member_user_permission() {
+		const _from_e = document.getElementById("submit_apply_member_user_permission_form");
+		const formData = new FormData();
+		formData.append("id", current_member_user_permission_id);
+		for (let i = 0; i < _from_e.elements.length; i++) {
+			let _f_e = _from_e.elements[i];
+			if (_f_e.name != "") {
+				let k = _f_e.name;
+				let v = _f_e.value;
+				formData.append(k, v);
+				if (_f_e.required & !v) {
+					toastMixin.fire({
+						title: "ข้อมูลไม่ครบ",
+						icon: "warning",
+					});
+					return false;
+				}
+			}
+		}
+		let _reply = await fetchApi("/api/member/user_permission", "post", formData, "json");
+		debug(_reply);
+		if (!!_reply) {
+			if (_reply.success == true) {
+				Swal.fire({
+					icon: "info",
+					title: "Successful",
+					html: _reply.msg,
+				}).then(() => {
+					init_info_member_user_permission();
+					document.getElementById('btn_Member_User_Permission_toggle').click();
+
+				});
+			} else {
+				debug(_reply)
+				toastMixin.fire({
+					title: JSON.stringify(_reply),
+					icon: "error",
+				});
+			}
+		}
+	}
+
+	async function remove_member_user_permission() {
+		if (!(await dialog_confirm())) return;
+		let _reply = await fetchApi("/api/member/user_permission?id=" + current_member_user_permission_id, "delete", null, "json");
+		debug(_reply);
+		if (!!_reply) {
+			if (_reply.success) {
+				Swal.fire({
+					icon: "info",
+					title: "Successful",
+					html: _reply.msg,
+				}).then(() => {
+					init_info_member_user_permission();
+					document.getElementById('btn_Member_User_Permission_toggle').click();
+
+				});
+			} else {
+				debug(_reply)
+				toastMixin.fire({
+					title: JSON.stringify(_reply),
+					icon: "error",
+				});
+			}
+		}
+	}
+
+	async function add_member_user_permission() {
+		const _from_e = document.getElementById("submit_apply_member_user_permission_form");
+		for (let i = 0; i < _from_e.elements.length; i++) {
+			let _f_e = _from_e.elements[i];
+			if (_f_e.name != "") {
+				let k = _f_e.name;
+				let v = "";
+				_f_e.value = v;
+			}
+		}
+
+		document.getElementById('submit_apply_member_user_permission_form_remove_btn').classList.add("hidden");
+		document.getElementById('btn_Member_User_Permission_toggle').click();
+
+		current_member_user_permission_id = 0
+
+	}
+</script>
+
+</html>

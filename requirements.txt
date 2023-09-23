@@ -1,0 +1,14 @@
+fastapi
+sqlmodel
+passlib
+PrintDebug
+pydantic
+PyJWT
+requests
+SQLAlchemy<2
+starlette
+uvicorn[standard]
+Jinja2
+python-multipart
+sse_starlette
+aiosqlite

@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    {% include '_meta.html' %}
+</head>
+
+<body class="flex flex-col color_theme_bg">
+    {% include '_nav_bar.html' %}
+
+    <main class="flex flex-row h-full">
+
+        <div class="container h-full p-4 mx-auto rounded-lg ">
+            <div class="p-4 mb-4 text-blue-900 border border-blue-300 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400 dark:border-blue-800" role="alert">
+                <div class="flex items-center">
+                    <svg aria-hidden="true" class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd"
+                            d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                            clip-rule="evenodd"></path>
+                    </svg>
+                    <span class="sr-only">Service Fee Config Panel</span>
+                    <h3 class="text-lg font-medium">Service Fee Config Panel</h3>
+                    <button type="button" onclick="history.back()" data-tooltip-target="tooltip-bottom" data-tooltip-placement="bottom"
+                        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white">
+                        <i class="mr-2 text-red-500 fa-solid fa-circle-chevron-left"></i> กลับ
+                    </button>
+                    <div id="tooltip-bottom" role="tooltip"
+                        class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+                        กลับไปหน้าตั้งค่า
+                        <div class="tooltip-arrow" data-popper-arrow></div>
+                    </div>
+                </div>
+
+                <div class="mt-2 mb-4 text-sm">
+                    ปรับตั้งค่าข้อมูลค่าบริการ
+                </div>
+                <a role="button" id="btn_parking_lot_add_item" onclick="add_service_fee()" class="text-center dark:text-blue-500 hover:underline"><i
+                        class="text-teal-500 fa-regular fa-square-plus"></i> สร้าง ข้อมูลค่าบริการ</a>
+
+            </div>
+
+            <div id="box_of_services_fee" class="grid gap-8 p-4 border-4 border-orange-500 rounded-lg md:grid-cols-3">
+
+            </div>
+
+
+        </div>
+
+        <!-- **NOTE -   Modal_Service_Fee-->
+        <div id="Modal_Service_Fee" tabindex="-1" aria-hidden="true"
+            class="fixed top-0 left-0 right-0 z-50 items-center justify-center hidden w-full overflow-x-hidden overflow-y-auto md:inset-0 h-modal md:h-full">
+            <div class="relative w-full h-full max-w-2xl p-4 md:h-auto">
+                <!-- Modal content -->
+                <div class="relative p-4 bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5">
+                    <!-- Modal header -->
+                    <div class="flex items-center justify-between pb-4 mb-4 border-b rounded-t sm:mb-5 dark:border-gray-600">
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+                            Modal_Service_Fee
+                        </h3>
+                        <button type="button" id="btn_Modal_Service_Fee_toggle"
+                            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                            data-modal-toggle="Modal_Service_Fee">
+                            <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd"
+                                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                    clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="sr-only">Close modal</span>
+                        </button>
+
+                    </div>
+                    <!-- Modal body -->
+                    <div>
+                        <form id="submit_apply_service_fee_form" class="grid gap-4 mb-4 sm:grid-cols-2">
+
+                            <div class="sm:col-span-2">
+                                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ค่าบริการ</label>
+                                <input type="text" autocomplete="off" name="name" class="input_box_form" placeholder="ชื่อ-ค่าบริการ" required>
+                            </div>
+                            <div class="sm:col-span-2">
+                                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ประเภทค่าบริการ</label>
+                                <select name="type" required
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                    <option value="GENERAL">✅ GENERAL</option>
+                                    <option value="STAMP ONLY">✅ STAMP ONLY</option>
+                                    <option value="IN">✅ IN</option>
+                                    <option value="OUT">✅ OUT</option>
+                                    <option value="IN-OUT">✅ IN-OUT</option>
+
+                                </select>
+                            </div>
+                            <div class="sm:col-span-2">
+                                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ปัดเศษชั่วโมง</label>
+                                <input type="number" value="0" autocomplete="off" name="round" class="input_box_form" placeholder="ปัดเศษชั่วโมงเมื่อเกินกว่าที่กำหนด" required>
+                            </div>
+                            <div class="sm:col-span-2">
+                                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">สถานะ</label>
+                                <select name="status" required
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                    <option>Enable</option>
+                                    <option>Disable</option>
+                                </select>
+                            </div>
+
+                            <div class="sm:col-span-2">
+                                <label for="remark" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">หมายเหตุ</label>
+                                <textarea name="remark" rows="4" class="input_box_form" placeholder="หมายเหตุ"></textarea>
+                            </div>
+                        </form>
+                        <div class="flex justify-between">
+                            <button type="button" onclick="submit_apply_service_fee()" class="w-32 border-blue-500 btn_block text_primary">
+                                <i class="fa fa-circle-check"></i>
+                                <span class="ml-2">ตกลง</span>
+                            </button>
+                            <button type="button" id="submit_apply_service_fee_form_remove_btn" onclick="remove_service_fee()" class="w-32 border-red-500 btn_block text_primary">
+                                <i class="text-red-600 fa-solid fa-eraser"></i>
+                                <span class="ml-2">ลบรายการข้อมูลนี้</span>
+                            </button>
+                            <button type="button" class="w-32 border-blue-500 btn_block text_danger" data-modal-toggle="Modal_Service_Fee">
+                                <i class="fa fa-arrow-right-from-bracket"></i>
+                                <span class="ml-2">กลับ</span>
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- **NOTE -   Modal_Service_Fee_Format_add-->
+        <div id="Modal_Service_Fee_Format_add" tabindex="-1" aria-hidden="true"
+            class="fixed top-0 left-0 right-0 z-50 items-center justify-center hidden w-full overflow-x-hidden overflow-y-auto md:inset-0 h-modal md:h-full">
+            <div class="relative w-full h-full max-w-2xl p-4 md:h-auto">
+                <!-- Modal content -->
+                <div class="relative p-4 bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5">
+                    <!-- Modal header -->
+                    <div class="flex items-center justify-between pb-4 mb-4 border-b rounded-t sm:mb-5 dark:border-gray-600">
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+                            รูปแบบค่าบริการ <span class="text-blue-500" id="title_Modal_Service_Fee_Format_add"></span>
+                        </h3>
+                        <button type="button" id="btn_Modal_Service_Fee_Format_add_toggle"
+                            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                            data-modal-toggle="Modal_Service_Fee_Format_add">
+                            <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd"
+                                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                    clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="sr-only">Close modal</span>
+                        </button>
+
+                    </div>
+                    <!-- Modal body -->
+                    <form id="submit_apply_service_fee_format_form" class="grid gap-4 mb-4 sm:grid-cols-2">
+                        <div class="sm:col-span-2">
+                            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ชื่อเงื่อนไข</label>
+                            <input type="text" value="test_001" autocomplete="off" name="name" class="input_box_form" placeholder="ชื่อ-ชื่อเงื่อนไข" required>
+                        </div>
+                        <div class="sm:col-span-2">
+                            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ประเภทเงื่อนไข</label>
+                            <select name="condition_type" required
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                <option value="PARKED_RANGE" selected="selected">📈 PARKED_RANGE</option>
+                                <option value="IN_RANGE">📈 IN_RANGE</option>
+                                <option value="OUT_RANGE">📈 OUT_RANGE</option>
+                            </select>
+                        </div>
+                        <div class="sm:col-span-2">
+                            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ลำดับความสำคัญ</label>
+                            <input type="number" required min="1" value="1" autocomplete="off" name="priority" class="input_box_form" placeholder="ลำดับความสำคัญ(ค่าน้อย)"
+                                required>
+
+                        </div>
+                        <div class="sm:col-span-2">
+                            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">เงื่อนไข</label>
+                            <input type="text" value="08:00-12:00" autocomplete="off" name="condition" class="input_box_form" placeholder="08:00-12:00" required>
+                        </div>
+                        <div class="sm:col-span-2">
+                            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">สถานะ</label>
+                            <select name="status" required
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                <option selected="selected">Enable</option>
+                                <option>Disable</option>
+                            </select>
+                        </div>
+
+                    </form>
+                    <div class="flex justify-between">
+                        <button type="button" onclick="submit_apply_service_fee_format()" class="w-32 border-blue-500 btn_block text_primary">
+                            <i class="fa fa-circle-check"></i>
+                            <span class="ml-2">ตกลง</span>
+                        </button>
+                        <button type="button" id="submit_apply_service_fee_format_form_remove_btn" onclick="remove_service_fee_format()"
+                            class="w-32 border-red-500 btn_block text_primary">
+                            <i class="text-red-600 fa-solid fa-eraser"></i>
+                            <span class="ml-2">ลบรายการข้อมูลนี้</span>
+                        </button>
+                        <button type="button" class="w-32 border-blue-500 btn_block text_danger" data-modal-toggle="Modal_Service_Fee_Format_add">
+                            <i class="fa fa-arrow-right-from-bracket"></i>
+                            <span class="ml-2">กลับ</span>
+                        </button>
+                    </div>
+                    <div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- **NOTE -   Modal_Service_Fee_Format_calculate_list-->
+        <div id="Modal_Service_Fee_Format_calculate_list" tabindex="-1" aria-hidden="true"
+            class="fixed top-0 left-0 right-0 z-50 items-center justify-center hidden w-full overflow-x-hidden overflow-y-auto md:inset-0 h-modal md:h-full">
+            <div class="relative w-full h-full max-w-2xl p-4 md:h-auto">
+                <!-- Modal content -->
+                <div class="relative p-4 bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5">
+                    <!-- Modal header -->
+                    <div class="flex items-center justify-between pb-4 mb-4 border-b rounded-t sm:mb-5 dark:border-gray-600">
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white" id="Modal_Service_Fee_Format_calculate_list_title">
+
+                        </h3>
+                        <button type="button" id="Modal_Service_Fee_Format_calculate_list_btn"
+                            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                            data-modal-toggle="Modal_Service_Fee_Format_calculate_list">
+                            <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd"
+                                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                    clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="sr-only">Close modal</span>
+                        </button>
+
+                    </div>
+                    <!-- Modal body -->
+                    <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+                        <template id="template_calculate_list">
+                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 ">
+                                <th scope="row" class="flex items-center px-6 py-2 text-gray-900 whitespace-nowrap dark:text-white">
+                                    <i class="mr-2 text-blue-400 fa-solid fa-clock-rotate-left fa-2x"></i>
+                                    <div contenteditable="true" name="calculate_list_condition_key" class="text-base font-semibold">00</div>
+                                </th>
+
+                                <td class="py-2 pl-8">
+                                    <div contenteditable="true" name="calculate_list_condition_value" class="text-base font-semibold">00</div>
+                                </td>
+
+                                <td class="py-2" name="calculate_list_control_btn">
+                                </td>
+                            </tr>
+                        </template>
+                        <template id="template_calculate_list_control_btn">
+                            <div class="flex flex-col gap-1">
+                                <a role="button" onclick="apply_calculate_list(this.parentElement.parentElement.parentElement)" class=" dark:text-blue-500 hover:underline"><i
+                                        class="text-teal-500 fa-regular fa-pen-to-square"></i> แก้ไขข้อมูล</a>
+                                <a role="button" onclick="remove_calculate_list(this.parentElement.parentElement.parentElement)" class=" dark:text-blue-500 hover:underline"><i
+                                        class="text-red-500 fa-regular fa-square-minus"></i>
+                                    ลบรายการ</a>
+                            </div>
+                        </template>
+                        <template id="template_calculate_list_submit_btn">
+                            <div class="flex flex-col gap-1">
+                                <a role="button" onclick="apply_calculate_list(this.parentElement.parentElement.parentElement)" class=" dark:text-blue-500 hover:underline"><i
+                                        class="text-teal-500 fa-regular fa-pen-to-square"></i> บันทึกข้อมูล</a>
+                                <a role="button" onclick="remove_calculate_list(this.parentElement.parentElement.parentElement)" class=" dark:text-blue-500 hover:underline"><i
+                                        class="text-orange-500 fa-regular fa-trash-can"></i>
+                                    ยกเลิกรายการ</a>
+                            </div>
+                        </template>
+                        <div class="flex">
+                            <div class="">
+                                ทดสอบคิคค่าบริการ
+                                <i class="fa-solid fa-spell-check"></i>
+                            </div>
+                            <input type="text" id="parked_service_fee_for_test"
+                                class="block p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-l-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                placeholder="00:00" value="15:00">
+                            <button type="button" onclick="test_calculate_list()"
+                                class="text-white w-1/2 right-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-r-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">ทดสอบคิคค่าบริการ</button>
+                        </div>
+
+
+                        <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3 rounded-l-md">
+                                        เวลาจอดมากกว่า ?
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        กำหนดค่าบริการ
+                                    </th>
+
+                                    <th scope="col" class="px-6 py-3 rounded-r-md">
+                                        การจัดการ
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody_calculate_list">
+                            </tbody>
+
+                        </table>
+                        <div class="p-4 text-center">
+                            <a role="button" id="btn_calculate_list_add_item" onclick="add_calculate_list()" class="text-center dark:text-blue-500 hover:underline"><i
+                                    class="text-teal-500 fa-regular fa-square-plus"></i> สร้าง รายการ</a>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+    <!-- **NOTE - Template Content of gateway -->
+
+    <template id="template_content_service_fee">
+        <div class="min-w-full text-center card color_widget_theme_bg">
+            <div class="block p-2">
+                <i class="text-orange-500 fa-solid fa-file-invoice-dollar fa-3x"></i>
+                <span class="ml-4 text-blue-500 text-md ">รูปแบบค่าบริการ</span>
+            </div>
+            <div class="block p-2" name="service_fee_name">
+            </div>
+            <table class="mx-auto text-sm text-left text-gray-500 w-fit dark:text-gray-400">
+                <tbody>
+                    <tr class="">
+                        <th scope="row" class="font-medium whitespace-nowrap d">
+                            <i class="mx-2 text-teal-500 fa-solid fa-right-to-bracket fa-2x"></i>
+                            ประเภท
+                        </th>
+                        <td class="px-6 py-4" name="service_fee_type">
+                        </td>
+                    </tr>
+                    <tr class="">
+                        <th scope=" row" class="font-medium whitespace-nowrap d">
+                            <i class="mx-2 text-teal-500 fa-solid fa-toggle-on fa-2x"></i>
+                            สถานะ
+                        </th>
+                        <td class="px-6 py-4 text-orange-500" name="service_fee_status">
+                        </td>
+                    </tr>
+                    <tr class="">
+                        <th scope=" row" class="font-medium whitespace-nowrap d">
+                            <i class="mx-2 text-teal-500 fa-solid fa-arrow-up-right-dots fa-2x"></i>
+                            ปัดเศษ
+                        </th>
+                        <td class="px-6 py-4 text-orange-500">
+                            <span class="mr-2 text-md" name="service_fee_round">15</span>
+                            นาที
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <p class="p-2 text-blue-400" name="service_fee_remark"></p>
+
+            <a role="button" class="block p-4 text-center dark:text-blue-500 hover:underline " name="service_fee_edit"><i class="text-teal-500 fa-regular fa-pen-to-square"></i>
+                แก้ไขข้อมูล</a>
+
+            <div class="flex flex-col mx-4 mb-2 border border-blue-500 rounded-md">
+                <div class="flex flex-col gap-1 p-2 mx-4 border border-blue-500 rounded-b-md" name="servece_fee_format_list">
+
+                </div>
+                <a role="button" class="block p-4 text-center dark:text-orange-500 hover:underline " name="service_fee_format_add"><i class="text-orange-500 fa-solid fa-plus"></i>
+                    เพื่มเงื่อนไขบริการ</a>
+            </div>
+
+        </div>
+    </template>
+    <template id="template_content_service_fee_format">
+        <div class="flex items-center px-2">
+            <span>
+                <a class="p-2 text-orange-500 rounded-full fa-regular fa-rectangle-list ring-blue-500 hover:ring-4" name="content_service_fee_format_edit_btn"></a>
+
+            </span>
+            <a role="button" class="p-4 text-center dark:text-teal-500 hover:underline" name="content_service_fee_format_name">
+                name-condition</a>
+
+        </div>
+
+    </template>
+    {% include '_footer.html' %}
+</body>
+{% include '_script.html' %}
+
+<script>
+    function show_dialog_protected() {
+        toastMixin.fire({
+            title: "ข้อมูล Defualt ไม่สามารถแก้ไขได้",
+            icon: "warning",
+        });
+    }
+
+    async function init_info_dashboard_service_fee() {
+        const _reply = await fetchApi("/api/service_fees/", "get", null, "json");
+        if (!!_reply) {
+            if (_reply.success) {
+                const box_of_services_fee = document.getElementById("box_of_services_fee");
+                box_of_services_fee.innerHTML = "";
+                const temp = document.getElementById("template_content_service_fee");
+                const template_content_service_fee_format = document.getElementById("template_content_service_fee_format");
+
+                const service_fees = _reply.data;
+                debug(service_fees);
+                for (const service_fee of service_fees) {
+
+                    const _s = service_fee.Service_Fees;
+                    debug(_s)
+
+                    const _c = temp.content.cloneNode(true);
+
+                    _c.querySelectorAll('[name="service_fee_name"]')[0].innerText = _s.name;
+                    _c.querySelectorAll('[name="service_fee_type"]')[0].innerText = _s.type;
+                    _c.querySelectorAll('[name="service_fee_status"]')[0].innerText = _s.status;
+
+                    _c.querySelectorAll('[name="service_fee_round"]')[0].innerText = _s.round;
+
+                    _c.querySelectorAll('[name="service_fee_remark"]')[0].innerText = _s.remark;
+
+
+                    _c.querySelectorAll('[name="service_fee_edit"]')[0].setAttribute('onclick', `show_dialog_service_fee(${_s.id})`)
+                    _c.querySelectorAll('[name="service_fee_format_add"]')[0].setAttribute('onclick', `show_dialog_service_fee_format_add(${_s.id},"${_s.name}")`)
+
+                    const servece_fee_format_list = _c.querySelectorAll('[name="servece_fee_format_list"]')[0]
+
+                    const _reply = await fetchApi("/api/data/service_fees_format/?service_fees_id=" + _s.id, "get", null, "json");
+                    debug(_reply);
+
+                    if (_reply.success) {
+                        const data = _reply.data;
+                        for (const _d of data) {
+                            const _s_f = _d.Service_Fees_Format;
+                            const _c_service_fee_format = template_content_service_fee_format.content.cloneNode(true);
+                            const content_service_fee_format_name = _c_service_fee_format.querySelectorAll('[name="content_service_fee_format_name"]')[0];
+                            content_service_fee_format_name.innerText = _s_f.name;
+                            debug(_s_f.status)
+                            if (_s_f.status != "Enable") {
+                                content_service_fee_format_name.innerText = `⛔ ${_s_f.name}`;
+                            }
+                            if (_s_f.primary) {
+                                content_service_fee_format_name.setAttribute('onclick', `show_dialog_protected();`)
+
+                            } else {
+                                content_service_fee_format_name.setAttribute('onclick', `show_dialog_service_fee_format_add(${_s.id},"${_s.name}",${_s_f.id})`)
+
+                            }
+                            const content_service_fee_format_edit_btn = _c_service_fee_format.querySelectorAll('[name="content_service_fee_format_edit_btn"]')[0];
+                            content_service_fee_format_edit_btn.setAttribute('onclick', `show_dialog_service_fee_format_edit_calculate_list(${_s_f.id},"${_s_f.name}")`)
+
+
+                            servece_fee_format_list.appendChild(_c_service_fee_format);
+                        }
+                    }
+                    box_of_services_fee.appendChild(_c);
+                }
+
+
+            }
+
+        } else {
+            debug(_reply)
+            toastMixin.fire({
+                title: JSON.stringify(_reply),
+                icon: "error",
+            });
+        }
+    }
+
+    init_info_dashboard_service_fee();
+
+    let current_service_fee_id = 0;
+    let current_service_fee_fromat_id = 0;
+    async function show_dialog_service_fee(id) {
+        const _reply = await fetchApi("/api/service_fees/?id=" + id, "get", null, "json");
+        if (!!_reply) {
+            if (_reply.success) {
+                current_service_fee_id = id;
+                const _from_e = document.getElementById("submit_apply_service_fee_form");
+                const data = _reply.data[0].Service_Fees;;
+                debug(data);
+                for (let i = 0; i < _from_e.elements.length; i++) {
+                    let _f_e = _from_e.elements[i];
+                    if (_f_e.name != "") {
+                        let k = _f_e.name;
+                        let v = data[k];
+                        _f_e.value = v;
+                    }
+                }
+            } else {
+
+                toastMixin.fire({
+                    title: JSON.stringify(_reply),
+                    icon: "error",
+                });
+            }
+        }
+        document.getElementById('submit_apply_service_fee_form_remove_btn').classList.remove("hidden");
+        document.getElementById('btn_Modal_Service_Fee_toggle').click();
+    }
+
+
+    async function remove_service_fee() {
+        if (!(await dialog_confirm())) return;
+        let _reply = await fetchApi("/api/service_fees/?id=" + current_service_fee_id, "delete", null, "json");
+        debug(_reply);
+        if (!!_reply) {
+            if (_reply.success) {
+                Swal.fire({
+                    icon: "info",
+                    title: "Successful",
+                    html: _reply.msg,
+                }).then(() => {
+                    window.location.reload();
+
+                });
+            } else {
+                debug(_reply)
+                toastMixin.fire({
+                    title: JSON.stringify(_reply),
+                    icon: "error",
+                });
+            }
+        }
+    }
+
+    async function submit_apply_service_fee() {
+        const _from_e = document.getElementById("submit_apply_service_fee_form");
+        const formData = new FormData();
+        formData.append("id", current_service_fee_id);
+        for (let i = 0; i < _from_e.elements.length; i++) {
+            let _f_e = _from_e.elements[i];
+            if (_f_e.name != "") {
+                let k = _f_e.name;
+                let v = _f_e.value;
+                formData.append(k, v);
+                if (_f_e.required & !v) {
+                    toastMixin.fire({
+                        title: "ข้อมูลไม่ครบ",
+                        text: k,
+                        icon: "warning",
+                    });
+                    return false;
+                }
+            }
+        }
+        let _reply = await fetchApi("/api/service_fees/", "post", formData, "json");
+        debug(_reply);
+        if (!!_reply) {
+            if (_reply.success == true) {
+                Swal.fire({
+                    icon: "info",
+                    title: "Successful",
+                    html: _reply.msg,
+                }).then(() => {
+                    window.location.reload();
+
+                });
+            } else {
+                debug(_reply)
+                toastMixin.fire({
+                    title: JSON.stringify(_reply),
+                    icon: "error",
+                });
+            }
+        }
+    }
+
+    async function add_service_fee() {
+        const _from_e = document.getElementById("submit_apply_service_fee_form");
+        for (let i = 0; i < _from_e.elements.length; i++) {
+            let _f_e = _from_e.elements[i];
+            if (_f_e.name != "") {
+                let k = _f_e.name;
+                let v = "";
+                _f_e.value = v;
+            }
+        }
+
+        document.getElementById('submit_apply_service_fee_form_remove_btn').classList.add("hidden");
+        document.getElementById('btn_Modal_Service_Fee_toggle').click();
+        current_service_fee_id = 0
+
+    }
+</script>
+
+<script>
+    async function show_dialog_service_fee_format_add(service_fee_id, name, id = 0) {
+        current_service_fee_id = service_fee_id;
+        current_service_fee_fromat_id = id;
+        const _from_e = document.getElementById("submit_apply_service_fee_format_form");
+        const submit_apply_service_fee_format_form_remove_btn = document.getElementById("submit_apply_service_fee_format_form_remove_btn");
+
+        if (id) {
+            const _reply = await fetchApi("/api/data/service_fees_format/?id=" + id, "get", null, "json");
+            if (_reply.success) {
+                const _s_f = _reply.data[0].Service_Fees_Format;
+                debug(_s_f)
+                for (let i = 0; i < _from_e.elements.length; i++) {
+                    let _f_e = _from_e.elements[i];
+                    if (_f_e.name != "") {
+                        _f_e.value = _s_f[_f_e.name];
+                    }
+                }
+                submit_apply_service_fee_format_form_remove_btn.classList.remove("hidden");
+
+            }
+        } else {
+            for (let i = 0; i < _from_e.elements.length; i++) {
+                let _f_e = _from_e.elements[i];
+                if (_f_e.name != "") {
+                    let k = _f_e.name;
+                    let v = "";
+                    _f_e.value = v;
+                }
+            }
+            submit_apply_service_fee_format_form_remove_btn.classList.add("hidden");
+
+        }
+
+
+        document.getElementById('title_Modal_Service_Fee_Format_add').innerText = name;
+        document.getElementById('btn_Modal_Service_Fee_Format_add_toggle').click();
+    }
+
+    async function submit_apply_service_fee_format() {
+        const _from_e = document.getElementById("submit_apply_service_fee_format_form");
+        const formData = new FormData();
+        formData.append("id", current_service_fee_fromat_id);
+        formData.append("service_fees_id", current_service_fee_id);
+
+        for (let i = 0; i < _from_e.elements.length; i++) {
+            let _f_e = _from_e.elements[i];
+            if (_f_e.name != "") {
+                let k = _f_e.name;
+                let v = _f_e.value;
+                if (_f_e.required & !v) {
+                    toastMixin.fire({
+                        title: "ข้อมูลไม่ครบ",
+                        text: k,
+                        icon: "warning",
+                    });
+                    return false;
+                }
+                formData.append(k, v);
+                debug("key :" + k + " : " + v);
+            }
+
+        }
+
+        let _reply = await fetchApi("/api/data/service_fees_format/", "post", formData, "json");
+        debug(_reply);
+        if (!!_reply) {
+            if (_reply.success == true) {
+                Swal.fire({
+                    icon: "info",
+                    title: "Successful",
+                    html: _reply.msg,
+                }).then(() => {
+                    init_info_dashboard_service_fee();
+                    document.getElementById('btn_Modal_Service_Fee_Format_add_toggle').click();
+
+                });
+            } else {
+                debug(_reply)
+                toastMixin.fire({
+                    title: JSON.stringify(_reply.msg),
+                    icon: "error",
+                });
+            }
+        }
+    }
+
+    async function remove_service_fee_format() {
+        if (!(await dialog_confirm())) return;
+        let _reply = await fetchApi("/api/data/service_fees_format/?id=" + current_service_fee_fromat_id, "delete", null, "json");
+        debug(_reply);
+        if (!!_reply) {
+            if (_reply.success) {
+                Swal.fire({
+                    icon: "info",
+                    title: "Successful",
+                    html: _reply.msg,
+                }).then(() => {
+                    window.location.reload();
+
+                });
+            } else {
+                debug(_reply)
+                toastMixin.fire({
+                    title: JSON.stringify(_reply),
+                    icon: "error",
+                });
+            }
+        }
+    }
+</script>
+
+<script>
+    //const Time_RE = /^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
+    const Time_RE = /^[0-9][0-9]:[0-5][0-9]$/;
+    let calculate_list_add_mode = false;
+    let calculate_list = null;
+    let calculate_list_str = "";
+    function build_tbody_calculate_list() {
+        calculate_list_add_mode = false;
+        calculate_list = calculate_list_str.split(",");
+        debug(calculate_list)
+        const tbody = document.getElementById("tbody_calculate_list");
+        tbody.innerHTML = "";
+        const temp = document.getElementById("template_calculate_list");
+
+        for (const _d of calculate_list) {
+            if (_d) {
+                const calculate_list_condition = _d.split("=");
+                const _c = temp.content.cloneNode(true);
+                _c.querySelectorAll('[name="calculate_list_condition_key"]')[0].innerText = calculate_list_condition[0];
+                _c.querySelectorAll('[name="calculate_list_condition_value"]')[0].innerText = calculate_list_condition[1];
+
+                const temp_btn_control = document.getElementById("template_calculate_list_control_btn");
+                const _c_btn_control = temp_btn_control.content.cloneNode(true);
+
+                _c.querySelectorAll('[name="calculate_list_control_btn"]')[0].appendChild(_c_btn_control);
+
+                tbody.appendChild(_c);
+            }
+        }
+
+    }
+
+    async function show_dialog_service_fee_format_edit_calculate_list(id, name_of_format) {
+        current_service_fee_fromat_id = id;
+        document.getElementById('Modal_Service_Fee_Format_calculate_list_title').innerText = name_of_format;
+
+        if (id) {
+            const _reply = await fetchApi("/api/data/service_fees_format/?id=" + id, "get", null, "json");
+            if (_reply.success) {
+                const _s_f = _reply.data[0].Service_Fees_Format
+                calculate_list_str = _s_f.calculate_list
+                build_tbody_calculate_list();
+
+            }
+        } else {
+            //for (let i = 0; i < _from_e.elements.length; i++) {
+            //    let _f_e = _from_e.elements[i];
+            //    if (_f_e.name != "") {
+            //        let k = _f_e.name;
+            //        let v = "";
+            //        _f_e.value = v;
+            //    }
+            //}
+
+        }
+
+        //document.getElementById('title_Modal_Service_Fee_Format_add').innerText = name;
+        document.getElementById('Modal_Service_Fee_Format_calculate_list_btn').click();
+    }
+
+    async function test_calculate_list() {
+        const parked_time = document.getElementById("parked_service_fee_for_test").value;
+        const parked_re = /^[0-9][0-9]:[0-5][0-9]$/;
+        if (!parked_re.test(parked_time)) {
+            await toastMixin.fire({
+                title: "คำแนะนำ",
+                icon: "error",
+                text: "รูปแบบข้อมูลไม่ถูกต้อง! " + parked_time,
+            });
+        } else {
+            const _reply = await fetchApi(`/api/data/service_fees_format/calculate_list_test?id=${current_service_fee_fromat_id}&parked=${parked_time}`, "get", null, "json");
+            debug(_reply);
+            if (_reply.success) {
+                Swal.fire({
+                    icon: "info",
+                    title: "ทดสอบคิคค่าบริการ",
+                    html: _reply.msg,
+                })
+            } else {
+                Swal.fire({
+                    icon: "error",
+                    title: "ทดสอบคิคค่าบริการ",
+                    text: _reply.msg,
+                })
+            }
+        }
+
+    }
+
+    async function add_calculate_list() {
+        if (!calculate_list_add_mode) {
+
+            const tbody = document.getElementById("tbody_calculate_list");
+            const temp = document.getElementById("template_calculate_list");
+            const _c = temp.content.cloneNode(true);
+
+            _c.querySelectorAll('[name="calculate_list_condition_key"]')[0].innerText = "00:00";
+            _c.querySelectorAll('[name="calculate_list_condition_value"]')[0].innerText = "+10";
+
+            const temp_btn_control = document.getElementById("template_calculate_list_submit_btn");
+            const _c_btn_control = temp_btn_control.content.cloneNode(true);
+
+            _c.querySelectorAll('[name="calculate_list_control_btn"]')[0].appendChild(_c_btn_control);
+
+            tbody.appendChild(_c);
+            calculate_list_add_mode = true;
+        } else {
+            await toastMixin.fire({
+                title: "คำแนะนำ",
+                icon: "warning",
+                text: "มีรายการที่อยู่ระหว่างการดำเนินการ!",
+            });
+        }
+    }
+
+    async function apply_calculate_list(row) {
+        const _k = row.querySelectorAll('[name="calculate_list_condition_key"]')[0].innerText;
+        const _v = row.querySelectorAll('[name="calculate_list_condition_value"]')[0].innerText;
+        if (!Time_RE.test(_k)) {
+            await toastMixin.fire({
+                title: "คำแนะนำ",
+                icon: "error",
+                text: "รูปแบบข้อมูลไม่ถูกต้อง!",
+            });
+            calculate_list_add_mode = false;
+            build_tbody_calculate_list();
+            return;
+        }
+        if (!parseInt(_v)) {
+
+            await toastMixin.fire({
+                title: "คำแนะนำ",
+                icon: "error",
+                text: "รูปแบบข้อมูลไม่ถูกต้อง! V",
+            });
+            calculate_list_add_mode = false;
+            build_tbody_calculate_list();
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append("id", current_service_fee_fromat_id);
+        formData.append("key", _k);
+        formData.append("value", _v);
+
+        const _reply = await fetchApi("/api/data/service_fees_format/calculate_list", "post", formData, "json");
+        debug(_reply);
+        if (!!_reply) {
+            if (_reply.success == true) {
+                calculate_list_add_mode = false;
+                Swal.fire({
+                    icon: "info",
+                    title: "Successful",
+                }).then(() => {
+                    calculate_list_str = _reply.data[0].calculate_list;
+                    build_tbody_calculate_list();
+
+                });
+            } else {
+                debug(_reply)
+                toastMixin.fire({
+                    title: JSON.stringify(_reply),
+                    icon: "error",
+                });
+            }
+        }
+    }
+
+    async function remove_calculate_list(row) {
+        const _k = row.querySelectorAll('[name="calculate_list_condition_key"]')[0].innerText;
+        const _v = row.querySelectorAll('[name="calculate_list_condition_value"]')[0].innerText;
+
+        const formData = new FormData();
+        formData.append("id", current_service_fee_fromat_id);
+        formData.append("key", _k);
+        formData.append("value", _v);
+
+        const _reply = await fetchApi("/api/data/service_fees_format/calculate_list", "delete", formData, "json");
+        debug(_reply);
+        if (!!_reply) {
+            if (_reply.success == true) {
+                calculate_list_add_mode = false;
+                Swal.fire({
+                    icon: "info",
+                    title: "Successful",
+                }).then(() => {
+                    calculate_list_str = _reply.data[0].calculate_list;
+                    build_tbody_calculate_list();
+
+                });
+            } else {
+                debug(_reply)
+                toastMixin.fire({
+                    title: JSON.stringify(_reply),
+                    icon: "error",
+                });
+            }
+        }
+    }
+
+
+</script>
+
+</html>

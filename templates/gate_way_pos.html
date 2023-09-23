@@ -1,0 +1,1577 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    {% include '_meta.html' %}
+</head>
+
+<body class="flex flex-col color_theme_bg">
+
+    <div class="drawer lg:drawer-open ">
+        <input id="side-drawer" type="checkbox" class="drawer-toggle" />
+        <div class="relative flex flex-col px-2 drawer-content">
+            {% include '_nav_bar.html' %}
+            <!-- Page content here -->
+            <div class="rounded-lg bg-base-200">
+                <!-- GATE IN FLEX -->
+                <div class="hidden " id="gate_in_page">
+                    <div class="flex flex-col gap-2">
+                        <!-- Card Box ทำรายการ -->
+                        <div class="p-4 card active:ring-2">
+                            <div class="grid grid-cols-1 gap-4 mb-4 md:grid-cols-2">
+
+                                <div class="hidden p-2 card md:block">
+
+                                    <div class="m-4 text-xl text-center" id="info_config_gateway_in_parking">Parking Name</div>
+
+                                    <figure><img id="input_config_gateway_in_image" src="" class="mx-auto rounded-lg" /></figure>
+                                    <div class="m-4 text-xl text-center" id="info_config_gateway_in_name"></div>
+
+                                    <div class="mx-auto mt-2 border rounded-md w-fit">
+                                        <div class="m-4 text-xl text-center">ค่าบริการ</div>
+                                        <div class="m-4 text-xl text-center" id="defult_service_fee">defult_service_fee</div>
+                                    </div>
+                                    <div class="m-4 text-xl text-center text-red-500">สถานะลานจอด <span id="info_config_gateway_in_parking_lot"
+                                            class="bg-indigo-100 text-indigo-800 text-xl font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-indigo-400 border border-indigo-400">1/500</span>
+                                    </div>
+
+                                </div>
+                                <div class="flex flex-col gap-4 grow ">
+                                    <div>
+                                        <label id="lable_of_gateway_in" for="id_card"
+                                            class="block mb-2 text-2xl font-medium text-center text-gray-900 dark:text-white">GATEWAY</label>
+                                        <input type="text" name="id_card" id="input_card_id" autocomplete="off" class="w-full input input-bordered input-secondary"
+                                            placeholder="กรุณาทาบบัตร เพื่อทำรายการ" onkeypress="input_id_card_onkeypress(event)">
+
+                                    </div>
+                                    <div>
+                                        <label for="license_id" class="block mb-2 text-2xl font-medium text-center text-gray-900 dark:text-white">License
+                                            <label class="relative inline-flex items-center mb-5 cursor-pointer">
+                                                <input type="checkbox" id="input_license_id_required" class="toggle toggle-error" checked />
+                                            </label>
+                                        </label>
+                                        <input type="text" name="license_id" id="input_license_id" autocomplete="off" class="w-full input input-bordered input-secondary"
+                                            placeholder="xx-xxxx" value="N/A" onkeypress="input_id_card_onkeypress(event)">
+                                    </div>
+                                    <div class="grid gap-2 sm:grid-cols-2">
+                                        <div class="">
+                                            <label for="input_gate_in_profile" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Services Fee</label>
+                                            <select id="input_gate_in_profile" class="w-full max-w-xs select select-secondary">
+
+                                            </select>
+                                        </div>
+                                        <div class="">
+                                            <label for="remark" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Remark</label>
+                                            <textarea name="remark" rows="4" class="w-full textarea textarea-bordered" placeholder="หมายเหตุ" id="input_gate_in_remark"></textarea>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <button class="w-full border-blue-500 btn_block text_primary" onclick="submit_gate_in_data()">
+                                            <i class="text-blue-600 fa-solid fa-arrow-right-to-bracket"></i>
+                                            <span class="ml-2 text-2xl">ทำรายการเข้า</span>
+                                        </button>
+                                        <button class="w-full mt-2 btn btn-outline btn-warning" onclick="switch_mode_gate_way('OUT')">
+                                            <span class="ml-2 text-2xl">Switch Mode</span>
+                                            <i class="ml-2 fa-solid fa-arrow-right-from-bracket"></i>
+
+                                        </button>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+                        <!-- Card Of Lasted Gate IN -->
+                        <div class="flex gap-2 p-4 card active:ring-2 ">
+                            <div
+                                class="flex flex-col w-1/2 p-6 text-center text-gray-900 bg-white border border-gray-100 rounded-lg shadow h-fit dark:border-gray-600 xl:p-8 dark:bg-gray-800 dark:text-white">
+                                <div class="">รายการล่าสุด</div>
+                                <div class="grid sm:grid-cols-2">
+                                    <label class="block max-w-sm text-sm font-medium">เวลา เข้า</label>
+                                    <div class="mb-2 " id="lasted_gate_in_time">-</div>
+
+                                    <label class="block text-sm font-medium ">หมายเลขบัตร</label>
+                                    <div class="mb-2" id="lasted_gate_in_card_id">-</div>
+
+                                    <label class="block text-sm font-medium ">ทะเบียนรถ</label>
+                                    <div class="mb-2" id="lasted_gate_in_license_id">-</div>
+
+                                    <label class="block text-sm font-medium ">รูปแบบค่าบริการ</label>
+                                    <div class="mb-2" id="lasted_gate_in_profile">-</div>
+
+                                </div>
+                            </div>
+                            <div class="flex flex-col w-1/2 text-gray-900 border border-gray-100 rounded-lg shadow dark:border-gray-600 xl:p-8 dark:text-white lg:flex-row">
+                                <div class="lg:w-1/2">
+                                    <div class="p-2 card ">
+                                        <h2 class="">Camera 01</h2>
+                                        <img id="gate_in_ip_camera_01_latest" src="" alt="Image Not Found" class="rounded-lg" />
+                                    </div>
+                                </div>
+                                <div class="lg:w-1/2">
+                                    <div class="p-2 card ">
+                                        <h2 class="">Camera 02</h2>
+                                        <img id="gate_in_ip_camera_02_latest" src="" alt="Image Not Found" class="rounded-lg" />
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- ? **************************************************************************************************** -->
+                <!-- GATE OUT FLEX -->
+                <div class="hidden" id="gate_out_page">
+                    <div class="flex flex-col gap-2">
+                        <div class=" card active:ring-2">
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+                                <div class="p-2 card ">
+                                    <div class="grid gap-4 mb-4 sm:grid-cols-2">
+                                        <div>
+                                            <label id="lable_of_gateway_out" for="gate_out_input_id_card"
+                                                class="block mb-2 text-xl font-medium text-center text-gray-900 dark:text-white">GATEWAY</label>
+                                            <input type="text" name="gate_out_input_id_card" id="gate_out_input_card_id" autocomplete="off"
+                                                class="w-full input input-bordered input-accent " placeholder="กรุณาทาบบัตร เพื่อทำรายการ" value=""
+                                                onkeypress="gate_out_input_id_card_onkeypress(event)">
+
+                                        </div>
+
+                                        <div>
+                                            <label for="gate_out_input_license_id" class="block mb-2 text-xl font-medium text-center text-gray-900 dark:text-white">License
+                                            </label>
+                                            <input readonly type="text" name="gate_out_license_id" id="gate_out_input_license_id" autocomplete="off"
+                                                class="w-full input input-bordered input-accent " placeholder="xx-xxxx" value="N/A">
+                                        </div>
+
+                                        <div>
+                                            <label for="gate_out_input_in_date" class="block mb-2 text-xl font-medium text-center text-gray-900 dark:text-white">วัน เข้า
+                                            </label>
+                                            <input placeholder="วัน-เดือน-ปี" readonly type="text" name="gate_out_input_in_date" id="gate_out_input_in_date" autocomplete="off"
+                                                class="w-full input input-bordered input-accent ">
+                                        </div>
+
+                                        <div>
+                                            <label for="gate_out_input_in_time" class="block mb-2 text-xl font-medium text-center text-gray-900 dark:text-white">เวลา
+                                            </label>
+                                            <input placeholder="ชั่วโมง:นาที" readonly type="text" name="gate_out_input_in_time" id="gate_out_input_in_time" autocomplete="off"
+                                                class="w-full input input-bordered input-accent ">
+                                        </div>
+
+                                        <div class="sm:col-span-2">
+                                            <label for="gate_out_input_parked_profile"
+                                                class="block w-full mx-auto mb-2 text-xl font-medium text-center text-gray-900 dark:text-white">ประเภทค่าบริการ</label>
+                                            <input placeholder="ประเภทค่าบริการ" readonly type="text" name="gate_out_input_parked_profile" id="gate_out_input_parked_profile"
+                                                autocomplete="off" class="w-full text-center input input-bordered input-accent ">
+                                            <input placeholder="รูปแบบค่าบริการ" readonly type="text" id="gate_out_input_parked_profile_format" autocomplete="off"
+                                                class="w-full mt-1 text-center input input-bordered input-accent">
+                                        </div>
+
+                                        <div class="">
+                                            <label for=" gate_out_input_parked_time"
+                                                class="block w-full mx-auto mb-2 text-xl font-medium text-center text-gray-900 dark:text-white">
+                                                เวลาจอด <span> <i class="fa-solid fa-clock"></i></span> </label>
+                                            <input placeholder="วัน:ชั่วโมง:นาที" readonly type="text" name="gate_out_input_parked_time" id="gate_out_input_parked_time"
+                                                autocomplete="off" class="w-full text-center input input-bordered input-accent">
+
+                                        </div>
+
+                                        <div class="">
+                                            <label for="gate_out_input_parked_price" class="block w-full mx-auto mb-2 text-xl font-medium text-center text-orange-400">ค่าบริการ
+                                                <span><i class="fa-solid fa-hand-holding-dollar"></i></span>
+                                            </label>
+                                            <input placeholder="000 บาท" readonly type="text" name="gate_out_input_parked_price " id="gate_out_input_parked_price"
+                                                autocomplete="off" class="w-full text-3xl text-center input input-bordered input-accent ">
+                                        </div>
+
+                                        <div class="hidden sm:col-span-2">
+                                            <label for="gate_out_input_remark" class="block mb-2 text-xl font-medium text-gray-900 dark:text-white">Remark</label>
+                                            <textarea readonly id="gate_out_input_remark" rows="2" class="text_box_form" placeholder="หมายเหตุ"></textarea>
+                                        </div>
+                                        <div class="sm:col-span-2">
+                                            <button id="btn_submit_gate_out_data" class="w-full border-blue-500 btn_block text-accent" onclick="submit_gate_out_data()">
+                                                <span class="ml-2 text-xl">ทำรายการออก</span>
+                                                <i class="ml-2 text-orange-600 fa-solid fa-arrow-right-from-bracket"></i>
+
+                                            </button>
+                                            <button class="w-full mt-2 btn btn-outline btn-warning" onclick="switch_mode_gate_way('IN')">
+                                                <i class="fa-solid fa-arrow-right-to-bracket"></i>
+
+                                                <span class="ml-2 text-xl">Switch Mode</span>
+                                            </button>
+
+                                            <button disabled class="w-full mt-2 btn btn-outline btn-warning" onclick="process_gate_out_open()">
+                                                <i class="fa-solid fa-arrow-right-to-bracket"></i>
+
+                                                <span class="ml-2 text-xl">OPEN GATE</span>
+                                            </button>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+
+                                <div class="p-2 card ">
+                                    <div>
+                                        <label for="gate_out_input_parked_profile"
+                                            class="block w-full mx-auto mb-2 font-medium text-center text-gray-900 dark:text-white">ช่องทางเข้า</label>
+                                        <input placeholder="ช่องทางเข้า" readonly type="text" id="gate_out_trans_gate_in_info"
+                                            class="w-full mb-2 text-center input input-bordered input-accent ">
+                                    </div>
+                                    <figure><img src="/static/image/logo.png" alt="Not Image" id="gate_out_ip_camera_01" class="mx-auto rounded-lg" /></figure>
+                                    <figure><img src="/static/image/logo.png" alt="Not Image" id="gate_out_ip_camera_02" class="mx-auto mt-2 rounded-lg" /></figure>
+                                    <div class="hidden" id="control_box_submit_gate_out">
+                                        <div class="flex flex-col gap-2 m-8 ">
+                                            <button type="button" class="w-full text-red-200 btn_block" onclick="cancel_submit_gate_out()">ยกเลิกทำรายการ</button>
+                                            <button type="button" class="w-full text-yellow-600 btn_block" onclick="chang_profile_gate_out()">เปลื่ยนรูปแบบค่าบริการ</button>
+                                            <button type="button" onkeydown="btn_confirm_gate_out_data_keydown(event)"
+                                                class="w-full h-16 btn_block text_success ring-4 animate-pulse" id="btn_confirm_gate_out_data"
+                                                onclick="confirm_gate_out_data()">ยืนยันทำรายการ</button>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="hidden p-2 card lg:block">
+                                    <div class="m-4 text-xl text-center" id="info_config_gateway_out_parking">Parking Name</div>
+                                    <figure><img id="input_config_gateway_out_image" src="" class="mx-auto rounded-lg" /></figure>
+                                    <div class="m-4 text-xl text-center" id="info_config_gateway_out_name"></div>
+                                    <div class="m-4 text-xl text-center text-red-500">สถานะลานจอด <span id="info_config_gateway_out_parking_lot"
+                                            class="bg-indigo-100 text-indigo-800 text-xl font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-indigo-400 border border-indigo-400">1/500</span>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card Of Lasted Gate Out -->
+                        <div class="flex gap-2 p-4 card active:ring-2 ">
+                            <div
+                                class="flex flex-col w-1/2 p-6 text-center text-gray-900 bg-white border border-gray-100 rounded-lg shadow h-fit dark:border-gray-600 xl:p-8 dark:bg-gray-800 dark:text-white">
+                                <button class="border-blue-500 btn_block text-accent" onclick="print_slip();">Last Slip</button>
+
+                                <div class="">รายการล่าสุด</div>
+                                <div class="grid sm:grid-cols-2">
+                                    <label class="block max-w-sm text-sm font-medium">เวลา ทำรายการ</label>
+                                    <div class="mb-2 " id="lasted_gate_out_time">-</div>
+
+                                    <label class="block text-sm font-medium ">หมายเลขบัตร</label>
+                                    <div class="mb-2" id="lasted_gate_out_card_id">-</div>
+
+                                    <label class="block text-sm font-medium ">ทะเบียนรถ</label>
+                                    <div class="mb-2" id="lasted_gate_out_license_id">-</div>
+
+                                    <label class="block text-sm font-medium ">รูปแบบค่าบริการ</label>
+                                    <div class="mb-2" id="lasted_gate_out_profile">-</div>
+
+                                    <label class="block text-sm font-medium ">ค่าบริการ</label>
+                                    <div class="mb-2" id="lasted_gate_out_amount">-</div>
+
+                                    <label class="block text-sm font-medium ">เวลาจอด</label>
+                                    <div class="mb-2" id="lasted_gate_out_parked">-</div>
+
+                                </div>
+                            </div>
+                            <div class="flex flex-col w-1/2 text-gray-900 border border-gray-100 rounded-lg shadow dark:border-gray-600 xl:p-8 dark:text-white lg:flex-row">
+                                <div class="lg:w-1/2">
+                                    <div class="p-2 card ">
+                                        <h2 class="">Camera 01</h2>
+                                        <img id="gate_out_ip_camera_01_latest" src="" alt="Image Not Found" class="rounded-lg" />
+                                    </div>
+                                </div>
+                                <div class="lg:w-1/2">
+                                    <div class="p-2 card ">
+                                        <h2 class="">Camera 02</h2>
+                                        <img id="gate_out_ip_camera_02_latest" src="" alt="Image Not Found" class="rounded-lg" />
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        {% include '_side_menu_bar.html' %}
+    </div>
+    {% include '_footer.html' %}
+
+    <template id="confirm_gate_in">
+        <swal-title>
+            <div id="swal_title_gate_in">ยืนยันทำรายการ?</div>
+
+        </swal-title>
+        <swal-icon type="question"></swal-icon>
+        <swal-html>
+            <div class="flex flex-col text-blue-500">
+                <div class="p-2 card ">
+                    <div class="flex flex-row gap-1">
+                        <img id="gate_in_ip_camera_01" alt="..." loading="lazy" class="w-1/2 p-1 rounded-lg" />
+                        <img id="gate_in_ip_camera_02" alt="..." loading="lazy" class="w-1/2 p-1 rounded-lg" />
+                    </div>
+                    <div class="">
+                        <div class="text-xl text-center" id="confirm_gate_in_name"></div>
+                        <div class="text-xl text-center" id="confirm_card_member_type_name"></div>
+                        <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                            <tbody>
+                                <tr class="">
+                                    <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap d">
+                                        หมายเลขบัตร
+                                    </th>
+                                    <td class="px-6 py-4" id="confirm_gate_in_card_id">
+                                        Loading...
+                                    </td>
+                                </tr>
+                                <tr class="">
+                                    <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap d">
+                                        ทะเบียนรถ
+                                    </th>
+                                    <td class="px-6 py-4" id="confirm_gate_in_license_id">
+                                        Loading...
+                                    </td>
+                                </tr>
+                                <tr class="">
+                                    <th scope=" row" class="px-6 py-4 font-medium whitespace-nowrap d">
+                                        วัน-เวลา
+                                    </th>
+                                    <td class="px-6 py-4 text-orange-500" id="confirm_gate_in_time">
+                                        Loading...
+                                    </td>
+                                </tr>
+                                <tr class="">
+                                    <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap d">
+                                        รูปแบบค่าบริการ
+                                    </th>
+                                    <td class="px-6 py-4" id="confirm_gate_in_service_fee_name">
+                                        Loading...
+                                    </td>
+                                </tr>
+                                <tr class="">
+                                    <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap d">
+                                        หมายเหตุ
+                                    </th>
+                                    <td class="px-6 py-4" id="confirm_gate_in_remark">
+                                        Loading...
+                                    </td>
+                                </tr>
+
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <p>Successfully by {{user.name}}</p>
+
+                </div>
+
+            </div>
+        </swal-html>
+        <swal-button type="confirm">
+            ตกลง
+        </swal-button>
+        <swal-button type="cancel">
+            ยกเลิก
+        </swal-button>
+        <swal-button type="deny">
+            แก้ไข
+        </swal-button>
+        <swal-param name="allowEscapeKey" value="false" />
+        <swal-param name="allowOutsideClick" value="false" />
+
+        <swal-function-param name="didOpen" value="popup => console.log(popup)" />
+    </template>
+
+    <template id="confirm_gate_out_process">
+        <swal-title>
+            ยืนยันทำรายการ?
+        </swal-title>
+        <swal-icon type="question" color="#3073A9"></swal-icon>
+        <swal-html>
+            <div class="flex flex-col text-blue-500">
+                <div class="p-2 card ">
+                    <div class="flex flex-col gap-2 m-8">
+                        <div>
+                            <p>Service fee</p>
+                            <div id="services_fee_profile" class="p-2 text-3xl font-bold text-blue-800 bg-blue-100 rounded dark:bg-blue-200 dark:text-blue-800">000</div>
+                        </div>
+                        <div>
+                            <p>ค่าบริการ</p>
+                            <div id="amount_input_parked_price" class="p-2 text-3xl font-bold text-blue-800 bg-blue-100 rounded dark:bg-blue-200 dark:text-blue-800">000</div>
+                        </div>
+                        <div class="">
+                            <label for="input_parked_price" class="block w-full mx-auto mb-2 text-2xl font-medium text-center text-orange-400">รับเงิน</label>
+                            <input placeholder="000 บาท" type="number" id="pay_input_parked_price" name="input_parked_price " autocomplete="off"
+                                onkeypress="event_key_pass_swal(event)" class="text-3xl text-center text_box_form">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </swal-html>
+        <swal-button type="confirm">
+            ตกลง
+        </swal-button>
+        <swal-button type="cancel">
+            ยกเลิก
+        </swal-button>
+        <swal-button type="deny">
+            กลับไปตรวจสอบ
+        </swal-button>
+        <swal-param name="allowEscapeKey" value="false" />
+        <swal-param name="allowOutsideClick" value="false" />
+
+        <swal-function-param name="didOpen" value="popup => console.log(popup)" />
+    </template>
+
+    <!-- Slip Card -->
+    <div class="hidden">
+        <div id="slip_print_div">
+            <div class="w-full max-w-md p-4 bg-white border border-black rounded-lg shadow sm:p-8 >
+                <div class=" flex items-center justify-center gap-4 ">
+                <img class=" w-16 h-16 rounded-full " src=" /static/data_base/image/app_configurations/app_configurations_image.jpg">
+                <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white">PKS@PARKING</h5>
+            </div>
+            <div class="flow-root text-black">
+                <ul role="list">
+
+                    <li class="py-2">
+                        <div class="flex items-center space-x-4">
+                            <div class="flex-1 min-w-0">
+                                <p class="text-sm font-medium truncate">หมายเลขรายการ</p>
+                                <p class="text-sm truncate">Transaction Number</p>
+                            </div>
+                            <div class="inline-flex items-center text-base font-semibold ">[transaction_id]</div>
+                        </div>
+                    </li>
+
+                    <li class="py-2">
+                        <div class="flex items-center space-x-4">
+                            <div class="flex-1 min-w-0">
+                                <p class="text-sm font-medium truncate">หมายเลขบัตร</p>
+                                <p class="text-sm truncate">card Number</p>
+                            </div>
+                            <div class="inline-flex items-center text-base font-semibold ">[card_id]</div>
+                        </div>
+                    </li>
+
+                    <li class="py-2">
+                        <div class="flex items-center space-x-4">
+                            <div class="flex-1 min-w-0">
+                                <p class="text-sm font-medium truncate">เวลาเข้า</p>
+                            </div>
+                            <div class="inline-flex items-center text-base font-semibold ">[in_time]</div>
+                        </div>
+                    </li>
+
+                    <li class="py-3 sm:py-4">
+                        <div class="flex items-center space-x-4">
+                            <div class="flex-1 min-w-0">
+                                <p class="text-sm font-medium truncate">เวลาออก</p>
+                            </div>
+                            <div class="inline-flex items-center text-base font-semibold ">[out_time]</div>
+                        </div>
+                    </li>
+
+                    <li class="py-2">
+                        <div class="flex items-center space-x-4">
+                            <div class="flex-1 min-w-0">
+                                <p class="text-sm font-medium truncate">เวลาจอด</p>
+                            </div>
+                            <div class="inline-flex items-center text-base font-semibold ">[parked]</div>
+                        </div>
+                    </li>
+
+                    <li class="py-2">
+                        <div class="flex items-center space-x-4">
+                            <div class="flex-1 min-w-0">
+                                <p class="text-sm font-medium truncate">รับเงิน</p>
+                            </div>
+                            <div class="inline-flex items-center text-base font-semibold ">[pay]</div>
+                        </div>
+                    </li>
+
+                    <li class="py-2">
+                        <div class="flex items-center space-x-4">
+                            <div class="flex-1 min-w-0">
+                                <p class="text-sm font-medium truncate">ค่าบริการ</p>
+                            </div>
+                            <div class="inline-flex items-center text-base font-semibold ">[amount]</div>
+                        </div>
+                    </li>
+
+                    <li class="py-2">
+                        <div class="flex items-center space-x-4">
+                            <div class="flex-1 min-w-0">
+                                <p class="text-sm font-medium truncate">เงินทอน</p>
+                            </div>
+                            <div class="inline-flex items-center text-base font-semibold ">[trun]</div>
+                        </div>
+                    </li>
+
+                </ul>
+                <div class="font-bold text-center text-md ">[service_fee]</div>
+                <div class="font-bold text-center text-md ">***ขอบคุณ***</div>
+            </div>
+        </div>
+
+    </div>
+    <!-- Slip Card -->
+    </div>
+</body>
+{% include '_script.html' %}
+<link rel="stylesheet" type="text/css" href="/static/plugins/printJS/print.min.css">
+<script src="/static/plugins/printJS/print.min.js"></script>
+<script src="/static/plugins/serial_port/serial_device.js?t={{now}}"></script>
+
+<script>
+    // CONST VARIABLES
+    const IMAGE_NOT_FOUND = "";
+    let GATE_MODE = null;
+    let PARKING_IN_NAME = null;
+    let GATE_IN_NAME = null;
+    let GATE_IN_ID = null;
+    let GATE_IN_IP_CAMERAS = null;
+    let PARKING_OUT_NAME = null;
+    let GATE_OUT_NAME = null;
+    let GATE_OUT_ID = null;
+    let GATE_OUT_IP_CAMERAS = null;
+    const PRINTER_WIDTH = null;
+    const USER_SERIAL_PORT = false;
+    let SERIAL_PORT = null;
+    let GATEWAY_LIST = null;
+    let SERVICES_FEES_LIST = null;
+    let SERVICES_FEES_DEFAULT = null;
+    const gate_in_page = document.getElementById("gate_in_page");
+    const gate_out_page = document.getElementById("gate_out_page");
+    //test_fetch();
+
+    async function set_localStorage() {
+        let set_default = null;
+        if (localStorage.getItem('GATE_IN_ID') === null) {
+            localStorage.setItem('GATE_IN_ID', 1);
+            set_default = true;
+        }
+        if (localStorage.getItem('GATE_OUT_ID') === null) {
+            set_default = true;
+            localStorage.setItem('GATE_OUT_ID', 1);
+        }
+        if (localStorage.getItem('GATE_MODE') === null) {
+            set_default = true;
+            localStorage.setItem('GATE_MODE', "IN");
+        }
+        if (localStorage.getItem('GATE_IN_SERVICES_FEE') === null) {
+            set_default = true;
+            localStorage.setItem('GATE_IN_SERVICES_FEE', 1);
+        }
+        if (set_default) {
+            await Swal.fire({
+                background: "#343A40",
+                title: 'กำหนดค่าบริการเริ่มต้น',
+                text: "กำหนดค่าบริการเริ่มต้นหากต้องการเปลื่ยนไปที่ส่วนกำหนดค่า",
+                confirmButtonText: 'OK',
+            })
+        }
+
+    }
+
+
+    set_localStorage();
+    print_info(info_text("Gate Mode :" + localStorage.getItem('GATE_MODE')));
+
+    function onReceive(msg) {
+        print_info(success_text(msg));
+    }
+    function onConnect(msg) {
+        toastMixin.fire({
+            title: "serial_device_connected",
+            text: msg,
+            icon: "success",
+        });
+    }
+    function onDisconnect(msg) {
+        print(success_text(msg));
+    }
+    function onError(msg) {
+        Swal.fire({
+            title: 'SERIAL_PORT',
+            text: msg,
+
+        })
+    }
+
+    async function get_connect_serial_port() {
+        if (USER_SERIAL_PORT) {
+            await Swal.fire({
+                background: "#343A40",
+                title: 'USER_SERIAL_PORT',
+                text: "Connect serial_port",
+                showCancelButton: true,
+                confirmButtonText: 'OK',
+
+            }).then(async (result) => {
+                print_info(result);
+                if (result.isConfirmed) {
+                    print_info("Testing");
+                    SERIAL_PORT = new SerialDevice({ port: "ttyUSB0" });
+                    print_info(SERIAL_PORT.getDevice());
+                    SERIAL_PORT.onReceive = onReceive;
+                    SERIAL_PORT.onConnect = onConnect;
+                    SERIAL_PORT.onError = onError;
+                    const r = await SERIAL_PORT.init();
+                    if (r) {
+
+                        //setInterval(() => {
+                        //    SERIAL_PORT.sendMsg("IR\r\n");
+                        //}, 3000);
+                        debug(SERIAL_PORT.port);
+                    }
+                } else if (result.isDenied) {
+
+                } else {
+
+                }
+            });
+        }
+    }
+
+    async function switch_mode_gate_way(gate_mode = null) {
+        if (gate_mode) {
+            if (gate_mode == "OUT") {
+                gate_in_page.classList.add("hidden")
+                gate_out_page.classList.remove("hidden")
+                gate_out_input_card_id.focus();
+                localStorage.setItem('GATE_MODE', gate_mode);
+            }
+            if (gate_mode == "IN") {
+                gate_in_page.classList.remove("hidden")
+                gate_out_page.classList.add("hidden")
+                input_card_id.focus();
+                localStorage.setItem('GATE_MODE', gate_mode);
+            }
+        } else {
+            await Swal.fire({
+                icon: 'error',
+                title: 'Oops...Gate ไม่ถูกต้อง',
+                text: "กรุณาตรวจสอบการกำหนดค่า",
+                footer: 'ข้อผิดพลาด!'
+            });
+        }
+
+    }
+    switch_mode_gate_way(localStorage.getItem('GATE_MODE'));
+
+    function warp_proxy(url, timestamp = true) {
+
+        if (timestamp) {
+            const _t = moment().unix();
+            return `/proxy?url=${encodeURI(url)}&timestamp=${_t}`;
+        } else {
+            return `/proxy?url=${encodeURI(url)}`;
+
+        }
+    }
+    async function setting_gate_way() {
+        try {
+            print_info(success_text("---------------------------- Setting ----------------------------)"));
+            let _result = await fetchApi("/api/service_fees/", "get", null, "json");
+            if (_result.success) {
+                SERVICES_FEES_LIST = _result.data;
+                debug(SERVICES_FEES_LIST)
+                let services_fees_list_option = "<option value=0>ค่าบริการตามประเภทบัตร</option>";
+                const _services_fees_list_option_id = localStorage.getItem('GATE_IN_SERVICES_FEE');
+                await SERVICES_FEES_LIST.forEach((value, index, array) => {
+                    //print_info(value);
+                    const _t_op = `<option value=${value.Service_Fees.id}>${value.Service_Fees.name}</option>`;
+                    services_fees_list_option += _t_op;
+                    if (value.Service_Fees.id == _services_fees_list_option_id) {
+                        SERVICES_FEES_DEFAULT = value.Service_Fees;
+                        document.getElementById("defult_service_fee").innerText = SERVICES_FEES_DEFAULT.name;
+                    }
+                })
+                //print_info(services_fees_list_option);
+                input_gate_in_profile.innerHTML = services_fees_list_option;
+                //print_info(localStorage.getItem('GATE_IN_SERVICES_FEE'))
+                //input_gate_in_profile.value = localStorage.getItem('GATE_IN_SERVICES_FEE');
+                input_gate_in_profile.value = 0;
+
+
+            } else {
+                await Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...Service_Fees ไม่ถูกต้อง',
+                    text: _result.msg,
+                    footer: 'ข้อผิดพลาด การเชื่อมต่อระบบ!'
+                });
+            }
+
+            if (!input_gate_in_profile.value) {
+                await Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...Service_Fees ไม่ถูกต้อง',
+                    text: _result.msg,
+                    footer: 'ข้อผิดพลาด การตั้งค่าระบบ!'
+                });
+            }
+
+            _result = await fetchApi("/api/function/gateway_list/?id=" + localStorage.getItem('GATE_IN_ID'), "get", null, "json");
+            if (_result.success) {
+                print_info(_result.data);
+                const _gateway_in = _result.data[0].GateWay;
+                const _parking_in = _result.data[0].Parking_Lot;
+                PARKING_IN_NAME = _parking_in.name;
+                GATE_IN_ID = _gateway_in.id;
+                GATE_IN_NAME = _gateway_in.name;
+                GATE_IN_IP_CAMERAS = String(_gateway_in.ip_cameras).split("\n").map(x => x.trim());
+
+                document.getElementById("info_config_gateway_in_parking").innerHTML = PARKING_IN_NAME;
+                document.getElementById("info_config_gateway_in_name").innerHTML = GATE_IN_NAME;
+                document.getElementById("info_config_gateway_in_parking_lot").innerHTML = `${_parking_in.value}/${_parking_in.limit}`;
+
+                document.getElementById("lable_of_gateway_in").innerHTML = _gateway_in.name;
+                document.getElementById("info_config_gateway_in_name").innerHTML = _gateway_in.name;
+                document.getElementById("input_config_gateway_in_image").src = _gateway_in.images_path;
+            } else {
+                await Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...GATE_IN_ID ไม่ถูกต้อง',
+                    text: _result.msg,
+                    footer: 'ข้อผิดพลาด การเชื่อมต่อระบบ!'
+                });
+            }
+            _result = await fetchApi("/api/function/gateway_list/?id=" + localStorage.getItem('GATE_OUT_ID'), "get", null, "json");
+            if (_result.success) {
+                const _gateway_out = _result.data[0].GateWay;
+                const _parking_out = _result.data[0].Parking_Lot;
+                PARKING_OUT_NAME = _parking_out.name;
+                GATE_OUT_ID = _gateway_out.id;
+                GATE_OUT_NAME = _gateway_out.name;
+                GATE_OUT_IP_CAMERAS = String(_gateway_out.ip_cameras).split("\n").map(x => x.trim());
+                print_info(GATE_OUT_IP_CAMERAS);
+
+                document.getElementById("info_config_gateway_out_parking").innerHTML = PARKING_OUT_NAME;
+                document.getElementById("info_config_gateway_out_name").innerHTML = GATE_OUT_NAME;
+                document.getElementById("info_config_gateway_out_parking_lot").innerHTML = `${_parking_out.value}/${_parking_out.limit}`;
+
+                document.getElementById("lable_of_gateway_out").innerHTML = _gateway_out.name;
+                document.getElementById("info_config_gateway_out_name").innerHTML = GATE_OUT_NAME;
+                document.getElementById("input_config_gateway_out_image").src = _gateway_out.images_path;
+            } else {
+                await Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...GATE_OUT_ID ไม่ถูกต้อง',
+                    text: _result.msg,
+                    footer: 'ข้อผิดพลาด การเชื่อมต่อระบบ!'
+                });
+            }
+            const value = "SLIP_OUT";
+            const _reply = await fetchApi("/api/document/?document=" + value, "get", null, "json");
+            debug(_reply);
+            if (_reply.success) {
+                const document_text_editor = document.getElementById("document_text_editor");
+                const App_Configurations = _reply.data.App_Configurations;
+                document.getElementById("slip_print_div").innerHTML = App_Configurations.value;
+            }
+
+        } catch (error) {
+            await Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: error.message,
+                footer: 'ข้อผิดพลาด การเชื่อมต่อระบบ!'
+            })
+            window.location.reload();
+        }
+        await get_connect_serial_port();
+    }
+
+    setting_gate_way();
+
+    function btn_confirm_gate_out_data_keydown(e) {
+        debug(e)
+        if (e.key === "Escape") {
+            toastMixin.fire({
+                title: "ยกเลิกทำรายการ",
+                icon: "warning",
+            });
+            cancel_submit_gate_out();
+        }
+    }
+</script>
+
+<script>
+    const input_card_id = document.getElementById("input_card_id");
+    if (GATE_MODE == "IN")
+        setTimeout(() => { input_card_id.focus(); }, 500);
+    const input_license_id = document.getElementById("input_license_id");
+    const input_license_id_required = document.getElementById("input_license_id_required");
+    const input_gate_in_remark = document.getElementById("input_gate_in_remark");
+    const input_gate_in_profile = document.getElementById("input_gate_in_profile");
+
+    function input_id_card_onkeypress(event) {
+
+        if (event.key === "Enter") {
+            event.preventDefault();
+            submit_gate_in_data();
+        }
+    }
+
+    function clear_gate_in_data() {
+        input_card_id.value = "";
+        input_license_id.value = "";
+        setTimeout(() => { input_card_id.focus(); }, 500);
+    }
+
+    let snap_image_uri_01 = null;
+    let snap_image_uri_02 = null;
+    let url_snap_image_uri_01 = null;
+    let url_snap_image_uri_02 = null;
+    let confirm_gate_in_card_id = null;
+    let confirm_gate_in_license_id = null;
+    let confirm_gate_in_time = null;
+    let confirm_gate_in_service_fee_name = null;
+    let confirm_gate_in_service_fee_id = null;
+    let confirm_gate_in_name = null;
+    let CARD_MEMBER = null;
+    async function submit_gate_in_data() {
+        const _card_id = input_card_id.value;
+
+        if (!_card_id) {
+            await toastMixin.fire({
+                title: `กรุณาทาบบัตรหรือป้อนเลขบัตรเพื่อทำรายการ`,
+                icon: "warning",
+            });
+            input_card_id.focus();
+            return;
+        }
+
+        if (!English.test(_card_id)) {
+            await toastMixin.fire({
+                timer: 5000,
+                title: `กรุณาตรวจสอบการตั้งค่าภาษาที่ Key Board`,
+                icon: "warning",
+            });
+            input_card_id.value = "";
+            input_card_id.focus();
+            return;
+        }
+
+        if (input_license_id_required.checked) {
+            if (input_license_id.value == "") {
+                toastMixin.fire({
+                    title: "คำเตือน",
+                    text: "ระบบต้องการบันทึกข้อมูลทะเบียน",
+                    icon: "info",
+                });
+                input_license_id.focus();
+                return false;
+            }
+        }
+
+        const _api_path = `/api/function/check_in?card_id=${_card_id}`;
+        const _reply = await fetchApi(_api_path, "get", null, "json");
+        print_info(_reply);
+        if (_reply.success == true) {
+            html = "";
+            Swal.fire({
+                background: "#343A40",
+                icon: 'error',
+                title: 'พบมีการทำรายการแล้ว',
+                template: '#confirm_gate_in',
+                showDenyButton: false,
+                showCancelButton: false,
+            }).then((result) => {
+                input_card_id.value = "";
+                input_license_id.value = "";
+                input_card_id.focus();
+            });
+
+            const Log_Transaction = _reply.data.Log_Transaction;
+            const services_free = _reply.data.Service_Fees;
+            const gateway = _reply.data.GateWay;
+            let member_type = _reply.data.Member_Type;
+            const _parked = _reply.parked;
+            if (!member_type) {
+                member_type = { "name": "บัตรไม่ลงทะเบียนในระบบ" }
+            }
+
+            document.getElementById("confirm_gate_in_name").innerHTML = gateway.name;
+            document.getElementById("confirm_card_member_type_name").innerHTML = member_type.name;
+            document.getElementById("confirm_gate_in_card_id").innerHTML = _card_id;
+            document.getElementById("confirm_gate_in_license_id").innerHTML = Log_Transaction.license;
+            const _date_time = moment(Log_Transaction.date_time);
+            document.getElementById("confirm_gate_in_time").innerHTML = `${_date_time.format('DD/MM/YYYY HH:mm')}<br>${_parked}`;
+            document.getElementById("confirm_gate_in_service_fee_name").innerHTML = services_free.name;
+
+            document.getElementById("confirm_gate_in_remark").innerHTML = Log_Transaction.remark;
+
+            const images_path = Log_Transaction.images_path.split(",");
+            document.getElementById("gate_in_ip_camera_01").src = images_path[0];
+            document.getElementById("gate_in_ip_camera_02").src = images_path[1];
+            return;
+        } else {
+            const _d = _reply.data;
+            if (_d) {
+                debug(_d)
+                CARD_MEMBER = _d;
+                Swal.fire({
+
+                    background: "#343A40",
+                    template: '#confirm_gate_in'
+                }).then(async (result) => {
+                    /* Read more about isConfirmed, isDenied below */
+                    if (result.isConfirmed) {
+                        const _tran = await process_Transaction_gate_in();
+
+                        if (_tran) {
+                            process_gate_in_open();
+                        }
+
+                        clear_gate_in_data();
+
+                    } else if (result.isDenied) {
+
+                    } else {
+                        clear_gate_in_data();
+                    }
+                });
+                preConfirmation_gate_in();
+
+            } else {
+                toastMixin.fire({
+                    icon: "warning",
+                    title: "สถานะบัตร",
+                    text: _reply.msg,
+                })
+                input_card_id.value = "";
+                input_card_id.focus();
+                return;
+            }
+        }
+    }
+
+    async function preConfirmation_gate_in() {
+
+        async function get_service_fee_name(id) {
+            for (const _s of SERVICES_FEES_LIST) {
+                if (_s.Service_Fees.id == id) {
+                    return (_s.Service_Fees);
+                }
+            }
+            return null;
+        }
+
+        confirm_gate_in_card_id = input_card_id.value;
+
+        confirm_gate_in_license_id = input_license_id.value;
+        confirm_gate_in_time = moment().format('DD-MM-YYYY HH:mm');
+        const _m = CARD_MEMBER.Member;
+        const _m_t = CARD_MEMBER.Member_Type;
+        const _s_f = CARD_MEMBER.Service_Fees;
+
+        if (input_gate_in_profile.value == 0) {
+            if (_s_f == null) {
+                debug(SERVICES_FEES_DEFAULT)
+                confirm_gate_in_service_fee_name = SERVICES_FEES_DEFAULT.name;
+                confirm_gate_in_service_fee_id = SERVICES_FEES_DEFAULT.id;
+
+            } else {
+                confirm_gate_in_service_fee_name = _s_f.name;
+                confirm_gate_in_service_fee_id = _s_f.id;
+            }
+        } else {
+            const _service_fee = await get_service_fee_name(input_gate_in_profile.value);
+            confirm_gate_in_service_fee_name = _service_fee.name;
+            confirm_gate_in_service_fee_id = _service_fee.id;
+        }
+
+        document.getElementById("confirm_card_member_type_name").innerHTML = "ประเภทบัตร :" + _m_t.name;
+
+        document.getElementById("confirm_gate_in_name").innerHTML = GATE_IN_NAME;
+        document.getElementById("confirm_gate_in_card_id").innerHTML = confirm_gate_in_card_id;
+        document.getElementById("confirm_gate_in_license_id").innerHTML = confirm_gate_in_license_id;
+        document.getElementById("confirm_gate_in_time").innerHTML = confirm_gate_in_time;
+        document.getElementById("confirm_gate_in_service_fee_name").innerHTML = confirm_gate_in_service_fee_name;
+
+        document.getElementById("confirm_gate_in_remark").innerHTML = input_gate_in_remark.value;
+        const _t = moment().unix();
+        let _url_01 = "";
+        let _url_02 = "";
+        debug(GATE_IN_IP_CAMERAS)
+
+        if (GATE_IN_IP_CAMERAS.length >= 1) {
+            //_url_01 = `/proxy?url=${encodeURI(GATE_IN_IP_CAMERAS[0])}`;
+            _url_01 = GATE_IN_IP_CAMERAS[0];
+        }
+        if (GATE_IN_IP_CAMERAS.length >= 2) {
+            //_url_01 = `/proxy?url=${encodeURI(GATE_IN_IP_CAMERAS[0])}`;
+            _url_02 = GATE_IN_IP_CAMERAS[1];
+        }
+        if (GATE_IN_IP_CAMERAS.length >= 3) {
+            //_url_01 = `/proxy?url=${encodeURI(GATE_IN_IP_CAMERAS[0])}`;
+            _url_03 = GATE_IN_IP_CAMERAS[3];
+        }
+
+        url_snap_image_uri_01 = "";
+        url_snap_image_uri_02 = "";
+        snap_image_uri_01 = null;
+        snap_image_uri_02 = null;
+        const swal_title_gate_in = document.getElementById("swal_title_gate_in");
+        swal_title_gate_in.innerHTML = `<div class="text-center">
+            <div role="status">
+                <svg aria-hidden="true" class="inline w-8 h-8 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-red-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
+                    <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"/>
+                </svg>
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>`;
+        debug(_url_01)
+        snap_image_uri_01 = await dataURLtoFile(_url_01, "snap_image_uri_01");
+        snap_image_uri_02 = await dataURLtoFile(_url_02, "snap_image_uri_02");
+        if (snap_image_uri_01)
+            url_snap_image_uri_01 = await URL.createObjectURL(snap_image_uri_01);
+        if (snap_image_uri_02)
+            url_snap_image_uri_02 = await URL.createObjectURL(snap_image_uri_02);
+
+        swal_title_gate_in.innerHTML = "ยืนยันทำรายการ?";
+
+        //print_info(snap_image_uri_01)
+        //print_info(snap_image_uri_02)
+
+
+        if (url_snap_image_uri_01) {
+            const _temp = document.getElementById("gate_in_ip_camera_01");
+            if (_temp)
+                _temp.src = url_snap_image_uri_01;
+
+        } else {
+            print_info(warn_text("snap_image_uri_01 not found :"));
+        }
+
+        if (url_snap_image_uri_02) {
+            const _temp = document.getElementById("gate_in_ip_camera_02");
+            if (_temp)
+                _temp.src = url_snap_image_uri_02;
+
+        } else {
+            print_info(warn_text("snap_image_uri_02 not found :"));
+        }
+
+    }
+
+    async function process_Transaction_gate_in() {
+        toastMixin.fire({
+            timer: 5000,
+            title: `กำลังดำเนินการ`,
+            text: "รอสักครู่",
+            icon: "info",
+        });
+        let _snap_image_uri_01 = false;
+        let _snap_image_uri_02 = false;
+        try {
+            const formData = new FormData();
+            formData.append("gateway_id", GATE_IN_ID);
+            formData.append("card_id", confirm_gate_in_card_id);
+            formData.append("license", confirm_gate_in_license_id);
+            formData.append("time", confirm_gate_in_time);
+            formData.append("service_fees_id", confirm_gate_in_service_fee_id);
+            if (snap_image_uri_01) {
+                formData.append("image_upload_01", snap_image_uri_01);
+                _snap_image_uri_01 = true;
+            }
+
+            if (snap_image_uri_02) {
+                formData.append("image_upload_02", snap_image_uri_02);
+                _snap_image_uri_02 = true;
+            }
+
+
+            const _api_path = "/api/function/check_in";
+
+            const _reply = await fetchApi(_api_path, "post", formData, "json");
+            Swal.close()
+            if (_reply.success == true) {
+                print_info(_reply.msg)
+                await toastMixin.fire({
+                    timer: 1000,
+                    title: `ดำเนินการเรียบร้อยแล้ว :${_reply.msg}`,
+                    icon: "success",
+                });
+            } else {
+                debug(_reply)
+                //await toastMixin.fire({
+                //    timer: 5000,
+                //    title: JSON.stringify(_reply),
+                //    icon: "error",
+                //});
+                await Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: JSON.stringify(_reply),
+                    footer: 'ข้อผิดพลาด !'
+                })
+                return;
+            }
+
+        } catch (error) {
+            await Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: error.message,
+                footer: 'ข้อผิดพลาด !'
+            })
+            return;
+        }
+
+        document.getElementById("lasted_gate_in_time").innerHTML = confirm_gate_in_time;
+        document.getElementById("lasted_gate_in_card_id").innerHTML = confirm_gate_in_card_id;
+        document.getElementById("lasted_gate_in_license_id").innerHTML = confirm_gate_in_license_id;
+        document.getElementById("lasted_gate_in_profile").innerHTML = confirm_gate_in_service_fee_name;
+
+        if (_snap_image_uri_01) {
+            document.getElementById("gate_in_ip_camera_01_latest").src = url_snap_image_uri_01;
+        } else {
+            document.getElementById("gate_in_ip_camera_01_latest").src = "";
+        }
+        if (_snap_image_uri_02) {
+            document.getElementById("gate_in_ip_camera_02_latest").src = url_snap_image_uri_02;
+        } else {
+            document.getElementById("gate_in_ip_camera_02_latest").src = "";
+        }
+
+        print_info(success_text("Process_transition_gate_in Successfully updated"));
+        return 1;
+    }
+
+    function process_gate_in_open() {
+        print_info(success_text("Processing open process_gate_in_open"));
+        setTimeout(() => {
+            toastMixin.fire({
+                title: `Successfully processed`,
+                text: "Open Gateway In",
+                icon: "success",
+            });
+        }, 500);
+
+    }
+</script>
+
+<script>
+    let transactions_id = null;
+    let snap_out_image_uri_01 = null;
+    let snap_out_image_uri_02 = null;
+    let url_snap_out_image_uri_01 = null;
+    let url_snap_out_image_uri_02 = null;
+
+    const gate_out_input_card_id = document.getElementById("gate_out_input_card_id");
+    if (GATE_MODE == "OUT")
+        setTimeout(() => { gate_out_input_card_id.focus(); }, 500);
+
+    const gate_out_input_license_id = document.getElementById("gate_out_input_license_id");
+    const gate_out_input_in_date = document.getElementById("gate_out_input_in_date");
+    const gate_out_input_parked_profile = document.getElementById("gate_out_input_parked_profile");
+    const gate_out_input_in_time = document.getElementById("gate_out_input_in_time");
+    const gate_out_input_parked_time = document.getElementById("gate_out_input_parked_time");
+    const gate_out_input_parked_profile_format = document.getElementById("gate_out_input_parked_profile_format");
+
+    const gate_out_input_parked_price = document.getElementById("gate_out_input_parked_price");
+
+    const gate_out_input_remark = document.getElementById("gate_out_input_remark");
+
+    const control_box_submit_gate_out = document.getElementById("control_box_submit_gate_out");
+
+    const btn_submit_gate_out_data = document.getElementById("btn_submit_gate_out_data");
+
+    const gate_out_trans_gate_in_info = document.getElementById("gate_out_trans_gate_in_info");
+
+    const gate_out_ip_camera_01 = document.getElementById("gate_out_ip_camera_01");
+    const gate_out_ip_camera_02 = document.getElementById("gate_out_ip_camera_02");
+
+
+
+
+    function clear_gate_out_data() {
+        gate_out_input_card_id.value = "";
+        gate_out_input_license_id.value = "";
+        gate_out_input_in_date.value = "";
+        gate_out_input_in_time.value = "";
+        gate_out_input_parked_time.value = "";
+        gate_out_input_parked_profile_format.value = "";
+        gate_out_input_parked_profile.value = "";
+        gate_out_input_parked_price.value = "";
+        gate_out_input_remark.value = "";
+        gate_out_trans_gate_in_info.value = "";
+        gate_out_ip_camera_01.src = "/static/image/logo.png";
+        gate_out_ip_camera_02.src = "/static/image/logo.png";
+
+
+
+    }
+    function show_gate_out_data(v = true) {
+        gate_out_input_card_id.readOnly = v;
+        if (v) {
+            control_box_submit_gate_out.classList.remove("hidden");
+            btn_submit_gate_out_data.classList.add("hidden");
+
+        } else {
+            control_box_submit_gate_out.classList.add("hidden");
+            btn_submit_gate_out_data.classList.remove("hidden");
+        }
+    }
+
+    async function cancel_submit_gate_out() {
+        clear_gate_out_data();
+        show_gate_out_data(false);
+        gate_out_input_card_id.focus();
+    }
+
+
+    function gate_out_input_id_card_onkeypress(event) {
+
+        if (event.key === "Enter") {
+            event.preventDefault();
+            submit_gate_out_data();
+        }
+    }
+
+    async function submit_gate_out_data() {
+        transactions_id = null;
+        const _card_id = gate_out_input_card_id.value;
+        if (!_card_id) {
+            await toastMixin.fire({
+                title: `กรุณาทาบบัตรหรือป้อนเลขบัตรเพื่อทำรายการ`,
+                icon: "warning",
+            });
+            gate_out_input_card_id.focus();
+            return;
+        }
+        let _amount = 0;
+        toastMixin.fire({
+            timer: 5000,
+            title: `กำลังตรวจสอบข้อมูล`,
+            text: "รอสักครู่",
+            icon: "info",
+        });
+
+        //setTimeout(() => { Swal.close() }, 1000);
+        const _api_path = `/api/function/check_out?card_id=${_card_id}`;
+        const _reply = await fetchApi(_api_path, "get", null, "json");
+        Swal.close();
+
+        if (_reply.success) {
+            const _data = _reply.data.transactions;
+            const _acc = _reply.data.acc;
+            print_info(_data);
+            const _gateway = _data.GateWay;
+            const _system_user = _data.SystemUser;
+            const _tran = _data.Transaction_Record;
+            const _Log_Transaction = _data.Log_Transaction;
+            const _services = _data.Service_Fees;
+
+            transactions_id = _tran.id;
+            gate_out_input_license_id.value = _Log_Transaction.license;
+            const _date_time = moment(_Log_Transaction.date_time);
+            gate_out_input_in_date.value = _date_time.format('DD/MM/YYYY');
+            gate_out_input_in_time.value = _date_time.format('HH:mm');
+            gate_out_input_parked_time.value = _acc.parked;
+            gate_out_input_parked_profile_format.value = _acc.service_fees_format;
+            gate_out_input_parked_profile.value = _services.name;
+            gate_out_trans_gate_in_info.value = _gateway.name;
+            const images_path = _Log_Transaction.images_path.split(",");
+            gate_out_ip_camera_01.src = images_path[0];
+            gate_out_ip_camera_02.src = images_path[1];
+
+            gate_out_input_parked_price.value = _acc.amount;
+            gate_out_input_remark.value = _Log_Transaction.remark;
+
+            show_gate_out_data();
+            document.getElementById("btn_confirm_gate_out_data").focus();
+            //btn_submit_gate_out.classList.remove("hidden");
+        } else {
+            gate_out_input_card_id.focus();
+            gate_out_input_card_id.value = "";
+            await toastMixin.fire({
+                title: `คำเตือน\n${_card_id}`,
+                text: _reply.msg,
+                icon: "warning",
+            });
+
+            return false;
+
+        }
+
+    }
+
+    async function process_transition_gate_out(amount, pay, turn_amount) {
+        //setTimeout(() => { Swal.close() }, 1000);
+        toastMixin.fire({
+            timer: 5000,
+            title: `กำลังดำเนินการ`,
+            text: "รอสักครู่",
+            icon: "info",
+        });
+
+        const formData = new FormData();
+        formData.append("transaction_records_id", transactions_id);
+        formData.append("amount", amount);
+        formData.append("pay", pay);
+        formData.append("turn_amount", turn_amount);
+
+        formData.append("gateway_id", GATE_OUT_ID);
+        formData.append("card_id", gate_out_input_card_id.value);
+        formData.append("license", gate_out_input_license_id.value);
+
+
+        let _url_01 = null;
+        let _url_02 = null;
+        //debug(GATE_OUT_IP_CAMERAS)
+        if (GATE_OUT_IP_CAMERAS.length >= 1) {
+            _url_01 = GATE_OUT_IP_CAMERAS[0];
+        }
+        if (GATE_OUT_IP_CAMERAS.length >= 2) {
+            _url_02 = GATE_OUT_IP_CAMERAS[1];
+        }
+        if (GATE_OUT_IP_CAMERAS.length >= 3) {
+            _url_03 = GATE_OUT_IP_CAMERAS[3];
+        }
+
+
+        const gate_out_ip_camera_01_latest = document.getElementById("gate_out_ip_camera_01_latest")
+        const gate_out_ip_camera_02_latest = document.getElementById("gate_out_ip_camera_02_latest")
+        gate_out_ip_camera_01_latest.src = _url_01;
+        gate_out_ip_camera_02_latest.src = _url_02;
+
+        let _snap_out_image_uri_01 = false;
+        let _snap_out_image_uri_02 = false;
+
+        snap_out_image_uri_01 = await dataURLtoFile(_url_01, "gate_out_ip_camera_01_latest");
+        snap_out_image_uri_02 = await dataURLtoFile(_url_02, "gate_out_ip_camera_02_latest");
+
+        if (snap_out_image_uri_01) {
+            formData.append("image_upload_01", snap_out_image_uri_01);
+            _snap_out_image_uri_01 = true;
+        }
+
+        if (snap_out_image_uri_02) {
+            formData.append("image_upload_02", snap_out_image_uri_02);
+            _snap_out_image_uri_02 = true;
+        }
+        debug_form(formData);
+
+        const _reply = await fetchApi("/api/function/check_out", "post", formData, "json");
+        Swal.close();
+        transactions_id = null;
+        if (!!_reply) {
+            if (_reply.status) {
+                const _data = _reply.data;
+                return _data;
+            } else {
+
+            }
+        }
+        return false;
+    }
+
+    async function process_gate_out_open() {
+        const _result = await fetchApi("http://192.168.1.48:8000/cmd?open_gate=1", "get", null, "text", null);
+        debug(_result);
+        print_info(success_text("Processing open process_gate_out_open"));
+        setTimeout(() => {
+            toastMixin.fire({
+                title: `Successfully processed`,
+                text: "Open Gateway Out",
+                icon: "success",
+            });
+        }, 500);
+
+    }
+
+    function print_slip() {
+
+        let focuser = setInterval(() => window.dispatchEvent(new Event('focus')), 1000);
+        printJS({
+            printable: 'slip_print_div',
+            type: 'html',
+            targetStyles: ['*'],
+            documentTitle: "Slip",
+
+            onPrintDialogClose: () => {
+                clearInterval(focuser);
+                // do your thing..
+                print_info(success_text("Processing print_slip"));
+                //process_gate_out_open();
+            },
+
+            onError: () => {
+
+                clearInterval(focuser);
+                print_info(warn_text("Warning Processing print_slip"));
+                // do your thing..
+            }
+        });
+
+    }
+
+    function printPageArea(areaID) {
+        var printContent = document.getElementById(areaID).innerHTML;
+        var originalContent = document.body.innerHTML;
+        document.body.innerHTML = printContent;
+        window.print();
+        document.body.innerHTML = originalContent;
+    }
+
+    function event_key_pass_swal(event) {
+        //
+        if (event.key === "Enter") {
+            event.preventDefault();
+            try {
+                document.getElementsByClassName("swal2-confirm")[0].onclick();
+            } catch (error) {
+                print_error(error);
+            }
+
+
+        }
+    }
+    async function confirm_gate_out_data() {
+        const amount = parseInt(gate_out_input_parked_price.value);
+        let pay = 0;
+        let turn_amount = 0;
+        if (amount > 0 && amount != NaN) {
+            setTimeout(function () {
+
+                document.getElementById("services_fee_profile").innerHTML = gate_out_input_parked_profile.value;
+                document.getElementById("amount_input_parked_price").innerHTML = `${amount} บาท`;
+                document.getElementById("pay_input_parked_price").focus();
+            }, 100)
+
+            const result = await Swal.fire({
+                background: "#343A40",
+                template: '#confirm_gate_out_process',
+                allowEnterKey: false,
+                preConfirm: () => {
+                    const _pay = parseInt(document.getElementById('pay_input_parked_price').value);
+                    if (_pay - amount > 1000) {
+                        return false;
+                    }
+                    if (_pay >= amount) {
+                        return (_pay);
+                    }
+                    return false;
+
+                },
+            });
+
+            print_info(result);
+            if (result.isDenied) {
+                return false;
+            }
+            if (result.isDismissed) {
+                clear_gate_out_data();
+                show_gate_out_data(false);
+                gate_out_input_card_id.focus();
+                return false;
+            }
+            if (result.value > 0) {
+                pay = result.value;
+                turn_amount = result.value - amount
+                const swal_result = await Swal.fire({
+                    title: "รับเงิน : " + pay,
+                    html: `ค่าบริการ : ${amount}<br>ทอน : ${turn_amount}\n`,
+                    showCancelButton: false,
+                    confirmButtonText: 'OK',
+                })
+
+            }
+
+        } else {
+            print_info("Transaction is not pay");
+        }
+
+        const data = await process_transition_gate_out(amount, pay, turn_amount);
+        if (data) {
+            const chack_out = moment().format("DD/MM/YYYY HH:mm");
+            const transaction = data.Transaction_Record;
+
+            const slip_data = document.getElementById("slip_print_div");
+            let slip_content = slip_data.innerHTML;
+
+            slip_content = slip_content.replace("[transaction_id]", transactions_id);
+            slip_content = slip_content.replace("[card_id]", gate_out_input_card_id.value);
+            slip_content = slip_content.replace("[in_time]", `${gate_out_input_in_date.value} ${gate_out_input_in_time.value}`);
+            slip_content = slip_content.replace("[parked]", gate_out_input_parked_time.value);
+            slip_content = slip_content.replace("[pay]", pay);
+            slip_content = slip_content.replace("[amount]", amount);
+            slip_content = slip_content.replace("[service_fee]", gate_out_input_parked_profile.value);
+            slip_content = slip_content.replace("[trun]", turn_amount);
+
+
+            slip_content = slip_content.replace("[out_time]", chack_out);
+
+            slip_data.innerHTML = slip_content;
+
+            const slip_print_div_html = `<div class="text-left">${document.getElementById("slip_print_div").innerHTML}</div>`;
+            const swal_result = await Swal.fire({
+                background: "#343A40",
+                title: 'Print Slip?',
+                html: slip_print_div_html,
+                showCancelButton: true,
+                confirmButtonText: 'OK',
+            });
+            print_info(swal_result)
+
+            if (swal_result.isConfirmed) {
+
+                print_slip();
+            }
+
+
+            document.getElementById("lasted_gate_out_time").innerText = chack_out;
+            document.getElementById("lasted_gate_out_card_id").innerText = gate_out_input_card_id.value;
+            document.getElementById("lasted_gate_out_license_id").innerText = gate_out_input_license_id.value;
+            document.getElementById("lasted_gate_out_profile").innerText = gate_out_input_parked_profile.value;
+            document.getElementById("lasted_gate_out_amount").innerText = amount;
+            document.getElementById("lasted_gate_out_parked").innerText = gate_out_input_parked_time.value;
+
+
+            process_gate_out_open();
+        } else {
+            await Swal.fire({
+                icon: 'error',
+                title: 'ข้อผิดพลาด',
+                text: "Oops...process_transition_gate_out ล้มเหลว",
+                footer: 'ข้อผิดพลาด ระบบ!'
+            });
+        }
+        clear_gate_out_data();
+        show_gate_out_data(false);
+        gate_out_input_card_id.focus();
+    }
+
+
+</script>
+
+<script>
+    function event_handler_ws(e) {
+        const func = e.func;
+        const params = e.params;
+        if (func == "parking_lot_info") {
+            const p = params.split(",");
+            if (p[0] == PARKING_IN_NAME) {
+                document.getElementById("info_config_gateway_in_parking_lot").innerHTML = p[1];
+            }
+            if (p[0] == PARKING_OUT_NAME) {
+                document.getElementById("info_config_gateway_out_parking_lot").innerHTML = p[1];
+            }
+        }
+    }
+    ws_event_subscription = event_handler_ws;
+</script>
+
+
+</html>

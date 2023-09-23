@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    {% include '_meta.html' %}
+</head>
+
+<body class="flex flex-col color_theme_bg">
+    {% include '_nav_bar.html' %}
+
+    <main class="flex flex-row h-full mb-16">
+        <div class="container h-full p-4 mx-auto rounded-lg ">
+
+            <div class="p-2 border rounded-lg">
+                <div class="flex p-4 mb-4 text-sm text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400" role="alert">
+                    <svg aria-hidden="true" class="flex-shrink-0 inline w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd"
+                            d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                            clip-rule="evenodd"></path>
+                    </svg>
+                    <span class="sr-only">Info</span>
+                    <div>
+                        <label for="estamp_device_name" class="block mb-2 text-base font-medium text-gray-900 dark:text-white">Estamp Device(เครื่องประทับค่าจอด)</label>
+                        <select id="estamp_device_name" onchange="load_estamp_data(this.value)"
+                            class="block w-full px-4 py-3 text-base text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            {% for e in estamp_list %}
+                            <option value="{{e}}">{{e}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                </div>
+                <div class="flex">
+                    <div class=" card color_widget_theme_bg active:ring-2">
+                        <div class="grid grid-cols-1 gap-2 md:grid-cols-2">
+                            <div class="p-2 card color_widget_theme_bg ">
+                                <div class="grid gap-4 mb-4 sm:grid-cols-2">
+                                    <div class="col-span-2">
+                                        <label id="lable_of_estamp_device_name" for="input_transection_card_id"
+                                            class="block mb-2 text-xl font-medium text-center text-gray-900 dark:text-white">Loading...</label>
+                                        <input type="text" id="input_transection_card_id" autocomplete="off" class="input_box_form" placeholder="กรุณาทาบบัตรทำรายการ"
+                                            onkeypress="estamp_input_id_card_onkeypress(event)" value="">
+
+                                    </div>
+
+                                    <div class="col-span-2">
+                                        <label for="transection_license_id" class="block mb-2 font-medium text-center text-gray-900 dark:text-white">License
+                                        </label>
+                                        <input readonly type="text" name="transection_license_id" id="transection_license_id" autocomplete="off" class="text_box_form"
+                                            placeholder="xx-xxxx" value="">
+                                    </div>
+
+                                    <div>
+                                        <label for="transection_in_date" class="block mb-2 text-xl font-medium text-center text-gray-900 dark:text-white">วัน เข้า
+                                        </label>
+                                        <input placeholder="วัน-เดือน-ปี" readonly type="text" name="transection_in_date" id="transection_in_date" autocomplete="off"
+                                            class="text_box_form">
+                                    </div>
+
+                                    <div>
+                                        <label for="transection_in_time" class="block mb-2 text-xl font-medium text-center text-gray-900 dark:text-white">เวลา
+                                        </label>
+                                        <input placeholder="ชั่วโมง:นาที" readonly type="text" name="transection_in_time" id="transection_in_time" autocomplete="off"
+                                            class="text_box_form">
+                                    </div>
+
+                                    <div class="col-span-2">
+                                        <label for="transection_service_fee_name"
+                                            class="block w-full mx-auto mb-2 text-xl font-medium text-center text-gray-900 dark:text-white">ประเภทค่าบริการ</label>
+                                        <input placeholder="รูปแบบค่าบริการ" readonly type="text" id="transection_service_fee_name" autocomplete="off"
+                                            class="mt-1 text-center text_box_form">
+                                    </div>
+
+                                    <div class="col-span-2">
+                                        <label for="transection_parked_time" class="block w-full mx-auto mb-2 text-xl font-medium text-center text-gray-900 dark:text-white">
+                                            เวลาจอด <span> <i class="fa-solid fa-clock"></i></span> </label>
+                                        <input placeholder="วัน:ชั่วโมง:นาที" readonly type="text" name="transection_parked_time" id="transection_parked_time" autocomplete="off"
+                                            class="text-center text_box_form">
+                                    </div>
+
+                                    <div class="col-span-2">
+                                        <label class="block w-full mx-auto mb-2 font-medium text-center text-gray-900 dark:text-white">ช่องทางเข้า</label>
+                                        <input placeholder="ช่องทางเข้า" readonly type="text" id="transection_trans_gate_in_info" class="mb-2 text-center text_box_form">
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="p-2 card ">
+                                <figure><img src="/static/image/logo.png" alt="Not Image" id="transection_ip_camera_01" class="mx-auto rounded-lg w-72" /></figure>
+                                <figure><img src="/static/image/logo.png" alt="Not Image" id="transection_ip_camera_02" class="mx-auto mt-2 rounded-lg w-72" /></figure>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="w-full">
+                        <div id="box_of_estamp_device_service_fee" class="grid w-full gap-8 p-4 border-4 border-orange-500 rounded-lg sm:grid-cols-2 lg:grid-cols-3">
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-4 my-4 overflow-x-auto border rounded-lg">
+                    <table class="w-full text-sm text-gray-500 dark:text-gray-400">
+                        <tbody id="transection_stamp_log">
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <template id="template_content_transection_log">
+        <tr class="">
+            <th scope="row" class="font-medium text-left whitespace-nowrap">
+                <i class="mx-2 text-teal-500 fa-solid fa-stamp "></i>
+                <div name="content_date_time_stamp"></div>
+
+            </th>
+            <td name="content_log_stamp_device" class="px-6 py-4">
+                log
+            </td>
+            <td name="content_log_stamp" class="px-6 py-4">
+                log
+            </td>
+            <td name="content_log_stamp1" class="px-6 py-4">
+                log
+            </td>
+            <td name="content_log_stamp2" class="px-6 py-4">
+                log
+            </td>
+        </tr>
+    </template>
+
+    <!-- **NOTE - Template Content of estamp_device_service_fee -->
+    <template id="template_content_estamp_device_service_fee">
+        <div class="min-w-full text-center card color_widget_theme_bg">
+            <button type="button" name="btn_stamp" class="block w-full p-2 border-blue-500 rounded-lg hover:ring-2 hover:bg-red-800">
+                <i class="text-orange-500 fa-solid fa-stamp fa-3x"></i>
+                <span class="ml-4 text-blue-500 text-md ">Estamp</span>
+            </button>
+            <div class="block p-2" name="name">
+            </div>
+            <p class="p-2 text-blue-400" name="remark"></p>
+        </div>
+    </template>
+    {% include '_footer.html' %}
+</body>
+{% include '_script.html' %}
+
+<script src="/static/plugins/serial_port/serial_device.js?t={{now}}"></script>
+<script>
+    let transection_current = null;
+
+    async function load_estamp_data(estamp_device_name = null) {
+
+        if (estamp_device_name == null) {
+            estamp_device_name = document.getElementById("estamp_device_name").value;
+        }
+        //debug(estamp_device_name);
+        if (estamp_device_name == "") {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Oops...',
+                text: 'user ไม่พบสิทธ์การใช้งาน',
+                footer: '<a href="">กรุณาติตต่อเจ้าหน้าที่ ?</a>'
+            })
+            return;
+        }
+        document.getElementById("lable_of_estamp_device_name").innerText = estamp_device_name;
+        const _reply = await fetchApi("/api/estamp_device/stamp/?device_name=" + estamp_device_name, "get", null, "json");
+
+        if (_reply.success) {
+            const box_of_estamp_device_service_fee = document.getElementById("box_of_estamp_device_service_fee");
+            box_of_estamp_device_service_fee.innerHTML = "";
+            const temp = document.getElementById("template_content_estamp_device_service_fee");
+
+            const list_service_fee = _reply.data;
+            debug(list_service_fee);
+            for (const service_fee of list_service_fee) {
+                const s = service_fee.Service_Fees;
+
+                const _c = temp.content.cloneNode(true);
+
+                _c.querySelectorAll('[name="name"]')[0].innerText = s.name;
+                _c.querySelectorAll('[name="remark"]')[0].innerText = s.remark;
+
+                _c.querySelectorAll('[name="btn_stamp"]')[0].setAttribute('onclick', `show_dialog_stamp(${s.id},'${s.name}')`)
+
+                box_of_estamp_device_service_fee.appendChild(_c);
+            }
+
+        } else {
+            debug(_reply)
+            toastMixin.fire({
+                title: JSON.stringify(_reply),
+                icon: "error",
+            });
+        }
+        document.getElementById("input_transection_card_id").focus();
+    }
+    load_estamp_data();
+
+    function estamp_input_id_card_onkeypress(event) {
+
+        if (event.key === "Enter") {
+            event.preventDefault();
+            submit_transection_data();
+        }
+    }
+    async function submit_transection_data() {
+        transactions_id = null;
+        transection_current = null;
+        const input_transection_card_id = document.getElementById("input_transection_card_id")
+        const _card_id = input_transection_card_id.value;
+        if (!_card_id) {
+            await toastMixin.fire({
+                title: `กรุณาทาบบัตรหรือป้อนเลขบัตรเพื่อทำรายการ`,
+                icon: "warning",
+            });
+            input_transection_card_id.focus();
+            return;
+        }
+        document.getElementById("transection_in_date").value = "";
+        document.getElementById("transection_license_id").value = "";
+        document.getElementById("transection_in_time").value = "";
+        document.getElementById("transection_parked_time").value = "";
+        document.getElementById("transection_service_fee_name").value = "";
+        document.getElementById("transection_trans_gate_in_info").value = "";
+        document.getElementById("transection_ip_camera_01").src = "/static/image/logo.png";
+        document.getElementById("transection_ip_camera_02").src = "/static/image/logo.png";
+
+
+
+        let _amount = 0;
+        toastMixin.fire({
+            timer: 5000,
+            title: `กำลังตรวจสอบข้อมูล`,
+            text: "รอสักครู่",
+            icon: "info",
+        });
+
+        //setTimeout(() => { Swal.close() }, 1000);
+        const _api_path = `/api/function/check_out?card_id=${_card_id}`;
+        const _reply = await fetchApi(_api_path, "get", null, "json");
+        Swal.close();
+
+        if (_reply.success) {
+            const _data = _reply.data.transactions;
+            transection_current = _data;
+            const _acc = _reply.data.acc;
+            print_info(_data);
+            const _gateway = _data.GateWay;
+            const _system_user = _data.SystemUser;
+            const _tran = _data.Transaction_Record;
+            const _Log_Transaction = _data.Log_Transaction;
+            const _services = _data.Service_Fees;
+
+            transactions_id = _tran.id;
+
+            const _date_time = moment(_Log_Transaction.date_time);
+            document.getElementById("transection_license_id").value = _Log_Transaction.license;
+            document.getElementById("transection_in_date").value = _date_time.format('DD/MM/YYYY');
+            document.getElementById("transection_in_time").value = _date_time.format('HH:mm');
+            document.getElementById("transection_parked_time").value = _acc.parked;
+            document.getElementById("transection_service_fee_name").value = _services.name;
+            document.getElementById("transection_trans_gate_in_info").value = _gateway.name;
+            const images_path = _Log_Transaction.images_path.split(",");
+            document.getElementById("transection_ip_camera_01").src = images_path[0];
+            document.getElementById("transection_ip_camera_02").src = images_path[1];
+
+
+            const _log_estamp = await fetchApi("/api/estamp_device/stamp_transection/?id=" + _tran.id, "get", null, "json");
+            if (_log_estamp.success) {
+                const transection_stamp_log = document.getElementById("transection_stamp_log");
+                transection_stamp_log.innerHTML = "";
+                const temp = document.getElementById("template_content_transection_log");
+
+                const _logs = _log_estamp.data;
+                debug(_logs)
+                if (_logs.length > 0) {
+                    const _c = temp.content.cloneNode(true);
+                    _c.querySelectorAll('[name="content_log_stamp_device"]')[0].innerText = "device";
+                    _c.querySelectorAll('[name="content_log_stamp"]')[0].innerText = "ผู้ดำเนิการ";
+
+                    _c.querySelectorAll('[name="content_log_stamp1"]')[0].innerText = "before_service_fees";
+                    _c.querySelectorAll('[name="content_log_stamp2"]')[0].innerText = "after_service_fees";
+                    transection_stamp_log.appendChild(_c);
+                }
+                for (let i = 0; i < _logs.length; i++) {
+                    const _log = _logs[i].Estamp_Record_Log;
+                    const s = _logs[i].System_User;
+                    const e = _logs[i].Estamp_Device;
+                    const before_service_fees = _logs[i].before_service_fees;
+                    const after_service_fees = _logs[i].after_service_fees;
+                    debug(_log);
+                    const _c = temp.content.cloneNode(true);
+                    const _date_time = moment(_log.date_time);
+                    _c.querySelectorAll('[name="content_date_time_stamp"]')[0].innerHTML = _date_time.format('DD/MM/YYYY<br>HH:mm');
+                    _c.querySelectorAll('[name="content_log_stamp_device"]')[0].innerText = e.device_name;
+                    _c.querySelectorAll('[name="content_log_stamp"]')[0].innerText = s.name;
+                    _c.querySelectorAll('[name="content_log_stamp1"]')[0].innerText = before_service_fees;
+                    _c.querySelectorAll('[name="content_log_stamp2"]')[0].innerText = after_service_fees;
+                    transection_stamp_log.appendChild(_c);
+
+                }
+            }
+        } else {
+            input_transection_card_id.focus();
+            input_transection_card_id.value = "";
+            await toastMixin.fire({
+                title: `คำเตือน\n${_card_id}`,
+                text: _reply.msg,
+                icon: "warning",
+            });
+
+            return false;
+
+        }
+
+    }
+    async function show_dialog_stamp(id, name) {
+        if (transection_current) {
+            if (id == transection_current.Service_Fees.id) {
+                await toastMixin.fire({
+                    title: "ประเภทค่าบริการ",
+                    text: "รายการ " + transection_current.Service_Fees.name,
+                    icon: "success",
+                });
+                return true;
+            }
+            Swal.fire({
+                title: 'ยืนยันทำรายการ?',
+                text: "ดำเนินการเปลื่ยนรูปแบบค่าบริการ ->" + name,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'ตกลงทำรายการ!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+
+                    confirm_stamp_transection(id);
+                }
+            })
+
+        } else {
+            await toastMixin.fire({
+                title: `ข้อมูลไม่ครบ`,
+                text: "กรุณาทาบบัตรหรือป้อนเลขบัตรเพื่อทำรายการ",
+                icon: "error",
+            });
+        }
+
+    }
+
+    async function confirm_stamp_transection(id) {
+        const estamp_device_name = document.getElementById("estamp_device_name").value;
+        const formData = new FormData();
+        formData.append("transaction_record_id", transection_current.Transaction_Record.id);
+        formData.append("service_fees_id", id);
+        formData.append("estamp_device_name", estamp_device_name);
+
+
+
+        const _reply = await fetchApi("/api/estamp_device/stamp_transection/", "post", formData, "json");
+        debug(_reply);
+        if (_reply.success == true) {
+            submit_transection_data();
+            toastMixin.fire({
+                title: `ดำเนินการเรียบร้อยแล้ว`,
+                text: "...",
+                icon: "success",
+            });
+        } else {
+            toastMixin.fire({
+                title: `ไม่สามารถดำเนินการได้`,
+                text: _reply.msg,
+                icon: "error",
+            });
+        }
+    }
+</script>
+
+
+
+</html>

@@ -1,0 +1,70 @@
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+
+<title>LPR MQTT (ทดสอบ)</title>
+<link rel="manifest" href="/static/manifest.json">
+
+<link rel="icon" type="image/svg+xml"
+    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22256%22 height=%22256%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2250%22 fill=%22%231b1bc0%22></rect><path d=%22M18.14 55.31L15.53 55.31L15.53 63.72Q15.03 63.86 14.00 63.99Q12.96 64.13 11.88 64.13L11.88 64.13Q9.50 64.13 8.58 63.32Q7.65 62.51 7.65 60.39L7.65 60.39L7.65 39.06Q7.65 38.12 8.17 37.60Q8.69 37.08 9.59 36.77L9.59 36.77Q11.12 36.23 13.21 35.98Q15.30 35.73 17.01 35.73L17.01 35.73Q23.22 35.73 26.51 38.39Q29.79 41.05 29.79 45.59L29.79 45.59Q29.79 47.79 28.96 49.57Q28.13 51.35 26.62 52.63Q25.11 53.91 22.95 54.61Q20.79 55.31 18.14 55.31L18.14 55.31ZM15.48 49.14L17.64 49.14Q19.53 49.14 20.66 48.22Q21.78 47.30 21.78 45.59L21.78 45.59Q21.78 43.88 20.73 42.96Q19.67 42.03 17.64 42.03L17.64 42.03Q16.92 42.03 16.45 42.06Q15.98 42.08 15.48 42.17L15.48 42.17L15.48 49.14ZM48.20 61.16L41.67 53.55L41.67 63.72Q41.18 63.86 40.14 63.99Q39.11 64.13 38.03 64.13L38.03 64.13Q35.64 64.13 34.72 63.32Q33.80 62.51 33.80 60.39L33.80 60.39L33.80 36.41Q34.34 36.32 35.37 36.16Q36.41 36.00 37.44 36.00L37.44 36.00Q39.69 36.00 40.68 36.77Q41.67 37.53 41.67 39.74L41.67 39.74L41.67 47.03L51.03 36.23Q54.09 36.23 55.42 37.38Q56.75 38.52 56.75 40.10L56.75 40.10Q56.75 41.27 56.16 42.30Q55.58 43.34 54.27 44.64L54.27 44.64L48.65 50.27Q51.57 53.51 53.96 56.03Q56.34 58.55 57.78 60.12L57.78 60.12Q57.78 61.11 57.42 61.88Q57.06 62.64 56.46 63.18Q55.85 63.72 55.08 63.99Q54.32 64.27 53.46 64.27L53.46 64.27Q51.62 64.27 50.45 63.34Q49.28 62.42 48.20 61.16L48.20 61.16ZM80.33 57.06L80.33 57.06Q79.75 57.56 78.82 57.85Q77.90 58.14 76.69 58.14L76.69 58.14Q75.06 58.14 74.01 57.74Q72.95 57.33 72.63 56.34L72.63 56.34Q71.38 52.38 70.56 49.93Q69.75 47.48 69.30 45.63L69.30 45.63L69.08 45.63Q68.94 48.29 68.88 50.47Q68.81 52.65 68.79 54.72Q68.77 56.79 68.70 58.91Q68.63 61.02 68.50 63.59L68.50 63.59Q67.91 63.81 66.97 63.97Q66.02 64.13 65.08 64.13L65.08 64.13Q63.09 64.13 61.99 63.50Q60.89 62.87 60.89 61.20L60.89 61.20Q60.89 59.81 61.02 57.13Q61.16 54.45 61.36 51.21Q61.56 47.97 61.79 44.55Q62.02 41.13 62.20 38.25L62.20 38.25Q62.55 37.67 63.77 36.99Q64.98 36.32 67.19 36.32L67.19 36.32Q69.58 36.32 70.92 37.06Q72.27 37.80 72.91 39.47L72.91 39.47Q73.31 40.55 73.78 41.94Q74.25 43.34 74.73 44.82Q75.20 46.31 75.65 47.77Q76.10 49.23 76.46 50.40L76.46 50.40L76.69 50.40Q77.77 46.63 78.84 43.09Q79.92 39.56 80.82 37.17L80.82 37.17Q81.50 36.81 82.56 36.57Q83.61 36.32 84.92 36.32L84.92 36.32Q87.13 36.32 88.52 36.97Q89.91 37.63 90.14 38.84L90.14 38.84Q90.32 39.74 90.52 41.61Q90.72 43.47 90.95 45.81Q91.17 48.15 91.40 50.77Q91.63 53.38 91.83 55.78Q92.03 58.19 92.16 60.19Q92.30 62.19 92.34 63.27L92.34 63.27Q91.58 63.72 90.75 63.93Q89.91 64.13 88.61 64.13L88.61 64.13Q86.90 64.13 85.73 63.54Q84.56 62.96 84.47 61.25L84.47 61.25Q84.20 56.34 84.13 52.43Q84.06 48.52 83.93 45.86L83.93 45.86L83.70 45.86Q83.25 47.61 82.40 50.27Q81.54 52.92 80.33 57.06Z%22 fill=%22%23fff%22></path></svg>" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Mali:wght@300&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="/static/plugins/daterangepicker/daterangepicker.css" />
+
+
+<link rel="stylesheet" href="/static/style.css?v={{now}}" />
+
+<!-- Font Awesome Link -->
+<link rel="stylesheet" href="/static/plugins/fontawesome-free-6.2.1-web/css/all.min.css">
+
+
+<link rel="stylesheet" type="text/css"
+    href="https://cdn.datatables.net/v/zf/jszip-2.5.0/dt-1.13.1/b-2.3.3/b-colvis-2.3.3/b-html5-2.3.3/b-print-2.3.3/r-2.4.0/sl-1.5.0/datatables.min.css" />
+
+<!-- <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> -->
+<!-- <link href="https://fonts.googleapis.com/css2?family=Wallpoet&display=swap" rel="stylesheet"> -->
+<!-- <link href="/static/font/Wallpoet-Regular.ttf" rel="stylesheet"> -->
+
+<style>
+    @font-face {
+        font-family: "Wallpoet";
+        src: url(/static/font/Wallpoet-Regular.ttf) format("truetype");
+    }
+
+    @font-face {
+        font-family: "Sarabun";
+        src: url(/static/font/Sarabun-Regular.ttf) format("truetype");
+    }
+
+
+    #AppClockDisplay {
+        font-family: 'Wallpoet',
+            cursive;
+    }
+
+    body {
+        font-family: 'Sarabun',
+            cursive;
+    }
+</style>
+
+<script>
+    if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark');
+    } else {
+        document.documentElement.classList.remove('dark')
+    }
+</script>
+
+<script>
+    // Global variables for loading HTML
+
+    const columnDefs = [{
+        className: "p-4",
+        "targets": '_all',
+    }];
+</script>

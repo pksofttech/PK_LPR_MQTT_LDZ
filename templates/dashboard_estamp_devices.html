@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    {% include '_meta.html' %}
+</head>
+
+<body class="flex flex-col color_theme_bg">
+    {% include '_nav_bar.html' %}
+
+    <main class="flex flex-row h-full">
+
+        <div class="container h-full p-4 mx-auto rounded-lg ">
+            <div class="p-4 mb-4 text-blue-900 border border-blue-300 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400 dark:border-blue-800" role="alert">
+                <div class="flex items-center">
+                    <svg aria-hidden="true" class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd"
+                            d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                            clip-rule="evenodd"></path>
+                    </svg>
+                    <span class="sr-only">Estamp Config Panel</span>
+                    <h3 class="text-lg font-medium">Estamp Devices Config Panel</h3>
+                    <button type="button" onclick="history.back()" data-tooltip-target="tooltip-bottom" data-tooltip-placement="bottom"
+                        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white">
+                        <i class="mr-2 text-red-500 fa-solid fa-circle-chevron-left"></i> กลับ
+                    </button>
+                    <div id="tooltip-bottom" role="tooltip"
+                        class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+                        กลับไปหน้าตั้งค่า
+                        <div class="tooltip-arrow" data-popper-arrow></div>
+                    </div>
+                </div>
+
+                <div class="mt-2 mb-4 text-sm">
+                    ปรับตั้งค่าข้อมูลเครื่อง Stamp
+                </div>
+                <a role="button" id="btn_parking_lot_add_item" onclick="add_estamp_device()" class="text-center dark:text-blue-500 hover:underline"><i
+                        class="text-teal-500 fa-regular fa-square-plus"></i> สร้าง ข้อมูล เครื่อง Stamp</a>
+
+            </div>
+
+            <div id="box_of_estamp_device" class="grid gap-8 p-4 border-4 border-orange-500 rounded-lg md:grid-cols-3">
+
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- **NOTE -   Modal_estamp_device-->
+    <div id="Modal_estamp_device" tabindex="-1" aria-hidden="true"
+        class="fixed top-0 left-0 right-0 z-50 items-center justify-center hidden w-full overflow-x-hidden overflow-y-auto md:inset-0 h-modal md:h-full">
+        <div class="relative w-full h-full max-w-2xl p-4 md:h-auto">
+            <!-- Modal content -->
+            <div class="relative p-4 bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5">
+                <!-- Modal header -->
+                <div class="flex items-center justify-between pb-4 mb-4 border-b rounded-t sm:mb-5 dark:border-gray-600">
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+                        Modal_estamp_device
+                    </h3>
+                    <button type="button" id="btn_Modal_estamp_device_toggle"
+                        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                        data-modal-toggle="Modal_estamp_device">
+                        <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd"
+                                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                clip-rule="evenodd"></path>
+                        </svg>
+                        <span class="sr-only">Close modal</span>
+                    </button>
+
+                </div>
+                <!-- Modal body -->
+                <div>
+                    <form id="submit_apply_estamp_device_form" class="grid gap-4 mb-4 sm:grid-cols-2">
+
+                        <div class="sm:col-span-1">
+                            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ชื่อ-Estamp</label>
+                            <input type="text" autocomplete="off" name="device_name" class="input_box_form" placeholder="ชื่อ-Estamp" required>
+                        </div>
+                        <div class="sm:col-span-1">
+                            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Estamp ID</label>
+                            <input type="text" autocomplete="off" name="device_id" class="input_box_form" placeholder="Estamo ID" required>
+                        </div>
+
+                        <div class="sm:col-span-1">
+                            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Type</label>
+                            <select name="type" required
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                <option value="WEB">💻 WEB</option>
+                                <option value="MACHINE">📱 MACHINE</option>
+                            </select>
+                        </div>
+                        <div class="sm:col-span-1">
+                            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">สถานะ</label>
+                            <select name="status" required
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                <option value="ENABLE">✅ ENABLE</option>
+                                <option value="DISABLE">❌ DISABLE</option>
+                            </select>
+                        </div>
+                        <div class="sm:col-span-2">
+                            <h3 class="mb-4 font-semibold text-gray-900 dark:text-white">Service Fee(รูปแบบค่าบริการ)</h3>
+                            <ul class="w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                {% for i in Service_Fees %}
+                                <li class="w-full border-b border-gray-200 rounded-t-lg dark:border-gray-600">
+                                    <div class="flex items-center pl-3">
+                                        <input name="service_fees_ids" type="checkbox" value="{{i[0]}}"
+                                            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+                                        <label class="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">{{i[1]}}</label>
+                                    </div>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+
+                        <div class="sm:col-span-1">
+                            <h3 class="mb-4 font-semibold text-gray-900 dark:text-white">System Users(ผู้ใช้งาน Stamp)</h3>
+                        </div>
+                        <div class="sm:col-span-1">
+                            <button id="dropdownSearchButton" data-dropdown-toggle="dropdownSystem_User"
+                                class="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                                type="button">เลือกผู้ใช้งาน<svg class="w-4 h-4 ml-2" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg></button>
+
+                            <!-- Dropdown menu -->
+                            <div id="dropdownSystem_User" class="z-10 hidden bg-white rounded-lg shadow w-60 dark:bg-gray-700">
+                                <ul class="h-48 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownSearchButton">
+                                    {% for i in System_User %}
+                                    <li>
+                                        <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
+                                            <input name="system_user_ids" type="checkbox" value="{{i[0]}}"
+                                                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+                                            <label class="w-full ml-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">{{i[1]}}</label>
+                                        </div>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+
+                        </div>
+
+                        <div class="sm:col-span-2">
+                            <label for="remark" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">หมายเหตุ</label>
+                            <textarea name="remark" rows="4" class="input_box_form" placeholder="หมายเหตุ"></textarea>
+                        </div>
+                    </form>
+                    <div class="flex justify-between">
+                        <button type="button" onclick="submit_apply_estamp_device()" class="w-32 border-blue-500 btn_block text_primary">
+                            <i class="fa fa-circle-check"></i>
+                            <span class="ml-2">ตกลง</span>
+                        </button>
+                        <button type="button" id="submit_apply_estamp_device_form_remove_btn" onclick="remove_estamp_device()" class="w-32 border-red-500 btn_block text_primary">
+                            <i class="text-red-600 fa-solid fa-eraser"></i>
+                            <span class="ml-2">ลบรายการข้อมูลนี้</span>
+                        </button>
+                        <button type="button" class="w-32 border-blue-500 btn_block text_danger" data-modal-toggle="Modal_estamp_device">
+                            <i class="fa fa-arrow-right-from-bracket"></i>
+                            <span class="ml-2">กลับ</span>
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- **NOTE - Template Content of estamp_device -->
+    <template id="template_content_estamp_device">
+        <div class="min-w-full text-center card color_widget_theme_bg">
+            <div class="block p-2">
+                <i class="text-orange-500 fa-solid fa-stamp fa-3x"></i>
+                <span class="ml-4 text-blue-500 text-md ">Estamp</span>
+            </div>
+            <div class="block p-2" name="device_name">
+            </div>
+            <table class="mx-auto text-sm text-left text-gray-500 w-fit dark:text-gray-400">
+                <tbody>
+                    <tr class="">
+                        <th scope="row" class="font-medium whitespace-nowrap">
+                            <i class="mx-2 text-teal-500 fa-solid fa-right-to-bracket fa-2x"></i>
+                            ประเภท
+
+                        </th>
+                        <td class="px-6 py-4" name="type">
+                        </td>
+                    </tr>
+                    <tr class="">
+                        <th scope=" row" class="font-medium whitespace-nowrap ">
+                            <i class="mx-2 text-teal-500 fa-solid fa-toggle-on fa-2x"></i>
+                            สถานะ
+                        </th>
+                        <td class="px-6 py-4 text-orange-500" name="status">
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+            <p class="p-2 text-blue-400" name="remark"></p>
+
+            <a role="button" class="block p-4 text-center dark:text-blue-500 hover:underline " name="estamp_device_edit"><i class="text-teal-500 fa-regular fa-pen-to-square"></i>
+                แก้ไขข้อมูล</a>
+
+        </div>
+    </template>
+
+    {% include '_footer.html' %}
+</body>
+{% include '_script.html' %}
+
+<script>
+    function show_dialog_protected() {
+        toastMixin.fire({
+            title: "ข้อมูล Defualt ไม่สามารถแก้ไขได้",
+            icon: "warning",
+        });
+    }
+
+    async function init_info_dashboard_estamp_device() {
+        const _reply = await fetchApi("/api/estamp_device/", "get", null, "json");
+
+        if (_reply.success) {
+            const box_of_estamp_device = document.getElementById("box_of_estamp_device");
+            box_of_estamp_device.innerHTML = "";
+            const temp = document.getElementById("template_content_estamp_device");
+
+            const estamp_devices = _reply.data;
+            debug(estamp_devices);
+            for (const estamp_device of estamp_devices) {
+
+                const _e = estamp_device.Estamp_Device;
+                debug(_e)
+
+                const _c = temp.content.cloneNode(true);
+
+                _c.querySelectorAll('[name="device_name"]')[0].innerText = _e.device_name;
+                _c.querySelectorAll('[name="type"]')[0].innerText = _e.type;
+                _c.querySelectorAll('[name="status"]')[0].innerText = _e.status;
+                //_c.querySelectorAll('[name="estamp_device_round"]')[0].innerText = _s.round;
+                //_c.querySelectorAll('[name="estamp_device_remark"]')[0].innerText = _s.remark;
+                _c.querySelectorAll('[name="estamp_device_edit"]')[0].setAttribute('onclick', `show_dialog_estamp_device(${_e.id})`)
+
+                box_of_estamp_device.appendChild(_c);
+            }
+
+        } else {
+            debug(_reply)
+            toastMixin.fire({
+                title: JSON.stringify(_reply),
+                icon: "error",
+            });
+        }
+    }
+
+    init_info_dashboard_estamp_device();
+
+    let current_estamp_device_id = 0;
+    let current_estamp_device_fromat_id = 0;
+    async function show_dialog_estamp_device(id) {
+        const _reply = await fetchApi("/api/estamp_device/?id=" + id, "get", null, "json");
+        debug(_reply);
+        if (_reply.success) {
+            current_estamp_device_id = id;
+            const _from_e = document.getElementById("submit_apply_estamp_device_form");
+            const data = _reply.data.Estamp_Device;;
+            debug(data);
+            const system_user_ids = data.system_user_ids.split(",");
+            const service_fees_ids = data.service_fees_ids.split(",");
+            debug(system_user_ids)
+            for (let i = 0; i < _from_e.elements.length; i++) {
+                let _f_e = _from_e.elements[i];
+                if (_f_e.name != "") {
+                    let k = _f_e.name;
+                    let v = data[k];
+
+                    if (k == "system_user_ids") {
+                        const id = String(_f_e.value);
+                        if (system_user_ids.includes(id)) {
+                            debug(k + ": " + id);
+                            _f_e.checked = true;
+                        }
+                    } else if (k == "service_fees_ids") {
+                        const id = String(_f_e.value);
+                        if (service_fees_ids.includes(id)) {
+                            debug(k + ": " + id);
+                            _f_e.checked = true;
+                        }
+                    } else {
+                        _f_e.value = v;
+                    }
+                }
+            }
+
+        } else {
+
+            toastMixin.fire({
+                title: JSON.stringify(_reply),
+                icon: "error",
+            });
+        }
+
+        document.getElementById('submit_apply_estamp_device_form_remove_btn').classList.remove("hidden");
+        document.getElementById('btn_Modal_estamp_device_toggle').click();
+    }
+
+
+    async function remove_estamp_device() {
+        if (!(await dialog_confirm())) return;
+        let _reply = await fetchApi("/api/estamp_device/?id=" + current_estamp_device_id, "delete", null, "json");
+        debug(_reply);
+        if (!!_reply) {
+            if (_reply.success) {
+                Swal.fire({
+                    icon: "info",
+                    title: "Successful",
+                    html: _reply.msg,
+                }).then(() => {
+                    window.location.reload();
+
+                });
+            } else {
+                debug(_reply)
+                toastMixin.fire({
+                    title: JSON.stringify(_reply),
+                    icon: "error",
+                });
+            }
+        }
+    }
+
+    async function submit_apply_estamp_device() {
+        const _from_e = document.getElementById("submit_apply_estamp_device_form");
+        const formData = new FormData();
+        formData.append("id", current_estamp_device_id);
+        let system_user_ids = "";
+        let service_fees_ids = "";
+        for (let i = 0; i < _from_e.elements.length; i++) {
+            let _f_e = _from_e.elements[i];
+            if (_f_e.name != "") {
+                let k = _f_e.name;
+                let v = _f_e.value;
+                if (_f_e.required & !v) {
+                    toastMixin.fire({
+                        title: "ข้อมูลไม่ครบ",
+                        text: k,
+                        icon: "warning",
+                    });
+                    return false;
+                }
+                if (k == "system_user_ids") {
+                    if (_f_e.checked == true) {
+                        //debug(_f_e.value)
+                        system_user_ids += `${_f_e.value},`;
+                    }
+                } else if (k == "service_fees_ids") {
+                    if (_f_e.checked == true) {
+                        //debug(_f_e.value)
+                        service_fees_ids += `${_f_e.value},`;
+                    }
+                }
+                else {
+                    formData.append(k, v);
+                }
+            }
+
+        }
+        formData.append("system_user_ids", system_user_ids.substring(0, system_user_ids.length - 1));
+        formData.append("service_fees_ids", service_fees_ids.substring(0, service_fees_ids.length - 1));
+        debug_form(formData)
+        let _reply = await fetchApi("/api/estamp_device/", "post", formData, "json");
+        debug(_reply);
+        if (!!_reply) {
+            if (_reply.success == true) {
+                Swal.fire({
+                    icon: "info",
+                    title: "Successful",
+                    html: _reply.msg,
+                }).then(() => {
+                    if (current_estamp_device_id == 0) {
+                        window.location.reload();
+                    }
+
+                    document.getElementById('btn_Modal_estamp_device_toggle').click();
+                });
+            } else {
+                debug(_reply)
+                toastMixin.fire({
+                    title: JSON.stringify(_reply),
+                    icon: "error",
+                });
+            }
+        }
+    }
+
+    async function add_estamp_device() {
+        const _from_e = document.getElementById("submit_apply_estamp_device_form");
+        for (let i = 0; i < _from_e.elements.length; i++) {
+            let _f_e = _from_e.elements[i];
+            if (_f_e.name != "") {
+                let k = _f_e.name;
+                let v = "";
+                _f_e.value = v;
+            }
+        }
+
+        document.getElementById('submit_apply_estamp_device_form_remove_btn').classList.add("hidden");
+        document.getElementById('btn_Modal_estamp_device_toggle').click();
+        current_estamp_device_id = 0
+
+    }
+</script>
+
+</html>

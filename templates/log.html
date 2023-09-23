@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    {% include '_meta.html' %}
+</head>
+
+<body class="flex flex-col color_theme_bg">
+    {% include '_nav_bar.html' %}
+
+    <main class="flex flex-row h-full">
+        {% include '_side_menu_bar.html' %}
+
+        <div class="container h-full p-4 mx-auto rounded-lg ">
+
+            <table id="lpt_table" class="table w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                    <tr>
+                        <th scope="col" class="px-6 py-3">
+                            สถานะ
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            รูป
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            plate_num
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            LPR Name
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            ช่องทาง
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            cam_id
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            cam_ip
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            view
+                        </th>
+                    </tr>
+                </thead>
+                <tbody id="table_of_lpr_log">
+
+                </tbody>
+            </table>
+
+        </div>
+
+    </main>
+
+    <template id="template_content_lpr_camera_item">
+        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+            <td class="px-6 py-4">
+                <div name="status"> </div>
+            </td>
+            <td class="w-32 p-4">
+                <div name="images_path"> </div>
+                <!-- <img src="" class="rounded-lg"> -->
+            </td>
+            <td class="px-6 py-4 font-semibold text-gray-900 dark:text-white">
+                <div name="plate_num"> </div>
+            </td>
+            <td class="px-6 py-4 font-semibold text-gray-900 dark:text-white">
+                <div name="lpr_name"> </div>
+            </td>
+            <td class="px-6 py-4 font-semibold text-gray-900 dark:text-white">
+                <div name="gate_name"> </div>
+            </td>
+            <td class="px-6 py-4">
+                <div name="device_id"> </div>
+            </td>
+            <td class="px-6 py-4">
+                <div name="device_ip"> </div>
+            </td>
+            <td class="px-6 py-4 font-semibold text-gray-900 dark:text-white">
+                <div name="date_time"> </div>
+            </td>
+            <td class="px-6 py-4" name="view_info_log_transection">
+
+            </td>
+        </tr>
+    </template>
+
+    <!-- **NOTE -  Modal_Info_Transection-->
+    <div id="Modal_Info_Transection" tabindex="-1" aria-hidden="true"
+        class="fixed top-0 left-0 right-0 z-50 items-center justify-center hidden w-full overflow-x-hidden overflow-y-auto md:inset-0 h-modal md:h-full">
+        <div class="relative w-full h-full max-w-3xl p-4 md:h-auto">
+            <!-- Modal content -->
+            <div class="relative p-4 bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5">
+                <!-- Modal header -->
+                <div class="flex items-center justify-between pb-4 mb-4 border-b rounded-t sm:mb-5 dark:border-gray-600">
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white" id="Modal_Info_Transection_ID">
+                        Modal_Info_Transection
+                    </h3>
+                    <button type="button" id="btn_Modal_Info_Transection_toggle"
+                        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                        data-modal-toggle="Modal_Info_Transection">
+                        <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd"
+                                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                clip-rule="evenodd"></path>
+                        </svg>
+                        <span class="sr-only">Close modal</span>
+                    </button>
+
+                </div>
+                <!-- Modal body -->
+                <div class="flex flex-col px-8">
+                    <div class="p-4 text-lg font-semibold text-gray-900 dark:text-white" id="Modal_Info_Transection_Card_id">
+                        xxxxx
+                    </div>
+                    <template id="template_Info_Transection_Content">
+                        <li class="mb-10 ml-12">
+                            <span
+                                class="absolute flex items-center justify-center w-12 h-12 bg-blue-100 rounded-full -left-6 ring-8 ring-white dark:ring-gray-900 dark:bg-blue-900">
+                                <img class="rounded-full shadow-lg" name="system_user_img" src="" />
+                            </span>
+                            <div class="items-center justify-between p-4 bg-white border border-gray-200 rounded-lg shadow-sm sm:flex dark:bg-gray-700 dark:border-gray-600">
+                                <div class="flex flex-col">
+                                    <div name="time_line_type"></div>
+                                    <a href="#" class="font-semibold text-blue-600 dark:text-blue-500 hover:underline" name="system_user_name">xxxx</a>
+                                    <span class="bg-gray-100 text-gray-800 text-xs font-normal mr-2 px-2.5 py-0.5 rounded dark:bg-gray-600 dark:text-gray-300"
+                                        name="gate_name">xxxx</span>
+                                    <time class="mb-1 text-xs font-normal text-gray-400 " name="date_time">just now</time>
+
+                                </div>
+                                <div>
+                                    <div class="flex flex-row gap-1" name="image_trans">
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </template>
+                    <ol class="relative border-l-4 border-gray-200 dark:border-gray-700" id="Modal_Info_Transection_Content_time_line">
+
+                    </ol>
+                    <div class="text-lg font-semibold text-gray-900 dark:text-white" id="Modal_Info_Transection_parked">
+                        xxxxx
+                    </div>
+
+                    <div class="flex justify-between mt-2">
+                        <button type="button" class="w-full border-blue-500 btn_block text_danger" data-modal-toggle="Modal_Info_Transection">
+                            <i class="fa fa-arrow-right-from-bracket"></i>
+                            <span class="ml-2">กลับ</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% include '_footer.html' %}
+</body>
+{% include '_script.html' %}
+<script>
+    function event_handler_ws(e) {
+        const func = e.func;
+        const params = e.params;
+        if (func == "lpr_event") {
+            debug(params)
+            const table_of_lpr_log = document.getElementById("table_of_lpr_log");
+            const temp = document.getElementById("template_content_lpr_camera_item");
+            const _c = temp.content.cloneNode(true);
+            let status = `<span class="badge_${params.tag}">${params.status}</span>`;
+
+            _c.querySelectorAll('[name="status"]')[0].innerHTML = status;
+            _c.querySelectorAll('[name="plate_num"]')[0].innerText = params.plate_num;
+            _c.querySelectorAll('[name="date_time"]')[0].innerText = params.date_time;
+
+            _c.querySelectorAll('[name="lpr_name"]')[0].innerHTML = params.device_name;
+            _c.querySelectorAll('[name="device_id"]')[0].innerText = params.device_id;
+            _c.querySelectorAll('[name="device_ip"]')[0].innerText = params.device_ip;
+
+            _c.querySelectorAll('[name="gate_name"]')[0].innerHTML = `<span class="badge_info">${params.gate_name}</span>`;
+
+
+            _c.querySelectorAll('[name="images_path"]')[0].innerHTML = `<a href="${params.images_path}" target="_blank"> <img src="${params.images_path}" class="rounded-lg"> </a>`;
+
+            const transaction_record_id = params.transaction_record_id;
+            if (transaction_record_id) {
+                const view_info_log_transection = `<a role="button" onclick="info_transection_show(${transaction_record_id})" class="font-medium text-red-600 dark:text-red-500 hover:underline">${transaction_record_id}</a>`
+                _c.querySelectorAll('[name="view_info_log_transection"]')[0].innerHTML = view_info_log_transection;
+            }
+
+
+
+            //table_of_lpr_log.appendChild(_c);
+            table_of_lpr_log.insertBefore(_c, table_of_lpr_log.firstChild);
+            //let table = document.getElementById("lpt_table");
+
+        }
+    }
+    ws_event_subscription = event_handler_ws;
+
+    async function init_info_lpr_log() {
+        current_lpr_camera_id = 0;
+        const _reply = await fetchApi("/lpr/", "get", null, "json");
+        const table_of_lpr_log = document.getElementById("table_of_lpr_log");
+        table_of_lpr_log.innerHTML = "";
+
+        if (_reply.success) {
+            const temp = document.getElementById("template_content_lpr_camera_item");
+            debug(temp)
+            const lpr_log = _reply.data;
+            debug(lpr_log);
+            for (const log of lpr_log) {
+                const l = log.Lpr_Log;
+                const lpr = log.Lpr_Camera;
+                const g = log.GateWay;
+                const _c = temp.content.cloneNode(true);
+                let status = `<span class="badge_${l.tag}">${l.status}</span>`;
+
+                _c.querySelectorAll('[name="status"]')[0].innerHTML = status;
+                _c.querySelectorAll('[name="plate_num"]')[0].innerText = l.plate_num;
+                _c.querySelectorAll('[name="date_time"]')[0].innerText = l.date_time;
+                if (lpr) {
+                    _c.querySelectorAll('[name="lpr_name"]')[0].innerHTML = lpr.device_name;
+                    _c.querySelectorAll('[name="device_id"]')[0].innerText = lpr.device_id;
+                    _c.querySelectorAll('[name="device_ip"]')[0].innerText = lpr.device_ip;
+                }
+                if (g) {
+                    _c.querySelectorAll('[name="gate_name"]')[0].innerHTML = `<span class="badge_info">${g.name}</span>`;
+                }
+
+                _c.querySelectorAll('[name="images_path"]')[0].innerHTML = `<img src="${l.images_path}" class="rounded-lg"> `;
+
+                const transaction_record_id = l.transaction_record_id;
+                if (transaction_record_id) {
+                    const view_info_log_transection = `<a role="button" onclick="info_transection_show(${transaction_record_id})" class="font-medium text-red-600 dark:text-red-500 hover:underline">${transaction_record_id}</a>`
+                    _c.querySelectorAll('[name="view_info_log_transection"]')[0].innerHTML = view_info_log_transection;
+                }
+                table_of_lpr_log.appendChild(_c);
+            }
+
+
+        } else {
+            debug(_reply)
+            toastMixin.fire({
+                title: JSON.stringify(_reply),
+                icon: "error",
+            });
+        }
+    }
+
+    init_info_lpr_log();
+
+    async function info_transection_show(id) {
+        const _reply = await fetchApi("/api/transaction_record/?id=" + id, "get", null, "json");
+        if (_reply.success) {
+            const d = _reply.data;
+            debug(d)
+            const Modal_Info_Transection_Content_time_line = document.getElementById("Modal_Info_Transection_Content_time_line");
+            document.getElementById("Modal_Info_Transection_ID").innerHTML = "หมายเลขรายการ : " + String(d.Transaction_Record.id).padStart(10, "0");
+
+            const _d = dateTimeToStr(d.In_Log.date_time, "YYYY/MM/DD@HH:mm:ss");
+            const datetime = _d.split("@");
+            const warp_datatime = `<div class="flex gap-1 mr-12">
+				<div class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">${datetime[0]}</div>
+				<div class="bg-yellow-100 text-yellow-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-yellow-300 border border-yellow-300">${datetime[1]}</div>
+					</div>`
+
+            document.getElementById("Modal_Info_Transection_Card_id").innerHTML = "หมายเลขบัตร : " + d.Transaction_Record.card_id + "  " + warp_datatime;
+
+            Modal_Info_Transection_Content_time_line.innerHTML = "";
+            const temp = document.getElementById("template_Info_Transection_Content");
+
+            const _c_in = temp.content.cloneNode(true);
+
+            _c_in.querySelectorAll('[name="system_user_img"]')[0].src = d.In_System_User.pictureUrl;
+            _c_in.querySelectorAll('[name="time_line_type"]')[0].innerHTML = "ทำรายการเข้า :" + `<span class="bg-yellow-100 text-yellow-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-yellow-300 border border-yellow-300">${d.In_Log.license}</span>`;
+            _c_in.querySelectorAll('[name="date_time"]')[0].innerText = moment(d.In_Log.date_time);
+            _c_in.querySelectorAll('[name="system_user_name"]')[0].innerText = d.In_System_User.name;
+            _c_in.querySelectorAll('[name="gate_name"]')[0].innerText = d.In_Gateway.name;
+
+            const _images = d.In_Log.images_path.split(",");
+            //debug(_images)
+            const image_trans = `
+								<a href="${_images[0]}" target = "_blank" ><img src="${_images[0]}" loading="lazy" class="w-1/2 p-1 rounded-lg" /></a>
+								<a href="${_images[1]}" target = "_blank" ><img  src="${_images[1]}" loading="lazy" class="w-1/2 p-1 rounded-lg" /></a>
+								`
+            _c_in.querySelectorAll('[name="image_trans"]')[0].innerHTML = image_trans;
+
+            Modal_Info_Transection_Content_time_line.appendChild(_c_in);
+
+            if (d.Transaction_Record.parked) {
+                const _c_in = temp.content.cloneNode(true);
+
+                _c_in.querySelectorAll('[name="system_user_img"]')[0].src = d.Out_System_User.pictureUrl;
+                _c_in.querySelectorAll('[name="time_line_type"]')[0].innerHTML = "ทำรายการออก"
+                _c_in.querySelectorAll('[name="date_time"]')[0].innerText = moment(d.Out_Log.date_time);
+                _c_in.querySelectorAll('[name="system_user_name"]')[0].innerText = d.Out_System_User.name;
+                _c_in.querySelectorAll('[name="gate_name"]')[0].innerText = d.Out_Gateway.name;
+
+                const _images = d.Out_Log.images_path.split(",");
+                debug(_images)
+                const image_trans = `
+								<a href="${_images[0]}" target = "_blank" ><img src="${_images[0]}" loading="lazy" class="w-1/2 p-1 rounded-lg" /></a>
+								<a href="${_images[1]}" target = "_blank" ><img  src="${_images[1]}" loading="lazy" class="w-1/2 p-1 rounded-lg" /></a>
+								`
+                _c_in.querySelectorAll('[name="image_trans"]')[0].innerHTML = image_trans;
+                Modal_Info_Transection_Content_time_line.appendChild(_c_in);
+
+                document.getElementById("Modal_Info_Transection_parked").innerHTML = `<i class="nav-icon fa-2x fa fa-clock text-info"></i> <span class="bg-green-100 text-green-800 text-md font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">${sec_to_duration(d.Transaction_Record.parked)}</span>`;
+
+
+            } else {
+                document.getElementById("Modal_Info_Transection_parked").innerHTML = `<i class="nav-icon fa-2x fa fa-clock text-info"></i> <span class="bg-red-100 text-red-800 text-md font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">${moment(d.In_Log.date_time).fromNow()}</span>`;
+
+            }
+
+            document.getElementById("btn_Modal_Info_Transection_toggle").click();
+
+        }
+
+    }
+
+
+</script>
+
+</html>

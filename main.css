@@ -1,0 +1,188 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+input:-webkit-autofill {
+    -webkit-text-fill-color: gray !important;
+}
+
+/* Change autocomplete styles in WebKit */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+    //border: 1px solid green;
+    //-webkit-text-fill-color: green;
+    //-webkit-box-shadow: 0 0 0px 1000px #000 inset;
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+nav,
+table,
+aside {
+    animation: fadeInAnimation ease 1.5s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+}
+
+body {
+    /* font-family: "Mali", cursive; */
+    /* color: gray; */
+    /* font-size: 16px; */
+    animation: fadeInAnimation ease 1.5s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+}
+
+@keyframes fadeInAnimation {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 100;
+    }
+}
+
+.swal2-popup {
+    color: lightseagreen !important;
+    background: #1f2937 !important;
+    border-radius: 25px !important;
+}
+.swal2-actions {
+    /* margin: 8px 4em !important; */
+    display: flex !important;
+    justify-content: center !important;
+    gap: 32px !important;
+}
+
+.swal2-confirm {
+    background: darkgreen !important;
+}
+
+.swal2-cancel {
+    background: darkorange !important;
+}
+
+body.swal2-shown > [aria-hidden="true"] {
+    transition: 0.5s filter;
+    filter: blur(2px);
+}
+
+/* ? Datatable  css */
+.dataTables_wrapper .bottom {
+    @apply grid sm:grid-cols-3 p-4;
+}
+
+.dataTables_wrapper .top {
+    @apply grid sm:grid-cols-3 p-4;
+}
+
+.dataTables_wrapper .dt-buttons {
+    @apply p-4 rounded-md;
+}
+
+.dataTables_wrapper .dt-buttons .active {
+    @apply text-blue-500;
+}
+
+.dataTables_wrapper .dataTables_processing {
+    @apply z-10;
+}
+
+.dataTables_wrapper .sorting {
+    @apply text-blue-500;
+}
+
+.dataTables_wrapper .paginate_button.current {
+    @apply bg-blue-500 rounded-md;
+}
+
+.dataTables_wrapper .dataTables_filter input[type="search"] {
+    @apply border border-blue-400 rounded-md bg-transparent;
+}
+
+.dataTables_wrapper .dataTables_length {
+    @apply p-4 h-fit rounded-md;
+}
+
+.dataTables_wrapper .dataTables_info {
+    @apply h-fit w-fit my-auto rounded-md  p-2 bg-transparent text-orange-500;
+}
+
+.dataTables_wrapper .dataTables_paginate {
+    @apply border border-blue-400 rounded-md items-center p-4 w-fit;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    @apply px-3 py-2 leading-tight text-gray-500  border border-gray-300 hover:bg-gray-100 hover:text-gray-700  dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white;
+}
+
+.dataTables_wrapper .previous {
+    @apply rounded-l-lg;
+}
+.dataTables_wrapper .next {
+    @apply rounded-r-lg;
+}
+
+.dataTables_wrapper select {
+    @apply w-full border px-1 border-blue-400 rounded-md  bg-transparent;
+}
+
+.dataTables_wrapper [role="menu"] {
+    @apply flex flex-col  rounded-md border-blue-900 gap-2 p-2 z-10 fixed;
+}
+
+.dataTables_wrapper :is(.buttons-csv, .buttons-excel, .buttons-print, .buttons-colvis) {
+    @apply border-blue-600;
+}
+
+.dataTables_wrapper .btn_tool {
+    @apply px-2 hover:text-blue-800;
+}
+
+.dataTables_wrapper .dt-button-collection {
+    @apply bg-blue-600 rounded-full;
+}
+
+.dt-buttons .dt-button {
+    @apply rounded-lg border p-2 hover:bg-blue-800;
+}
+
+th,
+td {
+    white-space: nowrap;
+}
+div.dataTables_wrapper {
+    margin: 0 auto;
+}
+
+/* over load css */
+.btn_block {
+    @apply rounded-lg border hover:bg-primary;
+}
+
+.link_btn {
+    @apply rounded-lg border hover:bg-primary;
+}
+
+.input_box_form {
+    @apply px-2 rounded-lg border hover:bg-primary;
+}
+
+.input_login_form {
+    @apply input px-2 hover:bg-primary;
+}
+
+.color_widget_theme_bg {
+    @apply bg-slate-300 dark:bg-slate-800;
+}

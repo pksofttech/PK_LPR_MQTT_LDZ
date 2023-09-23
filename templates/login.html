@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="apptheme">
+
+<head>
+    {% include '_meta.html' %}
+</head>
+
+<body class="">
+    <div class="flex justify-center p-8">
+        <div class="justify-center hidden w-1/2 hero bg-base-200 lg:block">
+            <div class="flex flex-row-reverse hero-content">
+                <img src="/static/image/system.png" class="w-64 rounded-lg shadow-2xl" />
+                <div>
+                    <h1 class="text-5xl font-bold">For Demo!</h1>
+                    <p class="py-6">ระบบใช้ทดสอบเท่านั้น</p>
+                    <a class="btn btn-primary" href="https://pksofttech.org" target="_blank">www.pksofttech.org</a>
+                </div>
+            </div>
+        </div>
+        <div class="flex flex-col items-center justify-center px-6 py-8 lg:py-0">
+
+            <img class="w-32 h-32 p-1 my-2 rounded-full ring-2 ring-gray-300 dark:ring-gray-500" src="/static/image/system.png" alt="Bordered avatar">
+
+            <div class="w-full rounded-lg shadow bg-base-200 md:mt-0 sm:max-w-md xl:p-0 ">
+                <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
+                    <h1 class="text-xl font-bold leading-tight tracking-tight text-center text-blue-300 w-100 md:text-2xl">
+                        Sign in to your account
+                    </h1>
+
+                    <div class="space-y-4 md:space-y-6">
+                        <div>
+                            <label for="input_app_mode" class="block my-2 text-base font-medium text-center text-gray-900 dark:text-white">Appication</label>
+                            <select id="input_app_mode" class="w-full max-w-xs select select-info">
+                                <option value="LPR_AUTO_GATE" selected>LPR AUTO GATE</option>
+                                <!-- <option value="SYSTEM">🇪 SYSTEM</option>
+                                <option value="ESTAMP">🇪 XXX</option>
+                                <option value="TEST">404</option> -->
+                            </select>
+                        </div>
+
+                        <div class="flex">
+                            <span class="inline-flex items-center px-3 text-sm rounded-l-lg bg-base-300">
+                                <i class="fa-solid fa-user"></i>
+                            </span>
+                            <input type="text" id="input_username_box" class="input_login_form" placeholder="username" value="root" required="">
+                            <span class="inline-flex items-center px-3 text-sm bg-base-300">
+                                <i class="fa-solid fa-user"></i>
+                            </span>
+                        </div>
+
+                        <div class="flex">
+                            <span class="inline-flex items-center px-3 text-sm rounded-l-lg bg-base-300">
+                                <i class="fa-solid fa-key"></i>
+                            </span>
+                            <input type="password" name="password" id="input_password_box" placeholder="••••••••" class="input_login_form" required="" value="12341234">
+                            <button class="px-3 rounded-r-lg btn btn-outline btn-warning" onclick="eye_password(this,'input_password_box')">
+                                <i class="fa-regular fa-eye-slash"></i>
+                            </button>
+
+                        </div>
+
+                        <div class="flex items-center justify-center">
+                            <input id="remember_check_box" aria-describedby="remember" type="checkbox" class="checkbox checkbox-success">
+                            <label for="remember_check_box" class="ml-2 ">Remember me</label>
+                        </div>
+
+                        <button onclick="submit_login();" class="w-full btn btn-info btn-outline">Sign in</button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+{% include '_script.html' %}
+<script>
+    // For Login Page
+    checkCookie();
+</script>
+<!-- <script src=" /static/dist/js/face_detec.js?v=1"></script> -->
+
+<script>
+    let login_mode_face = false;
+
+    async function login_mode_select() {
+        const user_name = $("#user_name").val();
+        debug(user_name);
+        if (!login_mode_face) {
+            if (user_name == "") {
+                toastMixin.fire({
+                    //background: bg_mode_theme,
+                    title: "warning",
+                    icon: "warning",
+                    text: "กรุณาป้อนชื่อผู้ใช้งานระบบ",
+                });
+                return;
+            } else {
+                let _respond = await fetchApi(`/check_login_face`, "POST", JSON.stringify({ user: "000" }), "json");
+                debug(_respond.status);
+                if (_respond.status !== 200) {
+                    Swal.fire({
+                        title: `code:${_respond.status}\n${_respond.statusText}`,
+                        icon: "warning",
+                        showConfirmButton: true,
+                        confirmButtonText: "close",
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                    }).then((result) => { });
+                    return;
+                }
+                if (_respond.data != "allow") {
+                    Swal.fire({
+                        title: `code:${_respond.status}\n${_respond.data}`,
+                        icon: "warning",
+                        showConfirmButton: true,
+                        confirmButtonText: "close",
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                    }).then((result) => { });
+                    return;
+                }
+            }
+            const login_face_recognition_box_html = `
+                                   <div class="text-center border">
+                                       <video id="video" class="border" width="250" height="250" autoplay muted></video>
+                                       <canvas id="canvas_test" class="" width="250" height="250"></canvas>
+                                   </div>
+                                   <div class="text-center border">
+                                       <img id="output" src="" class="" alt="face_detect">
+                                   </div>
+                                   `;
+
+            $("#login_face_recognition_box").html(login_face_recognition_box_html);
+            login_mode_face = true;
+            start_face_recognition();
+        } else {
+            const login_normal = `
+        <div class="row">
+        	<div class="col-8">
+        		<div class="icheck-info">
+        			<input type="checkbox" id="remember">
+        			<label for="remember">
+        				Remember Me
+        			</label>
+        		</div>
+        	</div>
+        	<!-- /.col -->
+        	<div class="col-4">
+        		<button class="btn btn-primary btn-block" onclick="login();">Sign In</button>
+        	</div>
+        	<!-- /.col -->
+        </div>
+
+        <div class="mb-3 text-center social-auth-links">
+
+        	<span class="mb-3 badge bg-info">-- OR --</span>
+        	<a href="#" class="btn btn-block btn-primary disabled">
+        		<i class="mr-2 fab fa-facebook"></i> Sign in using Facebook
+        	</a>
+        	<a href="#" class="btn btn-block btn-success disabled ">
+        		<i class="mr-2 fab fa-google"></i> Sign in using Google
+        	</a>
+
+        </div>`;
+            $("#login_face_recognition_box").html(login_normal);
+
+            login_mode_face = false;
+            window.location.reload();
+        }
+    }
+</script>
+<script>
+    const input_username_box = document.getElementById("input_username_box");
+    const input_password_box = document.getElementById("input_password_box");
+    const input_app_mode = document.getElementById("input_app_mode");
+    input_username_box.addEventListener("keypress", function (event) {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            input_password_box.focus();
+        }
+    });
+
+    input_password_box.addEventListener("keypress", function (event) {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            submit_login();
+        }
+    });
+
+
+    async function submit_login() {
+        const _user_name = input_username_box.value;
+        const _password = input_password_box.value;
+        const _app_mode = input_app_mode.value;
+
+        if (_user_name == "") {
+            Swal.fire("ข้อผิดพลาด", "กรุณาป้อนชื่อผู้ใช้งานระบบ", "error").then((result) => { });
+            return;
+        }
+        if (_password == "") {
+            Swal.fire("ข้อผิดพลาด", "กรุณาป้อน password ผู้ใช้งานระบบ", "error").then((result) => { });
+            return;
+        }
+        const remember_check = document.getElementById("remember_check_box").checked;
+        login(_user_name, _password, remember_check, _app_mode);
+    }
+
+    async function eye_password(t, id) {
+        const _e = document.getElementById(id);
+        if (_e) {
+            if (_e.getAttribute("type") == "password") {
+                _e.setAttribute("type", "text");
+                t.innerHTML = `<i class="fa-regular fa-eye"></i>`;
+            } else {
+                _e.setAttribute("type", "password");
+                t.innerHTML = `<i class="fa-regular fa-eye-slash"></i>`;
+            }
+        }
+    }
+</script>
+
+<script type="text/javascript">
+    const sound = new Howl({
+        src: ['/static/sound/com_01.mp3']
+    });
+
+    //sound.play();
+</script>
+
+</html>

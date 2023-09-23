@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% include '_header.html' %}
+    <!-- Option 2: CloudFlare CDN -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/brython/3.9.1/brython.min.js"></script> -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/brython/3.9.1/brython_stdlib.min.js"></script> -->
+    <!-- <script src="/static/dist/js/brython.min.js"></script>
+    <script src="/static/dist/js/brython_stdlib.min.js"></script> -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/brython@3.10/brython.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/brython@3.10/brython_stdlib.js"></script>
+</head>
+
+<body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed bg-gradient-gray-dark dark-mode">
+    <!-- Content Wrapper. Contains page content -->
+    <div class="wrapper">
+        {% include '_side_bar.html' %}
+        <div class="container h-full p-4 mx-auto rounded-lg lg:ml-80 ">
+            <!-- ? ************************************************ HTML CONTENT ******************************************************** -->
+            <div class="col">
+                <div class="card card-warning">
+                    <div class="card-header">
+                        <h3 class="card-title">Face recognition DLS Systems</h3>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                        </div>
+                        <!-- /.card-tools -->
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body" style="display: block">
+                        <div class="row" id="gate_access_info_box">
+                            {% for l in gate_access_device %}
+                            <div class="col-md-4 col-sm-6 col-12">
+                                <div class="border info-box">
+                                    <span class="info-box-icon bg-warning"><i class="fa fa-building" aria-hidden="true"></i></span>
+                                    <div class="info-box-content">
+                                        <h4 class="info-box-text">{{l.name}}</h4>
+                                        <span class="info-box-number">{{l.id}}</span>
+                                        <span class="info-box-text">{{l.address}}</span>
+                                        <span class="info-box-text">{{l.address_qr_er80}}</span>
+                                        <span class="info-box-text">{{l.mode}}</span>
+                                        <span id="{{l.id}}_last_id_card" class="info-box-text">{{l.last_id_card}}</span>
+                                        <span id="{{l.id}}_last_HeartBeat" class="info-box-text">{{l.last_HeartBeat}}</span>
+
+                                        {% if l.gate_direction == "IN" %}
+                                        <div class="alert alert-danger" role="alert">{{l.gate_direction}}</div>
+                                        {% else %}
+                                        <div class="alert alert-success" role="alert">{{l.gate_direction}}</div>
+
+                                        {% endif %}
+                                        <button class="btn btn-outline-danger" onclick="open_gate_test('{{l.id}}')">OPEN_TEST</button>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card card-info">
+                    <div class="card-header">
+                        <h3 class="card-title">รายการเข้า-ออก (Members)</h3>
+                        <div class="card-tools" id="card_widget_member">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <table class="table" id="access_log_table_member">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Type</th>
+                                    <th scope="col">เวลา</th>
+                                    <th scope="col">ช่องทาง</th>
+                                    <th scope="col">เลขบัตร</th>
+                                    <th scope="col">ชื่อ</th>
+                                    <!-- <th scope="col">Identification type</th> -->
+                                    <th scope="col">รูป</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card card-warning">
+                    <div class="card-header">
+                        <h3 class="card-title">รายการเข้า-ออก (Visitor)</h3>
+                        <div class="card-tools" id="card_widget_visitor">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <table class="table" id="access_log_table_visitor">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Type</th>
+                                    <th scope="col">เวลา</th>
+                                    <th scope="col">ช่องทาง</th>
+                                    <th scope="col">เลขบัตร</th>
+                                    <th scope="col">ชื่อ</th>
+                                    <th scope="col">QR TYPE</th>
+                                    <th scope="col">รูป</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ? ************************************************************************************************************************ -->
+        </div>
+        {% include '_footer.html' %}
+    </div>
+</body>
+
+{% include '_script.html' %}
+
+<script>
+    $("#card_widget_member").CardWidget("toggle");
+    $("#card_widget_visitor").CardWidget("toggle");
+
+    debug("dashboard Page");
+    const api_model = "api/gate_access";
+    let skip = 0;
+    const limit = 100;
+
+    const MAX_ROWS_TABLE = 25;
+
+    function add_log_table_member(json_msg, log_class = "", append = true) {
+        let log_tb = "#access_log_table_member";
+        const box_size = "60px";
+        const _t = dateTimeToStr(json_msg.gate_access_time);
+        const snap_imgs = String(json_msg.snap_imgs).split(",");
+        // debug(snap_imgs)
+        let td_imgs = "";
+        for (let index = 0; index < snap_imgs.length; index++) {
+            const e = snap_imgs[index];
+            if (e != "") {
+                td_imgs += `<a target="_blank" href="${e}"> <img class="img-thumbnail " alt="${e}" width="${box_size}" height = "${box_size}"  src="${e}"> </a>`;
+            }
+        }
+        let gate_access_type_badge = "badge bg-danger";
+        if (json_msg.gate_access_type == "IN") {
+            gate_access_type_badge = "badge bg-success";
+        }
+        access_row = `
+            <tr class="${log_class}">
+                <td><span class="${gate_access_type_badge} text-lg">${json_msg.gate_access_type}</span> </td>
+                <td><span class="badge bg-warning">${_t} </span> </td>
+                <td>${json_msg.gate_access_name}</td>
+                <td>${json_msg.card_id}</td>
+                <td>${json_msg.name}</td>
+                <td>${td_imgs}</td>
+            </tr>`;
+        if (append) {
+            $(`${log_tb}>tbody`).append(access_row);
+        } else {
+            $(`${log_tb}>tbody`).prepend(access_row);
+        }
+        rowCount = $(`${log_tb} tr`).length;
+        if (rowCount > MAX_ROWS_TABLE) {
+            $(`${log_tb} tr:last`).remove();
+        }
+    }
+
+    function add_log_table_visitor(json_msg, log_class = "", append = true) {
+        let log_tb = "#access_log_table_visitor";
+        const box_size = "60px";
+        const _t = dateTimeToStr(json_msg.gate_access_time);
+        const snap_imgs = String(json_msg.snap_imgs).split(",");
+        // debug(snap_imgs)
+        let td_imgs = "";
+        for (let index = 0; index < snap_imgs.length; index++) {
+            const e = snap_imgs[index];
+            if (e != "") {
+                td_imgs += `<a target="_blank" href="${e}"> <img class="img-thumbnail " alt="${e}" width="${box_size}" height = "${box_size}"  src="${e}"> </a>`;
+            }
+        }
+        let gate_access_type_badge = "badge bg-success";
+        if (json_msg.gate_access_type == "IN") {
+            gate_access_type_badge = "badge bg-danger";
+        }
+        access_row = `
+            <tr class="${log_class}">
+                <td><span class="${gate_access_type_badge} text-lg">${json_msg.gate_access_type}</span> </td>
+                <td><span class="badge bg-warning">${_t} </span> </td>
+                <td>${json_msg.gate_access_name}</td>
+                <td>${json_msg.card_id}</td>
+                <td>${json_msg.name}</td>
+                <td>${json_msg.similarity}</td>
+                <td>${td_imgs}</td>
+            </tr>`;
+        if (append) {
+            $(`${log_tb}>tbody`).append(access_row);
+        } else {
+            $(`${log_tb}>tbody`).prepend(access_row);
+        }
+
+        rowCount = $(`${log_tb} tr`).length;
+        if (rowCount > MAX_ROWS_TABLE) {
+            $(`${log_tb} tr:last`).remove();
+        }
+    }
+
+    async function get_member_access_log() {
+        const path_api = `api/memberAccessLog?skip=0&limit=10`;
+        const raw_data = await fetchApi(path_api, "get", null, "json");
+        debug(raw_data);
+
+        for (let index = 0; index < raw_data.length; index++) {
+            const e = raw_data[index];
+            const _a = e.AccessMemberLog;
+            const _g = e.GateAccess;
+            const _m = e.Members;
+            const json_msg = {};
+            json_msg["gate_access_type"] = _g.gate_type;
+            json_msg["gate_access_time"] = _a.date_time;
+            json_msg["gate_access_name"] = _g.name;
+            json_msg["card_id"] = _m.card_id;
+            json_msg["name"] = _m.name;
+            json_msg["similarity"] = _a.similarity;
+
+            json_msg["snap_imgs"] = _a.snap_imgs;
+
+            add_log_table_member(json_msg);
+        }
+    }
+
+    $(document).ready(function () {
+        $("#access_log_table_member").DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: "/data_queue",
+        });
+    });
+</script>
+
+</html>

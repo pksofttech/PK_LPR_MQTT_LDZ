@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    {% include '_meta.html' %}
+</head>
+
+<body class="flex flex-col color_theme_bg">
+    {% include '_nav_bar.html' %}
+
+    <main class="flex flex-row h-full">
+
+        <div class="container h-full p-4 mx-auto rounded-lg ">
+            <div class="p-4 mb-4 text-blue-900 border border-blue-300 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400 dark:border-blue-800" role="alert">
+                <div class="flex items-center">
+                    <svg aria-hidden="true" class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd"
+                            d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                            clip-rule="evenodd"></path>
+                    </svg>
+                    <span class="sr-only">GateWay Config Panel</span>
+                    <h3 class="text-lg font-medium">GateWay Config Panel</h3>
+                    <button type="button" onclick="history.back()" data-tooltip-target="tooltip-bottom" data-tooltip-placement="bottom"
+                        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white">
+                        <i class="mr-2 text-red-500 fa-solid fa-circle-chevron-left"></i> กลับ
+                    </button>
+                    <div id="tooltip-bottom" role="tooltip"
+                        class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+                        กลับไปหน้าตั้งค่า
+                        <div class="tooltip-arrow" data-popper-arrow></div>
+                    </div>
+                </div>
+
+                <div class="mt-2 mb-4 text-sm">
+                    ปรับตั้งค่าข้อมูลช่องทางเข้า-ออก
+                </div>
+                <div class="max-w-sm col-span-2 my-4">
+                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ลานจอดรถ</label>
+                    <select id="search_gate_parking_id_select" onchange="init_info_dashboard_gateway(this.value);"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                    </select>
+                </div>
+
+                <a role="button" id="btn_parking_lot_add_item" onclick="add_gateway()" class="text-center dark:text-blue-500 hover:underline"><i
+                        class="text-teal-500 fa-regular fa-square-plus"></i> สร้างช่องทาง เข้า-ออก</a>
+
+            </div>
+
+            <div class="flex flex-col gap-4">
+                <div class="text-center text-orange-500 text-md ">รายการช่องทางเข้า</div>
+                <div id="box_of_gateway_in" class="grid gap-8 p-4 border-4 border-orange-500 rounded-lg xl:grid-cols-4 md:grid-cols-3">
+
+                </div>
+                <div class="text-center text-teal-500 text-md ">รายการช่องทางออก</div>
+                <div id="box_of_gateway_out" class="grid gap-8 p-4 border-4 border-teal-500 rounded-lg xl:grid-cols-4 md:grid-cols-3">
+
+                </div>
+            </div>
+        </div>
+
+        <!-- **NOTE -   Modal_GateWay-->
+        <div id="Modal_GateWay" tabindex="-1" aria-hidden="true"
+            class="fixed top-0 left-0 right-0 z-50 items-center justify-center hidden w-full overflow-x-hidden overflow-y-auto md:inset-0 h-modal md:h-full">
+            <div class="relative w-full h-full max-w-2xl p-4 md:h-auto">
+                <!-- Modal content -->
+                <div class="relative p-4 bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5">
+                    <!-- Modal header -->
+                    <div class="flex items-center justify-between pb-4 mb-4 border-b rounded-t sm:mb-5 dark:border-gray-600">
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+                            สร้าง แก้ไข ช่องทาง
+                        </h3>
+                        <button type="button" id="btn_Modal_GateWay_toggle"
+                            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                            data-modal-toggle="Modal_GateWay">
+                            <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd"
+                                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                    clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="sr-only">Close modal</span>
+                        </button>
+
+                    </div>
+                    <!-- Modal body -->
+                    <div>
+                        <form id="submit_apply_gateway_form" class="grid gap-4 mb-4 sm:grid-cols-2">
+                            <div class="flex items-center justify-center gap-2 sm:col-span-2">
+                                <img src="/static/dist/img/img_not_found.png" id="preview_image_GateWay"
+                                    class="w-1/3 p-1 mx-auto mb-2 rounded-full ring-2 ring-gray-300 dark:ring-gray-500" alt="ไม่มีรูป" />
+
+                                <div class="inline-flex w-1/3 text-center border rounded-lg">
+                                    <input type="file" class="text-sm rounded-lg text_info" name="image_upload" accept="image/*"
+                                        onchange="showPreview(event,'preview_image_GateWay');" />
+                                </div>
+                            </div>
+
+                            <div class="sm:col-span-2">
+                                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ชื่อ-ช่องทาง</label>
+                                <input type="text" autocomplete="off" name="name" class="input_box_form" placeholder="ชื่อ-ช่องทาง" required>
+                            </div>
+                            <div class="sm:col-span-2">
+                                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ลานจอดรถ</label>
+                                <select id="input_gate_parking_id_select" name="parking_id"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                </select>
+                            </div>
+                            <div class="sm:col-span-2">
+                                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ประเภทช่องทาง</label>
+                                <select name="type"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                    <option>IN</option>
+                                    <option>OUT</option>
+                                    <!-- <option>IN-OUT</option> -->
+                                </select>
+                            </div>
+                            <div class="sm:col-span-2">
+                                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">สถานะ</label>
+                                <select name="status"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                    <option>Enable</option>
+                                    <option>Disable</option>
+                                </select>
+                            </div>
+
+                            <div class="sm:col-span-2">
+                                <label for="ip_cameras" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">กล้องบันทึกภาพ</label>
+                                <textarea name="ip_cameras" rows="4" class="input_box_form" placeholder="กล้องบันทึกภาพ"></textarea>
+                            </div>
+
+                            <div class="sm:col-span-2">
+                                <label for="remark" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">หมายเหตุ</label>
+                                <textarea name="remark" rows="4" class="input_box_form" placeholder="หมายเหตุ"></textarea>
+                            </div>
+                        </form>
+                        <div class="flex justify-between">
+                            <button type="button" onclick="submit_apply_gateway()" class="w-32 border-blue-500 btn_block text_primary">
+                                <i class="fa fa-circle-check"></i>
+                                <span class="ml-2">ตกลง</span>
+                            </button>
+                            <button type="button" onclick="remove_gateway()" class="w-32 border-red-500 btn_block text_primary">
+                                <i class="text-red-600 fa-solid fa-eraser"></i>
+                                <span class="ml-2">ลบรายการช่องทางนี้</span>
+                            </button>
+                            <button type="button" class="w-32 border-blue-500 btn_block text_danger" data-modal-toggle="Modal_GateWay">
+                                <i class="fa fa-arrow-right-from-bracket"></i>
+                                <span class="ml-2">กลับ</span>
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </main>
+    <!-- **NOTE - Template Content of gateway -->
+    <template id="template_content_gateway_info">
+        <div class="card color_widget_theme_bg ">
+            <img src="" class="w-full max-w-sm p-2 mx-auto rounded-2xl max-h-72" name="gateway_image" />
+            <div class="flex flex-col gap-2 m-8">
+                <div class="flex">
+                    <i class="mx-4 text-blue-500 fa-solid fa-square-parking fa-2x"></i>
+                    <div class="text-blue-400" name="gateway_name"></div>
+                </div>
+                <div class="flex">
+                    <i class="mx-4 text-teal-500 fa-solid fa-right-to-bracket fa-2x"></i>
+                    <div class="text-blue-400" name="gateway_type"></div>
+                </div>
+
+                <div class="flex">
+                    <i class="mx-4 text-orange-500 fa-solid fa-location-arrow fa-2x"></i>
+                    <div class="text-blue-400" name="gateway_status"></div>
+                </div>
+
+                <div class="text-blue-400" name="gateway_date_created"></div>
+                <div class="text-blue-400" name="parking_name"></div>
+                <div class="text-blue-400" name="system_user_name"></div>
+
+                <p class="mx-auto mt-4 text-sm text-orange-400">IP Cameras</p>
+                <div class="p-2 text-sm text-blue-400 truncate border rounded-lg" name="ip_cameras"></div>
+
+            </div>
+
+            <a role="button" class="block p-4 text-center dark:text-blue-500 hover:underline flo" name="gateway_btn_edit"><i class="text-teal-500 fa-regular fa-pen-to-square"></i>
+                แก้ไขข้อมูล</a>
+
+        </div>
+    </template>
+    {% include '_footer.html' %}
+</body>
+{% include '_script.html' %}
+
+<script>
+    async function init_info_dashboard_gateway(parking_id = 0) {
+        //debug(parking_id);
+        let _reply = null;
+        let _query = "/api/function/gateway_list/";
+        if (parking_id == 0) {
+            _reply = await fetchApi("/api/function/parking_lot_list", "get", null, "json");
+            if (!!_reply) {
+                if (_reply.success == true) {
+                    const _parking_lots = _reply.data;
+                    let _parking_lot_selete = "";
+
+                    for (const item of _parking_lots) {
+                        const _p = item.Parking_Lot;
+                        const _t_op = `<option value=${_p.id}>${_p.name}</option>`;
+                        _parking_lot_selete += _t_op;
+                    }
+                    document.getElementById("search_gate_parking_id_select").innerHTML = `<option value=0>All Parking_Lot</option>` + _parking_lot_selete;
+
+                    document.getElementById("input_gate_parking_id_select").innerHTML = _parking_lot_selete;
+                }
+            } else {
+                toastMixin.fire({
+                    title: JSON.stringify(_reply),
+                    icon: "error",
+                });
+                return;
+            }
+        } else {
+            _query = "/api/function/gateway_list/?parking_id=" + parking_id;
+        }
+
+        _reply = await fetchApi(_query, "get", null, "json");
+        if (!!_reply) {
+            if (_reply.success) {
+                const box_of_gateway_in = document.getElementById("box_of_gateway_in");
+                const box_of_gateway_out = document.getElementById("box_of_gateway_out");
+                const temp = document.getElementById("template_content_gateway_info");
+                const gateways = _reply.data;
+                //debug(gateways);
+                box_of_gateway_in.innerHTML = "";
+                box_of_gateway_out.innerHTML = "";
+                for (const gateway of gateways) {
+
+                    const _g = gateway.GateWay;
+                    const _s = gateway.System_User;
+                    const _p = gateway.Parking_Lot;
+                    const _c = temp.content.cloneNode(true);
+                    const _d_image = _c.querySelectorAll("div")[0].querySelectorAll("img")[0];
+                    const _d = _c.querySelectorAll("div")[0].querySelectorAll("div")[0].querySelectorAll("div");
+                    const _d_a = _c.querySelectorAll("div")[0].querySelectorAll("div")[0].querySelectorAll("a")[0];
+
+                    _c.querySelectorAll('[name="gateway_image"]')[0].src = _g.images_path;
+
+                    _c.querySelectorAll('[name="gateway_name"]')[0].innerText = _g.name;
+                    _c.querySelectorAll('[name="gateway_type"]')[0].innerText = _g.type;
+                    _c.querySelectorAll('[name="gateway_status"]')[0].innerText = _g.status;
+                    _c.querySelectorAll('[name="gateway_date_created"]')[0].innerText = _g.date_created;
+                    _c.querySelectorAll('[name="parking_name"]')[0].innerText = _p.name;
+                    _c.querySelectorAll('[name="system_user_name"]')[0].innerText = _s.name;
+
+                    const ip_cameras = _g.ip_cameras.split("\n")
+
+                    _c.querySelectorAll('[name="ip_cameras"]')[0].innerHTML = ip_cameras.join("<br>");
+
+
+
+                    _c.querySelectorAll('[name="gateway_btn_edit"]')[0].setAttribute('onclick', `show_dialog_gateway(${_g.id})`)
+
+
+                    if (_g.type == "IN") {
+                        box_of_gateway_in.appendChild(_c);
+                    }
+                    if (_g.type == "OUT") {
+                        box_of_gateway_out.appendChild(_c);
+                    }
+
+                }
+
+            } else {
+                debug(_reply)
+                toastMixin.fire({
+                    title: JSON.stringify(_reply),
+                    icon: "error",
+                });
+            }
+        }
+
+    }
+    init_info_dashboard_gateway(0);
+
+    let current_gateway_id = 0;
+    async function show_dialog_gateway(id) {
+
+        let _reply = await fetchApi("/api/function/gateway_list/?id=" + id, "get", null, "json");
+        if (!!_reply) {
+            if (_reply.success == true) {
+                current_gateway_id = id;
+                const _from_e = document.getElementById("submit_apply_gateway_form");
+                const data = _reply.data[0].GateWay;
+                for (let i = 0; i < _from_e.elements.length; i++) {
+                    let _f_e = _from_e.elements[i];
+                    if (_f_e.name != "") {
+                        let k = _f_e.name;
+                        //debug("key :" + k + " : " + v);
+                        if (k == "image_upload") {
+                            document.getElementById("preview_image_GateWay").src = data["images_path"];
+                            continue;
+                        }
+                        let v = data[k];
+                        _f_e.value = v;
+                    }
+                }
+            } else {
+                debug(_reply)
+                toastMixin.fire({
+                    title: JSON.stringify(_reply),
+                    icon: "error",
+                });
+            }
+        }
+
+        document.getElementById('btn_Modal_GateWay_toggle').click();
+    }
+
+
+    async function remove_gateway() {
+        if (!(await dialog_confirm())) return;
+        let _reply = await fetchApi("/api/function/gateway?id=" + current_gateway_id, "delete", null, "json");
+        debug(_reply);
+        if (!!_reply) {
+            if (_reply.success) {
+                Swal.fire({
+                    icon: "info",
+                    title: "Successful",
+                    html: _reply.msg,
+                }).then(() => {
+                    window.location.reload();
+
+                });
+            } else {
+                debug(_reply)
+                toastMixin.fire({
+                    title: JSON.stringify(_reply),
+                    icon: "error",
+                });
+            }
+        }
+    }
+
+    async function submit_apply_gateway() {
+        const _from_e = document.getElementById("submit_apply_gateway_form");
+        const formData = new FormData();
+        if (current_gateway_id > 0) {
+            formData.append("id", current_gateway_id);
+        }
+        for (let i = 0; i < _from_e.elements.length; i++) {
+            let _f_e = _from_e.elements[i];
+            if (_f_e.name != "") {
+                let k = _f_e.name;
+                let v = _f_e.value;
+
+                if (k == "image_upload" & v != "") {
+
+                    formData.append(k, await dataURLtoFile(document.getElementById("preview_image_GateWay").src, v));
+                    debug("form is already uploaded file")
+                    continue;
+                }
+                formData.append(k, v);
+                debug("key :" + k + " : " + v);
+            }
+        }
+        let _reply = await fetchApi("/api/function/gateway", "post", formData, "json");
+        debug(_reply);
+        if (!!_reply) {
+            if (_reply.success == true) {
+                Swal.fire({
+                    icon: "info",
+                    title: "Successful",
+                    html: _reply.msg,
+                }).then(() => {
+                    window.location.reload();
+
+                });
+            } else {
+                debug(_reply)
+                toastMixin.fire({
+                    title: JSON.stringify(_reply),
+                    icon: "error",
+                });
+            }
+        }
+    }
+
+    async function add_gateway() {
+        const _from_e = document.getElementById("submit_apply_gateway_form");
+        let _reply = await fetchApi("/api/function/parking_lot_list", "get", null, "json");
+        if (!!_reply) {
+            if (_reply.success == true) {
+                const _parking_lots = _reply.data;
+                let _parking_lot_selete = "";
+
+                for (const item of _parking_lots) {
+                    const _p = item.Parking_Lot;
+                    const _t_op = `<option value=${_p.id}>${_p.name}</option>`;
+                    _parking_lot_selete += _t_op;
+                }
+                document.getElementById("input_gate_parking_id_select").innerHTML = _parking_lot_selete;
+            }
+        } else {
+            toastMixin.fire({
+                title: JSON.stringify(_reply),
+                icon: "error",
+            });
+            return;
+        }
+
+        for (let i = 0; i < _from_e.elements.length; i++) {
+            let _f_e = _from_e.elements[i];
+            if (_f_e.name != "") {
+                let k = _f_e.name;
+                let v = "";
+                //debug("key :" + k + " : " + v);
+                if (k == "image_upload") {
+                    document.getElementById("preview_image_GateWay").src = "";
+                    continue;
+                }
+                _f_e.value = v;
+            }
+        }
+        document.getElementById('btn_Modal_GateWay_toggle').click();
+        current_gateway_id = 0
+
+    }
+</script>
+
+</html>

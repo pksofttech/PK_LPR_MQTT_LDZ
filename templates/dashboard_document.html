@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    {% include '_meta.html' %}
+</head>
+
+<body class="flex flex-col color_theme_bg">
+    {% include '_nav_bar.html' %}
+
+    <main class="flex flex-row h-full mb-16">
+
+        <div class="container h-full p-4 mx-auto rounded-lg ">
+            <div class="flex flex-col justify-between gap-2 ">
+
+                <div class="w-full">
+                    <div class="p-2 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+                        <div>
+                            <label for="large" class="block mb-2 text-base font-medium text-gray-900 dark:text-white">Document select</label>
+                            <select id="large" onchange="select_edit_document(this.value)"
+                                class="block w-full px-4 py-3 text-base text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <option selected>Select...</option>
+                                <option value="SLIP_OUT">Slip Out</option>
+                                <!-- <option value="SLIP_IN">SLIP_IN</option> -->
+                                <!-- <option value="SLIP_MEMBER">SLIP_MEMBER</option> -->
+                                <option value="HEADER_REPORT">HEADER_REPORT</option>
+                                <option value="FOOTER_REPORT">FOOTER_REPORT</option>
+                                <!-- <option value="HEADER_ACC">HEADER_ACC</option> -->
+                                <!-- <option value="HEADER_TRANSACTION">HEADER_TRANSACTION</option> -->
+
+                            </select>
+                            <div class="inline-flex my-2 rounded-md shadow-sm" role="group">
+                                <button onclick="preview_document()" type=" button"
+                                    class="px-4 py-2 text-sm font-medium text-gray-900 bg-blue-500 border border-gray-200 rounded-l-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-blue-500 dark:focus:text-white">
+                                    Preview
+                                </button>
+                                <button type="button" onclick="set_default_document()"
+                                    class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border-t border-b border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-blue-500 dark:focus:text-white">
+                                    Default
+                                </button>
+                                <button onclick="save_document()" type="button"
+                                    class="px-4 py-2 text-sm font-medium text-gray-900 bg-green-600 border border-gray-200 rounded-r-md hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-blue-500 dark:focus:text-white">
+                                    Save
+                                </button>
+                            </div>
+
+                        </div>
+
+                        <div class="p-2 overflow-auto border rounded-lg" id="preview_document_box">
+
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="w-full text-center bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+                    <div class="p-4">
+                        <label class="block mb-2 text-lg font-medium text-gray-900 dark:text-white">รูปแบบ</label>
+                        <textarea id="document_text_editor" row="50" class="w-full p-2 overflow-auto input_box_form h-80"></textarea>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+    {% include '_footer.html' %}
+</body>
+{% include '_script.html' %}
+
+
+<script>
+    let current_document = "";
+    function preview_document() {
+        const preview_document_box = document.getElementById("preview_document_box");
+        const document_text_editor = document.getElementById("document_text_editor");
+        preview_document_box.innerHTML = document_text_editor.value;
+    }
+
+    async function select_edit_document(value = null) {
+        current_document = value;
+        document_text_editor.value = "";
+        const _reply = await fetchApi("/api/document/?document=" + value, "get", null, "json");
+        debug(_reply);
+        if (_reply.success) {
+
+            const document_text_editor = document.getElementById("document_text_editor");
+            const App_Configurations = _reply.data.App_Configurations;
+            document_text_editor.value = App_Configurations.value;
+        }
+        preview_document();
+
+    }
+
+    async function save_document() {
+        if (current_document == "") {
+            return
+        }
+        const data_document = document_text_editor.value;
+        const formData = new FormData();
+        formData.append("document", current_document);
+        formData.append("data_document", data_document);
+        const _reply = await fetchApi("/api/document/", "post", formData, "json");
+        debug(_reply);
+        if (_reply.success) {
+            const document_text_editor = document.getElementById("document_text_editor");
+            const App_Configurations = _reply.data;
+            document_text_editor.value = App_Configurations.value;
+            toastMixin.fire({
+                title: "Success",
+                text: "ดำเนินการเรียบร้อยแล้ว",
+                icon: "success",
+            });
+
+        }
+        preview_document();
+
+    }
+
+    async function set_default_document() {
+        if (current_document == "") {
+            return
+        }
+        const document_text_editor = document.getElementById("document_text_editor");
+        let default_data = "";
+        if (current_document == "SLIP_OUT") {
+            default_data = `<div class="w-full max-w-md p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-8 dark:bg-gray-800 dark:border-gray-700">
+<div class="flex items-center justify-center gap-4">
+<img class="w-16 h-16 rounded-full" src="/static/data_base/image/default/system.png">
+    <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white">PKS@PARKING</h5>
+    </div>
+<div class="flow-root text-white">
+<ul role="list" >
+
+<li class="py-2"> <div class="flex items-center space-x-4"> <div class="flex-1 min-w-0"> <p class="text-sm font-medium truncate">หมายเลขรายการ</p>
+<p class="text-sm truncate">Transaction Number</p></div>
+<div class="inline-flex items-center text-base font-semibold ">[transaction_id]</div></div></li>
+
+<li class="py-2"> <div class="flex items-center space-x-4"> <div class="flex-1 min-w-0"> <p class="text-sm font-medium truncate">หมายเลขบัตร</p>
+<p class="text-sm truncate">card Number</p></div>
+<div class="inline-flex items-center text-base font-semibold ">[card_id]</div></div></li>
+
+<li class="py-2"> <div class="flex items-center space-x-4"> <div class="flex-1 min-w-0"> <p class="text-sm font-medium truncate">เวลาเข้า</p></div>
+<div class="inline-flex items-center text-base font-semibold ">[in_time]</div></div></li>
+
+<li class="py-3 sm:py-4"> <div class="flex items-center space-x-4"> <div class="flex-1 min-w-0"> <p class="text-sm font-medium truncate">เวลาออก</p></div>
+<div class="inline-flex items-center text-base font-semibold ">[out_time]</div></div></li>
+
+<li class="py-2"> <div class="flex items-center space-x-4"> <div class="flex-1 min-w-0"> <p class="text-sm font-medium truncate">เวลาจอด</p></div>
+<div class="inline-flex items-center text-base font-semibold ">[parked]</div></div></li>
+
+<li class="py-2"> <div class="flex items-center space-x-4"> <div class="flex-1 min-w-0"> <p class="text-sm font-medium truncate">รับเงิน</p></div>
+<div class="inline-flex items-center text-base font-semibold ">[pay]</div></div></li>
+
+<li class="py-2"> <div class="flex items-center space-x-4"> <div class="flex-1 min-w-0"> <p class="text-sm font-medium truncate">ค่าบริการ</p></div>
+<div class="inline-flex items-center text-base font-semibold ">[amount]</div></div></li>
+
+<li class="py-2"> <div class="flex items-center space-x-4"> <div class="flex-1 min-w-0"> <p class="text-sm font-medium truncate">เงินทอน</p></div>
+<div class="inline-flex items-center text-base font-semibold ">[trun]</div></div></li>
+
+</ul>
+<div class="font-bold text-center text-md ">[service_fee]</div>
+<div class="font-bold text-center text-md ">***ขอบคุณ***</div>
+</div>
+</div>`;
+        }
+        if (default_data) {
+            document_text_editor.value = default_data;
+            toastMixin.fire({
+                title: "Success",
+                text: "ดำเนินการเรียบร้อยแล้ว",
+                icon: "success",
+            });
+            preview_document();
+        }
+
+
+    }
+
+</script>
+
+</html>

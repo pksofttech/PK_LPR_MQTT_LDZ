@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>The Materialize App Example</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+
+        <link rel="stylesheet" href="/css/w3.css" />
+
+        <link rel="stylesheet" href="/plugins/datatables/jquery.dataTables.min.css" />
+        <!-- <link rel="stylesheet" href="/plugins/datatables-buttons/css/buttons.dataTables.min.css" /> -->
+        <link rel="stylesheet" href="/sass/materialize.css" />
+
+        <!-- <style type="text/css">
+            .wrapper {
+                padding-left: 300px;
+            }
+        </style> -->
+    </head>
+    <body class="dark">
+        <header>
+            <div class="navbar-fixed">
+                <nav class="navbar nav-extended">
+                    <div class="nav-wrapper">
+                        <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+
+                        <ul class="">
+                            <li><i class="material-icons">home</i></li>
+                            <li><a href="collapsible.html">Javascript</a></li>
+                            <li><a href="mobile.html">Mobile</a></li>
+                        </ul>
+                        <ul class="right">
+                            <li>
+                                <a href="#!" data-target="chat-dropdown" class="dropdown-trigger waves-effect">
+                                    <i class="material-icons">settings</i>
+                                </a>
+                                <div id="chat-dropdown" class="dropdown-content">
+                                    <div class="settings-group">
+                                        <div class="setting">
+                                            Night Mode
+                                            <i class="material-icons left">brightness_4</i>
+                                            <div class="switch right">
+                                                <label>
+                                                    <input checked type="checkbox" onchange="switch_therme();"" /><span class="lever"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <p>
+                                            <label>
+                                                <input type="checkbox" class="filled-in" checked="checked" />
+                                                <span>Filled in</span>
+                                            </label>
+                                        </p>
+                                        <div class="setting">
+                                            Beta Testing
+                                            <label class="right"> <input type="checkbox" /><span></span> </label>
+                                        </div>
+                                        <div class="col" style="width: 400px">
+                                            <div class="card horizontal">
+                                                <div class="card-image">
+                                                    <img src="https://materializecss.com/images/sample-1.jpg" />
+                                                </div>
+                                                <div class="card-stacked w3-padding">
+                                                    <div class="card-content w3-border">
+                                                        <p>I am a very simple card. I am good at containing small bits of information.</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <a data-target="info-dropdown" class="dropdown-trigger btn-floating btn-small waves-effect waves-light">
+                                    <img
+                                        class="w3-image"
+                                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSzjctp5CU7fwIQIVk6aOIqYsQrU9d_9BDQ9g&usqp=CAU"
+                                    />
+                                </a>
+                                <span class="badge-tag orange lighten-2 w3-tiny">2 new.</span>
+
+                                <div id="info-dropdown" class="dropdown-content w3-quarter">
+                                    <ul class="collection">
+                                        <li class="collection-item avatar">
+                                            <img
+                                                src="data:image/png;base64,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"
+                                                alt=""
+                                                class="circle"
+                                            />
+                                            <span class="title">Title</span>
+                                            <p>First Line</p>
+                                            <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
+                                        </li>
+                                        <li class="collection-item avatar">
+                                            <i class="material-icons circle success-color">folder</i>
+                                            <span class="title">Title</span>
+                                            <p>First Line</p>
+                                            <a href="#!" class="secondary-content"><i class="material-icons danger-color">grade</i></a>
+                                        </li>
+                                        <li class="collection-item avatar">
+                                            <i class="material-icons circle">folder</i>
+                                            <span class="title">Title</span>
+                                            <p>First Line</p>
+                                            <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
+                                        </li>
+                                    </ul>
+                                    <a class="center" href="#"> data test </a>
+                                </div>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <button class="btn-floating btn-small waves-effect waves-light"><i class="material-icons">home</i></button>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <button class="btn-floating btn-small waves-effect waves-light"><i class="material-icons">home</i></button>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+            <ul id="slide-out" class="sidenav sidenav-fixed w3-padding-small">
+                <li>
+                    <div class="row">
+                        <div class="col s6">
+                            <img class="logo w3-circle w3-padding" style="width: 100px" src="/image/logo.png" alt="" />
+                        </div>
+                        <div class="col">
+                            <h5 class="w3-cursive">App Name For Web</h5>
+                        </div>
+                    </div>
+                </li>
+                <li class="bold active">
+                    <a href="about.html" class="waves-effect waves-teal"><i class="material-icons left success-color">adb</i>About</a>
+                </li>
+                <li class="bold"><a href="app.html" class="waves-effect waves-teal">Getting Started</a></li>
+                <li class="no-padding">
+                    <ul class="collapsible collapsible-accordion">
+                        <li class="bold">
+                            <a class="collapsible-header waves-effect waves-teal" tabindex="0">CSS</a>
+                            <div class="collapsible-body">
+                                <ul>
+                                    <li><a href="color.html">Color</a></li>
+                                    <li><a href="grid.html">Grid</a></li>
+                                    <li><a href="helpers.html">Helpers</a></li>
+                                    <li><a href="media-css.html">Media</a></li>
+                                    <li><a href="pulse.html">Pulse</a></li>
+                                    <li><a href="sass.html">Sass</a></li>
+                                    <li><a href="shadow.html">Shadow</a></li>
+                                    <li><a href="table.html">Table</a></li>
+                                    <li><a href="css-transitions.html">Transitions</a></li>
+                                    <li><a href="typography.html">Typography</a></li>
+                                </ul>
+                            </div>
+                        </li>
+
+                        <li class="bold">
+                            <a class="collapsible-header waves-effect waves-teal" tabindex="0">Forms</a>
+                            <div class="collapsible-body">
+                                <ul>
+                                    <li><a href="autocomplete.html">Autocomplete</a></li>
+                                    <li><a href="checkboxes.html">Checkboxes</a></li>
+                                    <li><a href="chips.html">Chips</a></li>
+                                    <li><a href="pickers.html">Pickers</a></li>
+                                    <li><a href="radio-buttons.html">Radio Buttons</a></li>
+                                    <li><a href="range.html">Range</a></li>
+                                    <li><a href="select.html">Select</a></li>
+                                    <li><a href="switches.html">Switches</a></li>
+                                    <li><a href="text-inputs.html">Text Inputs</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+                <li class="bold"><a href="mobile.html" class="waves-effect waves-teal">Mobile</a></li>
+                <li class="bold"><a href="showcase.html" class="waves-effect waves-teal">Showcase</a></li>
+                <li class="bold"><a href="themes.html" class="waves-effect waves-teal">Themes</a></li>
+            </ul>
+        </header>
+        <main>
+            <div class="container-fluid">
+                <!-- <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a> -->
+                <div class="row">
+                    <div class="col s12">
+                        <div class="input-field col s3">
+                            <input id="last_name" type="text" class="validate" />
+                            <label for="last_name">Last Name</label>
+                        </div>
+
+                        <form action="#">
+                            <div class="input-field col s3">
+                                <select>
+                                    <option value="" disabled selected>Choose your option</option>
+                                    <option value="1">Option 1</option>
+                                    <option value="2">Option 2</option>
+                                    <option value="3">Option 3</option>
+                                </select>
+                                <label>Materialize Select</label>
+                            </div>
+                            <div class="col s6">
+                                <p>
+                                    <label>
+                                        <input type="checkbox" />
+                                        <span>Red</span>
+                                    </label>
+                                </p>
+                                <p>
+                                    <label>
+                                        <input type="checkbox" checked="checked" />
+                                        <span>Yellow</span>
+                                    </label>
+                                </p>
+                                <p>
+                                    <label>
+                                        <input type="checkbox" class="filled-in" checked="checked" />
+                                        <span>Filled in</span>
+                                    </label>
+                                </p>
+                                <p>
+                                    <label>
+                                        <input id="indeterminate-checkbox" type="checkbox" />
+                                        <span>Indeterminate Style</span>
+                                    </label>
+                                </p>
+                                <p>
+                                    <label>
+                                        <input type="checkbox" checked="checked" disabled="disabled" />
+                                        <span>Green</span>
+                                    </label>
+                                </p>
+                                <p>
+                                    <label>
+                                        <input type="checkbox" disabled="disabled" />
+                                        <span>Brown</span>
+                                    </label>
+                                </p>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="col s12 w3-border w3-round w3-margin-top w3-padding-16">
+                        <table id="example" class="compact hover" style="width: 100%"></table>
+                    </div>
+                </div>
+                <div class="parallax-container" style="height: 300px">
+                    <div class="parallax"><img src="https://materializecss.com/images/sample-1.jpg" /></div>
+                </div>
+                <div class="row">
+                    <div class="col s12 m6 l3">
+                        <div class="card">
+                            <div class="card-image">
+                                <img src="https://materializecss.com/images/sample-1.jpg" />
+                                <span class="card-title">Card Title</span>
+                                <a class="btn-floating halfway-fab waves-effect waves-light red"><i class="material-icons">add</i></a>
+                            </div>
+                            <div class="card-content">
+                                <p>
+                                    I am a very simple card. I am good at containing small bits of information. I am convenient because I require
+                                    little markup to use effectively.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col s12 m6 l3">
+                        <div class="card">
+                            <div class="card-image waves-effect waves-block waves-light">
+                                <img
+                                    src="https://besthqwallpapers.com/Uploads/4-5-2020/131778/thumb2-4k-zorin-os-blue-logo-minimalism-zorin-os-logo-linux.jpg"
+                                />
+                            </div>
+                            <div class="card-content">
+                                <span class="card-title activator grey-text text-darken-4"
+                                    >Card Title<i class="material-icons right">more_vert</i></span
+                                >
+                                <p><a href="#">This is a link</a></p>
+                            </div>
+                            <div class="card-reveal">
+                                <span class="card-title grey-text text-darken-4">Card Title<i class="material-icons right">close</i></span>
+                                <p>Here is some more information about this product that is only revealed once clicked on.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col s12 m3">
+                        <div class="card horizontal">
+                            <div class="card-image">
+                                <img src="https://materializecss.com/images/sample-1.jpg" />
+                            </div>
+                            <div class="card-stacked">
+                                <div class="card-content">
+                                    <p>I am a very simple card. I am good at containing small bits of information.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col s12 m3">
+                        <div class="row">
+                            <div class="card horizontal">
+                                <div class="card-image">
+                                    <i class="large material-icons green-text">insert_chart</i>
+                                </div>
+                                <div class="card-stacked w3-padding">
+                                    <div class="card-content w3-border">
+                                        <p>I am a very simple card. I am good at containing small bits of information.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card horizontal">
+                                <div class="card-image">
+                                    <i class="large material-icons red-text">bug_report</i>
+                                </div>
+                                <div class="card-stacked w3-padding">
+                                    <div class="card-content w3-border">
+                                        <p>I am a very simple card. I am good at containing small bits of information.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card horizontal">
+                                <div class="card-image">
+                                    <i class="large material-icons blue-text">account_balance</i>
+                                </div>
+                                <div class="card-stacked w3-padding">
+                                    <div class="card-content w3-border">
+                                        <p>I am a very simple card. I am good at containing small bits of information.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <ul class="collection">
+                        <li class="collection-item avatar">
+                            <img src="https://materializecss.com/images/yuna.jpg" alt="" class="circle" />
+                            <span class="title">Title</span>
+                            <p>
+                                First Line <br />
+                                Second Line
+                            </p>
+                            <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
+                        </li>
+                        <li class="collection-item avatar">
+                            <i class="material-icons circle">folder</i>
+                            <span class="title">Title</span>
+                            <p>
+                                First Line <br />
+                                Second Line
+                            </p>
+                            <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
+                        </li>
+                        <li class="collection-item avatar">
+                            <i class="material-icons circle green">insert_chart</i>
+                            <span class="title">Title</span>
+                            <p>
+                                First Line <br />
+                                Second Line
+                            </p>
+                            <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
+                        </li>
+                        <li class="collection-item avatar">
+                            <i class="material-icons circle red">play_arrow</i>
+                            <span class="title">Title</span>
+                            <p>
+                                First Line <br />
+                                Second Line
+                            </p>
+                            <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Gitter Chat Link -->
+            <div class="fixed-action-btn">
+                <a class="btn-floating btn-large red">
+                    <i class="large material-icons">mode_edit</i>
+                </a>
+                <ul>
+                    <li>
+                        <a class="btn-floating red"><i class="material-icons">insert_chart</i></a>
+                    </li>
+                    <li>
+                        <a class="btn-floating yellow darken-1"><i class="material-icons">format_quote</i></a>
+                    </li>
+                    <li>
+                        <a class="btn-floating green"><i class="material-icons">publish</i></a>
+                    </li>
+                    <li>
+                        <a class="btn-floating blue"><i class="material-icons">attach_file</i></a>
+                    </li>
+                </ul>
+            </div>
+        </main>
+        <footer class="page-footer">
+            <div class="row">
+                <div class="col l4 m6 s12">
+                    <h5 class="white-text">About Us</h5>
+                    <p class="grey-text text-lighten-4">
+                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy
+                        text ever since the 1500s,
+                    </p>
+                </div>
+                <div class="col l4 m3 s12">
+                    <!-- <h6 class="white-text">Front-End Tutorials</h6> -->
+                </div>
+                <div class="col l3 m3 s12">
+                    <h6 class="white-text">Back-End Tutorials</h6>
+                    <ul>
+                        <li><a class="grey-text text-lighten-3" href="#!">Java</a></li>
+                        <li><a class="grey-text text-lighten-3" href="#!">Python</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-copyright">
+                <div class="col l6 m6 s12">
+                    &copy; 2018 Copyright
+                    <a class="white-text text-lighten-4" href="http://www.freetimelearning.com/" target="_blank">Free Time Learn</a>
+                </div>
+
+                <div class="col l6 m6 s12">
+                    <a class="grey-text text-lighten-4 right" href="http://www.freetimelearning.com/" target="_blank">Designed By F T L</a>
+                </div>
+            </div>
+        </footer>
+
+        <script src="/sweetalert2.all.min.js"></script>
+        <script type="text/javascript" src="/plugins/jquery/jquery.min.js"></script>
+        <script type="text/javascript" charset="utf8" src="/plugins/datatables/jquery.dataTables.min.js"></script>
+        <script type="text/javascript" charset="utf8" src="/plugins/datatables-buttons/js/dataTables.buttons.js"></script>
+
+        <script type="text/javascript" charset="utf8" src="/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+        <script type="text/javascript" charset="utf8" src="/plugins/datatables-buttons/js/buttons.colVis.js"></script>
+        <script type="text/javascript" charset="utf8" src="/plugins/datatables-buttons/js/buttons.materialize.js"></script>
+        <script type="text/javascript" charset="utf8" src="/plugins/jszip/jszip.min.js"></script>
+
+        <script type="text/javascript" charset="utf8" src="/js/bin/materialize.js"></script>
+
+        <script>
+            const DEBUG_MODE = true;
+
+            function debug(msg) {
+                if (DEBUG_MODE) {
+                    // console.icon("bulb","x")
+
+                    if (typeof msg == "object") {
+                        console.log(msg);
+                    } else {
+                        console.log(`%cDebug: %c ${msg}`, "color:DarkBlue;", "color:DarkCyan;");
+                    }
+                }
+            }
+
+            function print_info(msg) {
+                console.info(msg);
+            }
+
+            function print_warn(msg) {
+                console.warn(msg);
+            }
+
+            function print_error(msg) {
+                console.log(`%cError: %c ${msg}`, "color:DarkRed;", "color:DarkCyan;");
+                // console.error(msg);
+            }
+
+            if (DEBUG_MODE) {
+                print_warn("Debug Mode Enable!!!");
+            }
+        </script>
+        <script>
+            let data = [];
+            for (let index = 0; index < 50; index++) {
+                data.push({
+                    name: "Garrett Winters : " + index,
+                    position: "Director",
+                    salary: "$5,300",
+                    start_date: "2011/07/25",
+                    office: "Edinburgh",
+                    extn: "8422",
+                });
+            }
+            let table = $("#example").DataTable({
+                dom: "Blfrtip",
+                pageLength: 10,
+                buttons: [
+                    {
+                        extend: "excel",
+                        className: "btn waves-effect waves-light",
+                        titleAttr: "Export in Excel",
+                        text: "Excel",
+                    },
+                    {
+                        extend: "colvis",
+                        className: "btn waves-effect waves-light",
+                        // titleAttr: "Export in Excel",
+                        text: "colvis",
+                    },
+                ],
+                data: data,
+                columns: [
+                    { data: "name", title: "data" },
+                    { data: "position", title: "data" },
+                    { data: "salary", title: "data" },
+                    { data: "office", title: "data" },
+                ],
+            });
+            // table.on("search", function () {
+            //     $(".dataTables_filter input").css("background-color", table.search() === "" ? "transparent" : "red");
+            // });
+        </script>
+        <script type="text/javascript">
+            localStorage.setItem("mode", "dark");
+            function switch_therme() {
+                localStorage.setItem("mode", (localStorage.getItem("mode") || "dark") === "dark" ? "light" : "dark");
+                localStorage.getItem("mode") === "dark"
+                    ? document.querySelector("body").classList.add("dark")
+                    : document.querySelector("body").classList.remove("dark");
+            }
+            document.addEventListener("DOMContentLoaded", function () {
+                var elems = document.querySelectorAll(".sidenav");
+                var instances = M.Sidenav.init(elems, {
+                    onOpenStart: function () {
+                        // console.log("I trigger as soon as the page is loaded");
+                        document.body.style.transition = "0.5s";
+                        document.body.style.paddingLeft = "300px";
+                        document.getElementsByClassName("navbar")[0].style.width = `${$(window).width() - 300}px`;
+                    },
+                    onCloseEnd: function () {
+                        // console.log("same");
+                        document.body.style.transition = "0.5s";
+                        document.body.style.paddingLeft = "0px";
+                        document.getElementsByClassName("navbar")[0].style.width = "100%";
+                    },
+                });
+            });
+
+            $(document).ready(function () {
+                // Plugin initialization
+                $(".carousel").carousel();
+                $(".carousel.carousel-slider").carousel({
+                    fullWidth: true,
+                    indicators: true,
+                    onCycleTo: function (item, dragged) {},
+                });
+                $(".collapsible").collapsible();
+                $(".collapsible.expandable").collapsible({
+                    accordion: false,
+                });
+
+                $(".dropdown-trigger").dropdown({ constrainWidth: false, coverTrigger: false, closeOnClick: false });
+                $(".slider").slider();
+                $(".parallax").parallax();
+                $(".materialboxed").materialbox();
+                $(".modal").modal();
+                $(".scrollspy").scrollSpy();
+                $(".datepicker").datepicker();
+                $(".tabs").tabs();
+                $(".timepicker").timepicker();
+                $(".tooltipped").tooltip();
+                $("select").not(".disabled").formSelect();
+                // $(".sidenav").sidenav();
+                $(".tap-target").tapTarget();
+                $("input.autocomplete").autocomplete({
+                    data: { Apple: null, Microsoft: null, Google: "http://placehold.it/250x250" },
+                });
+                $("input[data-length], textarea[data-length]").characterCounter();
+                $(".fixed-action-btn").floatingActionButton();
+                $(".tabs").tabs();
+                $(window).resize(function () {
+                    // $("body").prepend("<div>" + $(window).width() + "</div>");
+                    if ($(window).width() > 993) {
+                        document.getElementsByClassName("navbar")[0].style.width = `${$(window).width() - 300}px`;
+                        // document.getElementsByClassName("navbar")[0].style.overflow = "visible";
+                    } else {
+                        // document.getElementsByClassName("navbar")[0].style.overflow = "hidden";
+                    }
+                });
+            });
+        </script>
+    </body>
+</html>

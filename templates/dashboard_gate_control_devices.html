@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    {% include '_meta.html' %}
+</head>
+
+<body class="flex flex-col color_theme_bg">
+    {% include '_nav_bar.html' %}
+
+    <main class="flex flex-row h-full">
+
+        <div class="container h-full p-4 mx-auto rounded-lg ">
+            <div class="p-4 mb-4 text-blue-900 border border-blue-300 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400 dark:border-blue-800" role="alert">
+                <div class="flex items-center">
+                    <svg aria-hidden="true" class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd"
+                            d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                            clip-rule="evenodd"></path>
+                    </svg>
+                    <span class="sr-only">Gate Control Devices</span>
+                    <h3 class="text-lg font-medium">Gate Control Devices</h3>
+                    <button type="button" onclick="history.back()" data-tooltip-target="tooltip-bottom" data-tooltip-placement="bottom"
+                        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white">
+                        <i class="mr-2 text-red-500 fa-solid fa-circle-chevron-left"></i> กลับ
+                    </button>
+                    <div id="tooltip-bottom" role="tooltip"
+                        class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+                        กลับไปหน้าตั้งค่า
+                        <div class="tooltip-arrow" data-popper-arrow></div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="p-2 mt-4 text-lg font-medium">LPR Camera Devices <button type="button" data-bs-toggle="tooltip" title="add dervice" onclick="add_lpr_camera();"
+                    class="inline-flex items-center p-1 text-sm font-medium text-center text-blue-700 border border-blue-700 rounded-full hover:bg-blue-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:focus:ring-blue-800">
+                    <i class="fa-solid fa-square-plus"></i>
+                </button></div>
+            <div id="box_of_lpr_camera" class="grid gap-8 p-4 border-2 border-green-500 rounded-lg md:grid-cols-2 lg:grid-cols-4">
+
+            </div>
+
+            <div class="p-2 mt-4 text-lg font-medium">Reader Member Devices <button type="button" data-bs-toggle="tooltip" title="add dervice"
+                    class="inline-flex items-center p-1 text-sm font-medium text-center text-blue-700 border border-blue-700 rounded-full hover:bg-blue-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:focus:ring-blue-800">
+                    <i class="fa-solid fa-square-plus"></i>
+                </button></div>
+            <div id="box_of_reader" class="grid gap-8 p-4 border-2 border-green-500 rounded-lg md:grid-cols-4">
+
+
+            </div>
+
+            <div class="mt-4 text-lg font-medium ">Open Barrier Devices</div>
+            <div id="box_of_barrier" class="grid gap-8 p-4 border-2 border-teal-500 rounded-lg md:grid-cols-3">
+
+            </div>
+
+
+            <div class="mt-4 text-lg font-medium">Face Recognition Devives</div>
+            <div id="box_of_face_recognition" class="grid gap-8 p-4 border-2 border-yellow-500 rounded-lg md:grid-cols-3">
+
+            </div>
+
+
+        </div>
+
+
+    </main>
+
+    <template id="template_content_lpr_camera_item">
+        <div class="shadow-lg color_widget_theme_bg rounded-2xl">
+            <!-- <img src="/static/image/logo.png" class="h-12 mx-auto rounded-full" /> -->
+            <div class="w-full">
+                <i class="mx-8 text-orange-600 p8 fa-solid fa-video fa-3x"></i>
+            </div>
+            <div class="w-full p-4">
+                <p class="mb-2 text-lg font-medium" name="device_name">
+                    LPR-GATE_IN
+                </p>
+                <p class="text-md " name="device_gate_name"></p>
+                <p class="text-xs ">System_User: <span class="text-xs " name="device_system_user"></span></p>
+                <p class="text-xs ">services fee: <span class="text-xs " name="device_services_fee"></span></p>
+                <p class="text-xs ">ID: <span class="text-xs " name="device_id"></span></p>
+                <p class="text-xs ">IP: <span class="text-xs " name="device_ip"></span></p>
+                <p class="text-xs ">MODE: <span class="text-xs " name="mode"></span></p>
+                <p class="text-xs ">Direction: <span class="text-xs " name="direction"></span></p>
+                <p class="text-xs ">Model: <span class="text-xs " name="device_model"></span></p>
+                <p class="text-xs ">Remark: <span class="text-xs " name="remark"></span></p>
+
+                <a role="button" name="lpr_camera_edit" class="float-right p-2 font-medium link_btn">
+                    Config
+                </a>
+
+
+            </div>
+        </div>
+    </template>
+
+    <!-- **NOTE -  Modal_Lpr_Camera-->
+    <div id="Modal_Lpr_Camera" tabindex="-1" aria-hidden="true"
+        class="fixed top-0 left-0 right-0 z-50 items-center justify-center hidden w-full overflow-x-hidden overflow-y-auto md:inset-0 h-modal md:h-full">
+        <div class="relative w-full h-full max-w-2xl p-4 md:h-auto">
+            <!-- Modal content -->
+            <div class="relative p-4 bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5">
+                <!-- Modal header -->
+                <div class="flex items-center justify-between pb-4 mb-4 border-b rounded-t sm:mb-5 dark:border-gray-600">
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+                        lpr_camera
+                    </h3>
+                    <button type="button" id="btn_lpr_camera_toggle"
+                        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                        data-modal-toggle="Modal_Lpr_Camera">
+                        <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd"
+                                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                clip-rule="evenodd"></path>
+                        </svg>
+                        <span class="sr-only">Close modal</span>
+                    </button>
+
+                </div>
+                <!-- Modal body -->
+                <div>
+                    <form id="submit_apply_lpr_camera_form" class="grid gap-4 mb-4 sm:grid-cols-2">
+
+                        <div class="sm:col-span-1">
+                            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ชื่อ(device_name)<br><i class="fa-solid fa-video"></i></label>
+                            <input type="text" autocomplete="off" name="device_name" class="input_box_form" placeholder="ชื่อ" required>
+                        </div>
+
+                        <div class="sm:col-span-1">
+                            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ผู้ทำรายการ(device_system_user)<br><a role="button"
+                                    class="text-orange-500 hover:underline" onclick="dialog_edit_device_system_user()"><i
+                                        class="mx-2 fa-regular fa-pen-to-square"></i>เลือกผู้ทำรายการ</a></label>
+                            <input type="text" autocomplete="off" readonly required name="device_system_user" class="input_box_form" placeholder="ผู้ทำรายการ">
+                        </div>
+                        <div class="sm:col-span-1">
+                            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ช่องทาง(Gate Name)<br><a role="button"
+                                    class="text-orange-500 hover:underline" onclick="dialog_edit_device_gate_name()"><i
+                                        class="mx-2 fa-regular fa-pen-to-square"></i>เลือกช่องทาง</a></label>
+                            <input type="text" autocomplete="off" readonly required name="device_gate_name" class="input_box_form" placeholder="ช่องทาง">
+                        </div>
+                        <div class="sm:col-span-1">
+                            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ค่าบริการตั้งต้น(defult Services fee)<br><a role="button"
+                                    class="text-orange-500 hover:underline" onclick="dialog_edit_device_services_fee()"><i
+                                        class="mx-2 fa-regular fa-pen-to-square"></i>เลือกค่าบริการตั้งต้น</a></label>
+                            <input type="text" autocomplete="off" readonly name="device_services_fee" class="input_box_form" placeholder="ช่องทาง">
+                        </div>
+
+                        <div class="sm:col-span-1">
+                            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">device_id</label>
+                            <input type="text" autocomplete="off" name="device_id" class="input_box_form" placeholder="device_id" required>
+                        </div>
+                        <div class="sm:col-span-1">
+                            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">device_ip</label>
+                            <input type="text" autocomplete="off" name="device_ip" class="input_box_form" placeholder="device_ip" required>
+                        </div>
+
+                        <div class="sm:col-span-1">
+                            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">device_model</label>
+                            <select name="device_model" required
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                <option selected value="XD01">XD01</option>
+                                <option value="CDN02">CDN02</option>
+                            </select>
+                        </div>
+                        <div class="sm:col-span-1">
+                            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">type</label>
+                            <select name="type" required
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                <option selected value="MODULE">Module</option>
+                                <option value="STATION">Station</option>
+                            </select>
+                        </div>
+
+                        <div class="sm:col-span-1">
+                            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">direction</label>
+                            <select name="direction" required
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                <option selected value="AUTO">AUTO(Gate Config)</option>
+                                <option value="IN">IN</option>
+                                <option value="OUT">OUT</option>
+                                <option value="ALL">ALL</option>
+                            </select>
+                        </div>
+                        <div class="sm:col-span-1">
+                            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">mode</label>
+                            <select name="mode" required
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                <option selected value="MEMBER">Member</option>
+                                <option value="VISITOR">Visitor</option>
+                                <option value="ALL">Member+Visitor</option>
+                            </select>
+                        </div>
+
+                        <div class="sm:col-span-2">
+                            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">device_send_data_path</label>
+                            <input type="text" autocomplete="off" name="device_send_data_path" class="input_box_form" placeholder="device_send_data_path">
+                        </div>
+                        <div class="sm:col-span-2">
+                            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">device_send_heartbeat_path</label>
+                            <input type="text" autocomplete="off" name="device_send_heartbeat_path" class="input_box_form" placeholder="device_send_heartbeat_path">
+                        </div>
+
+                        <div class="sm:col-span-2">
+                            <label for="remark" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">รายละเอียด</label>
+                            <textarea name="remark" rows="2" class="p-4 input_box_form" placeholder="รายละเอียด"></textarea>
+                        </div>
+                    </form>
+                    <div class="flex justify-between">
+                        <button type="button" onclick="submit_apply_lpr_camera()" class="w-32 border-blue-500 btn_block text_primary">
+                            <i class="fa fa-circle-check"></i>
+                            <span class="ml-2">ตกลง</span>
+                        </button>
+                        <button type="button" id="submit_apply_lpr_camera_form_remove_btn" onclick="remove_lpr_camera()" class="w-32 border-red-500 btn_block text_primary">
+                            <i class="text-red-600 fa-solid fa-eraser"></i>
+                            <span class="ml-2">ลบรายการข้อมูลนี้</span>
+                        </button>
+                        <button type="button" class="w-32 border-blue-500 btn_block text_danger" data-modal-toggle="Modal_Lpr_Camera">
+                            <i class="fa fa-arrow-right-from-bracket"></i>
+                            <span class="ml-2">กลับ</span>
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% include '_footer.html' %}
+</body>
+{% include '_script.html' %}
+
+
+<script>
+    let current_lpr_camera_id = 0;
+
+    async function init_info_lpr_camera() {
+        current_lpr_camera_id = 0;
+        const _reply = await fetchApi("/api/devices/lpr_camera/", "get", null, "json");
+        const box_of_lpr_camera = document.getElementById("box_of_lpr_camera");
+        box_of_lpr_camera.innerHTML = "";
+
+        if (_reply.success) {
+            const temp = document.getElementById("template_content_lpr_camera_item");
+            //debug(temp)
+            const lpr_cameras = _reply.data;
+            //debug(lpr_cameras);
+            for (const lpr_camera of lpr_cameras) {
+                const l = lpr_camera.Lpr_Camera;
+                const g = lpr_camera.GateWay;
+                const su = lpr_camera.System_User;
+                const sf = lpr_camera.Service_Fees;
+                let device_gate_name = "";
+                if (g) {
+                    device_gate_name = `<span class="badge_info">${g.name}</span>`;
+                } else {
+                    device_gate_name = `<span class="badge_danger">ยังไม่ตั้งค่า</span>`;
+                }
+                const _c = temp.content.cloneNode(true);
+                _c.querySelectorAll('[name="device_name"]')[0].innerText = l.device_name;
+                _c.querySelectorAll('[name="device_system_user"]')[0].innerText = su.name;
+
+                _c.querySelectorAll('[name="device_gate_name"]')[0].innerHTML = device_gate_name;
+                _c.querySelectorAll('[name="device_services_fee"]')[0].innerHTML = sf.name;
+
+                _c.querySelectorAll('[name="device_id"]')[0].innerText = l.device_id;
+                _c.querySelectorAll('[name="device_ip"]')[0].innerText = l.device_ip;
+                _c.querySelectorAll('[name="direction"]')[0].innerText = l.direction;
+                _c.querySelectorAll('[name="device_model"]')[0].innerText = l.device_model;
+                _c.querySelectorAll('[name="mode"]')[0].innerText = l.mode;
+                _c.querySelectorAll('[name="remark"]')[0].innerText = l.remark;
+
+                _c.querySelectorAll('[name="lpr_camera_edit"]')[0].setAttribute('onclick', `show_dialog_lpr_camera_edit(${l.id})`)
+
+
+                box_of_lpr_camera.appendChild(_c);
+            }
+
+
+        } else {
+            debug(_reply)
+            toastMixin.fire({
+                title: JSON.stringify(_reply),
+                icon: "error",
+            });
+        }
+    }
+
+    //init_info_lpr_camera();
+
+    async function show_dialog_lpr_camera_edit(lpr_camera_id) {
+        current_lpr_camera_id = lpr_camera_id;
+
+        const _from_e = document.getElementById("submit_apply_lpr_camera_form");
+        const submit_apply_lpr_camera_form_remove_btn = document.getElementById("submit_apply_lpr_camera_form_remove_btn");
+
+        if (lpr_camera_id) {
+            const _reply = await fetchApi("/api/devices/lpr_camera/?id=" + lpr_camera_id, "get", null, "json");
+            //debug(_reply)
+            if (_reply.success) {
+                const _p = _reply.data[0].Lpr_Camera;
+                const _g = _reply.data[0].GateWay;
+                const _su = _reply.data[0].System_User;
+                const _sf = _reply.data[0].Service_Fees;
+                for (let i = 0; i < _from_e.elements.length; i++) {
+                    let _f_e = _from_e.elements[i];
+                    if (_f_e.name != "") {
+                        if (_f_e.name == "device_gate_name") {
+                            if (_g) {
+                                _f_e.value = _g.name;
+                            } else {
+                                _f_e.value = "";
+                            }
+                            continue;
+                        }
+                        if (_f_e.name == "device_system_user") {
+                            _f_e.value = _su.name;
+                            continue;
+                        }
+                        if (_f_e.name == "device_services_fee") {
+                            _f_e.value = _sf.name;
+                            continue;
+                        }
+                        _f_e.value = _p[_f_e.name];
+                    }
+                }
+                submit_apply_lpr_camera_form_remove_btn.classList.remove("hidden");
+
+            }
+        } else {
+            submit_apply_lpr_camera_form_remove_btn.classList.add("hidden");
+
+        }
+
+
+        document.getElementById('btn_lpr_camera_toggle').click();
+    }
+
+    async function submit_apply_lpr_camera() {
+        const _from_e = document.getElementById("submit_apply_lpr_camera_form");
+        const formData = new FormData();
+        formData.append("id", current_lpr_camera_id);
+        for (let i = 0; i < _from_e.elements.length; i++) {
+            let _f_e = _from_e.elements[i];
+            if (_f_e.name != "") {
+                let k = _f_e.name;
+                let v = _f_e.value;
+                formData.append(k, v);
+                if (_f_e.required & !v) {
+                    toastMixin.fire({
+                        title: "ข้อมูลไม่ครบ",
+                        text: k,
+                        icon: "warning",
+                    });
+                    return false;
+                }
+            }
+        }
+        debug_form(formData)
+        let _reply = await fetchApi("/api/devices/lpr_camera/", "post", formData, "json");
+        debug(_reply);
+        if (!!_reply) {
+            if (_reply.success == true) {
+                Swal.fire({
+                    icon: "info",
+                    title: "Successful",
+                    html: _reply.msg,
+                }).then(() => {
+                    init_info_lpr_camera();
+                    document.getElementById('btn_lpr_camera_toggle').click();
+
+                });
+            } else {
+                debug(_reply)
+                toastMixin.fire({
+                    title: JSON.stringify(_reply),
+                    icon: "error",
+                });
+            }
+        }
+    }
+
+    async function remove_lpr_camera() {
+        if (!(await dialog_confirm())) return;
+        let _reply = await fetchApi("/api/devices/lpr_camera/?id=" + current_lpr_camera_id, "delete", null, "json");
+        debug(_reply);
+        if (!!_reply) {
+            if (_reply.success) {
+                Swal.fire({
+                    icon: "info",
+                    title: "Successful",
+                    html: _reply.msg,
+                }).then(() => {
+                    init_info_lpr_camera();
+                    document.getElementById('btn_lpr_camera_toggle').click();
+
+                });
+            } else {
+                debug(_reply)
+                toastMixin.fire({
+                    title: JSON.stringify(_reply),
+                    icon: "error",
+                });
+            }
+        }
+    }
+
+    async function add_lpr_camera() {
+        const _from_e = document.getElementById("submit_apply_lpr_camera_form");
+        for (let i = 0; i < _from_e.elements.length; i++) {
+            let _f_e = _from_e.elements[i];
+            if (_f_e.name != "") {
+                let k = _f_e.name;
+                let v = "";
+                _f_e.value = v;
+            }
+        }
+
+        document.getElementById('submit_apply_lpr_camera_form_remove_btn').classList.add("hidden");
+        document.getElementById('btn_lpr_camera_toggle').click();
+
+        current_lpr_camera_id = 0
+
+    }
+
+    async function dialog_edit_device_gate_name() {
+        const _reply = await fetchApi("/api/function/gateway_list", "get", null, "json");
+        if (_reply.status) {
+            const _d = _reply.data;
+            const _gate_way_list = ["ไม่กำหนด"];
+            for (const l of _d) {
+                _gate_way_list.push(l.GateWay.name);
+            }
+            const { value: index } = await Swal.fire({
+                background: '#1F2937',
+                title: 'เลือกช่องทาง',
+                input: 'select',
+                inputOptions: _gate_way_list,
+                utPlaceholder: 'เลือกช่องทาง',
+                showCancelButton: true,
+            })
+
+            if (index) {
+                //Swal.fire(`You selected: ${_member_user_list[index]}`)
+                const _from_e = document.getElementById("submit_apply_lpr_camera_form");
+                _from_e.querySelectorAll('[name="device_gate_name"]')[0].value = _gate_way_list[index];
+            }
+        }
+
+    }
+
+    async function dialog_edit_device_system_user() {
+        const _reply = await fetchApi("/api/systems_user/", "get", null, "json");
+        if (_reply.status) {
+            const _d = _reply.data;
+            const _system_user_list = [];
+            for (const l of _d) {
+                _system_user_list.push(l.System_User.name);
+            }
+            const { value: index } = await Swal.fire({
+                background: '#1F2937',
+                title: 'เลือกผู้ทำรายการ',
+                input: 'select',
+                inputOptions: _system_user_list,
+                utPlaceholder: 'เลือกผู้ทำรายการ',
+                showCancelButton: true,
+            })
+
+            if (index) {
+                //Swal.fire(`You selected: ${_member_user_list[index]}`)
+                const _from_e = document.getElementById("submit_apply_lpr_camera_form");
+                _from_e.querySelectorAll('[name="device_system_user"]')[0].value = _system_user_list[index];
+            }
+        }
+    }
+
+    async function dialog_edit_device_services_fee() {
+        const _reply = await fetchApi("/api/function/service_fees_list/", "get", null, "json");
+        if (_reply.status) {
+            const _d = _reply.data;
+            const _services_fee_list = [];
+            for (const l of _d) {
+                _services_fee_list.push(l.Service_Fees.name);
+            }
+            const { value: index } = await Swal.fire({
+                background: '#1F2937',
+                title: 'เลือกค่าบริการตั้งต้น',
+                input: 'select',
+                inputOptions: _services_fee_list,
+                utPlaceholder: 'เลือกค่าบริการตั้งต้น',
+                showCancelButton: true,
+            })
+
+            if (index) {
+                //Swal.fire(`You selected: ${_member_user_list[index]}`)
+                const _from_e = document.getElementById("submit_apply_lpr_camera_form");
+                _from_e.querySelectorAll('[name="device_services_fee"]')[0].value = _services_fee_list[index];
+            }
+        }
+    }
+
+    init_info_lpr_camera();
+</script>
+
+</html>

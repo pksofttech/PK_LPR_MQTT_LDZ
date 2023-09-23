@@ -1,0 +1,12 @@
+{
+    "configurations": [
+        {
+            "name": "Fastapi",
+            "type": "python",
+            "request": "launch",
+            "program": "start_server.py",
+            "console": "integratedTerminal",
+            "justMyCode": true
+        }
+    ]
+}

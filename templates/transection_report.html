@@ -1,0 +1,1843 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	{% include '_meta.html' %}
+
+</head>
+
+<body class="dark:bg-base-100">
+	<!-- MAIN BODY -->
+	<div class="drawer lg:drawer-open ">
+		<input id="side-drawer" type="checkbox" class="drawer-toggle" />
+		<div class="relative flex flex-col px-2 drawer-content">
+			{% include '_nav_bar.html' %}
+			<!-- Page content here -->
+			<div class="bg-base-200">
+				<div class="mb-4 border-b border-gray-200 dark:border-gray-700">
+					<ul class="flex flex-wrap -mb-px text-sm font-medium text-center" data-tabs-toggle="#page_TabContent" role="tablist">
+
+						<li class="mr-2" role="presentation">
+							<button class="inline-block p-4 border-b-2 rounded-t-lg" id="transection_report_system_user_btn" onclick="build_transection_report_system_user_table()"
+								data-tabs-target="#transection_report_system_user_tab_target" type="button" role="tab" aria-controls="transection_report_system_user_tab_content"
+								aria-selected="false"><i class="mr-2 fa-solid fa-xl fa-users-gear"></i>สรุปรายการเข้า-ออก<br>(ผู้ทำรายการ)</button>
+						</li>
+
+						<li class="mr-2" role="presentation">
+							<button class="inline-block p-4 border-b-2 rounded-t-lg" id="transection_report_btn" onclick="build_transection_report_table()"
+								data-tabs-target="#transection_report_tab_target" type="button" role="tab" aria-controls="transection_report_tab_content" aria-selected="false"><i
+									class="mr-2 fa-solid fa-xl fa-arrow-right-to-bracket"></i>สรุปรายการเข้า-ออก<br>(ช่องทางเข้า-ออก)</button>
+						</li>
+
+
+						<li class="mr-2" role="presentation">
+							<button class="inline-block p-4 border-b-2 rounded-t-lg" id="transection_park_btn" onclick="build_transection_table()"
+								data-tabs-target="#transection_park_tab_target" type="button" role="tab" aria-controls="transection_park_tab_content" aria-selected="false"><i
+									class="mr-2 fa-solid fa-xl fa-file-powerpoint"></i>ข้อมูลรายการเข้า-ออก</button>
+						</li>
+
+						<li class="mr-2" role="presentation">
+							<button class="inline-block p-4 border-b-2 rounded-t-lg" id="transection_acc_btn" onclick="build_transection_acc_table()"
+								data-tabs-target="#transection_acc_tab_target" type="button" role="tab" aria-controls="transection_acc_tab_content" aria-selected="false"><i
+									class="mr-2 fa-solid fa-xl fa-file-invoice-dollar"></i>ข้อมูลรายการค่าบริการ</button>
+						</li>
+
+						<li class="mr-2" role="presentation">
+							<button class="inline-block p-4 border-b-2 rounded-t-lg" id="transection_estamp_btn" onclick="build_transection_estamp_table()"
+								data-tabs-target="#transection_estamp_tab_target" type="button" role="tab" aria-controls="transection_estamp_tab_content" aria-selected="false">
+								<i class="mr-2 fa-solid fa-xl fa-stamp"></i>ข้อมูลรายการ Estamp</button>
+						</li>
+
+					</ul>
+				</div>
+
+				<div id="page_TabContent">
+
+					<div class="hidden p-4 rounded-lg " id="transection_report_system_user_tab_target" role="tabpanel" aria-labelledby="transection_report_system_user_btn">
+						<div class="text-gray-500 shadow-md sm:rounded-lg">
+							<div>
+								<input type="text"
+									class="w-full p-2 text-lg font-medium text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-green-500 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+									id="select_date_time_range_of_build_transection_report_system_user_table" placeholder="YYYY/MM/DD HH:MM - YYYY/MM/DD HH:MM" value=""
+									onchange="build_transection_report_system_user_table(this.value)">
+								<ul
+									class="items-center w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg sm:flex dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+									<li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
+										<div class="flex items-center pl-3">
+											<input checked id="horizontal-list-radio_01" type="radio" value="by_system_user" name="list_report_radio_system_user"
+												onchange="build_transection_report_system_user_table()"
+												class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+											<label for="horizontal-list-radio_01"
+												class="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">ผู้ทำรายการ(เข้า-ออก)
+											</label>
+										</div>
+									</li>
+
+									<li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
+										<div class="flex items-center pl-3">
+											<input id="horizontal-list-radio_02" type="radio" value="by_system_user_in" name="list_report_radio_system_user"
+												onchange="build_transection_report_system_user_table()"
+												class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+											<label for="horizontal-list-radio_02" class="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">ผู้ทำรายการ(เข้า)
+											</label>
+										</div>
+									</li>
+
+									<li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
+										<div class="flex items-center pl-3">
+											<input id="horizontal-list-radio_03" type="radio" value="by_system_user_out" name="list_report_radio_system_user"
+												onchange="build_transection_report_system_user_table()"
+												class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+											<label for="horizontal-list-radio_03" class="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">ผู้ทำรายการ(ออก)
+											</label>
+										</div>
+									</li>
+
+								</ul>
+
+							</div>
+
+							<table id="transection_report_system_user_table" class="w-full text-sm text-gray-500 dark:text-gray-400 display">
+								<tfoot>
+									<tr>
+										<!-- <th colspan="2" class="text-orange-500" style="text-align:right">รวม: </th> -->
+										<th class="text-orange-500"></th>
+										<th class="text-orange-500"></th>
+										<th class="text-orange-500"></th>
+										<th class="text-orange-500"></th>
+										<th class="text-orange-500"></th>
+										<th class="text-orange-500"></th>
+									</tr>
+								</tfoot>
+							</table>
+
+						</div>
+					</div>
+
+					<div class="hidden p-4 rounded-lg " id="transection_report_tab_target" role="tabpanel" aria-labelledby="transection_report_btn">
+						<div class="text-gray-500 shadow-md sm:rounded-lg">
+							<div>
+								<input type="text"
+									class="w-full p-2 text-lg font-medium text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-green-500 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+									id="select_date_time_range_of_build_transection_report_table" placeholder="YYYY/MM/DD HH:MM - YYYY/MM/DD HH:MM" value=""
+									onchange="build_transection_report_table(this.value)">
+								<ul
+									class="items-center w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg sm:flex dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+									<li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
+										<div class="flex items-center pl-3">
+											<input checked id="horizontal-list-radio_gate" type="radio" value="by_gate" name="list_report_radio"
+												onchange="build_transection_report_table()"
+												class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+											<label for="horizontal-list-radio_gate" class="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">ช่องทางเข้า-ออก
+											</label>
+										</div>
+									</li>
+
+									<li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
+										<div class="flex items-center pl-3">
+											<input id="horizontal-list-radio_gate_in" type="radio" value="by_gate_in" name="list_report_radio"
+												onchange="build_transection_report_table()"
+												class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+											<label for="horizontal-list-radio_gate_in" class="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">ช่องทางเข้า
+											</label>
+										</div>
+									</li>
+
+									<li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
+										<div class="flex items-center pl-3">
+											<input id="horizontal-list-radio_gate_out" type="radio" value="by_gate_out" name="list_report_radio"
+												onchange="build_transection_report_table()"
+												class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+											<label for="horizontal-list-radio_gate_out" class="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">ช่องทางออก
+											</label>
+										</div>
+									</li>
+
+								</ul>
+
+							</div>
+
+							<table id="transection_report_table" class="w-full text-sm text-gray-500 dark:text-gray-400 display">
+								<tfoot>
+									<tr>
+										<!-- <th colspan="2" class="text-orange-500" style="text-align:right">รวม: </th> -->
+										<th class="text-orange-500"></th>
+										<th class="text-orange-500"></th>
+										<th class="text-orange-500"></th>
+										<th class="text-orange-500"></th>
+										<th class="text-orange-500"></th>
+										<th class="text-orange-500"></th>
+									</tr>
+								</tfoot>
+							</table>
+
+						</div>
+					</div>
+
+					<div class="hidden p-4 rounded-lg " id="transection_park_tab_target" role="tabpanel" aria-labelledby="transection_park_btn">
+						<div class="text-gray-500 shadow-md sm:rounded-lg">
+							<div>
+								<input type="text"
+									class="w-full p-2 text-lg font-medium text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-blue-500 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+									id="reservationtime" placeholder="YYYY/MM/DD HH:MM - YYYY/MM/DD HH:MM" value="" onchange="build_transection_table(this.value)">
+								<ul
+									class="items-center w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg sm:flex dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+									<li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
+										<div class="flex items-center pl-3">
+											<input checked id="horizontal-list-radio-in_time" type="radio" value="in_time" name="list-radio" onchange="build_transection_table()"
+												class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+											<label for="horizontal-list-radio-in_time" class="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">เวลา-เข้า
+											</label>
+										</div>
+									</li>
+									<li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
+										<div class="flex items-center pl-3">
+											<input id="horizontal-list-radio-out_time" type="radio" value="out_time" name="list-radio" onchange="build_transection_table()"
+												class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+											<label for="horizontal-list-radio-out_time"
+												class="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">เวลา-ออก</label>
+										</div>
+									</li>
+									<li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
+										<div class="flex items-center pl-3">
+											<input id="horizontal-list-radio-in_park" type="radio" value="in_park" name="list-radio" onchange="build_transection_table()"
+												class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+											<label for="horizontal-list-radio-in_park" class="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+												ยังอยู่ในลานจอด</label>
+										</div>
+									</li>
+									<li class="w-full dark:border-gray-600">
+										<div class="flex items-center pl-3">
+											<input id="horizontal-list-radio-success" type="radio" value="out_park" name="list-radio" onchange="build_transection_table()"
+												class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+											<label for="horizontal-list-radio-success" class="w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+												ทำรายการเข้า-ออก(ในช่วงเวลา)</label>
+										</div>
+									</li>
+								</ul>
+
+							</div>
+
+							<table id="transection_table" class="w-full text-sm text-gray-500 dark:text-gray-400 display">
+
+							</table>
+
+						</div>
+					</div>
+
+					<div class="hidden p-4 rounded-lg " id="transection_acc_tab_target" role="tabpanel" aria-labelledby="transection_acc_btn">
+						<div class="text-gray-500 shadow-md sm:rounded-lg">
+							<div>
+								<input type="text"
+									class="w-full p-2 text-lg font-medium text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+									id="reservationtime_acc" placeholder="YYYY/MM/DD HH:MM - YYYY/MM/DD HH:MM" value="" onchange="build_transection_acc_table(this.value)">
+
+							</div>
+
+							<table id="transection_acc_table" class="w-full text-sm text-gray-500 dark:text-gray-400 display">
+								<tfoot>
+									<tr>
+										<!-- <th colspan="8" class="text-orange-500" style="text-align:right">รวม: </th> -->
+										<!-- <th class="text-orange-500"></th> -->
+										<th class="text-orange-500"></th>
+										<th class="text-orange-500"></th>
+										<th class="text-orange-500"></th>
+										<th class="text-orange-500"></th>
+										<th class="text-orange-500"></th>
+										<th class="text-orange-500"></th>
+										<th class="text-orange-500"></th>
+										<th class="text-orange-500"></th>
+										<th class="text-orange-500"></th>
+										<th class="text-orange-500"></th>
+										<th class="text-orange-500"></th>
+										<th class="text-orange-500"></th>
+										<th class="text-orange-500"></th>
+										<th class="text-orange-500"></th>
+
+									</tr>
+								</tfoot>
+							</table>
+
+						</div>
+					</div>
+
+					<div class="hidden p-4 rounded-lg " id="transection_estamp_tab_target" role="tabpanel" aria-labelledby="transection_estamp_btn">
+						<div class="text-gray-500 shadow-md sm:rounded-lg">
+							<div>
+								<input type="text"
+									class="w-full p-2 text-lg font-medium text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-orange-600 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+									id="reservationtime_estamp" placeholder="YYYY/MM/DD HH:MM - YYYY/MM/DD HH:MM" value="" onchange="build_transection_estamp_table(this.value)">
+
+							</div>
+
+							<table id="transection_estamp_table" class="w-full text-sm text-gray-500 dark:text-gray-400 display">
+
+							</table>
+
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+
+		{% include '_side_menu_bar.html' %}
+	</div>
+
+	<!-- **NOTE -  Modal_Info_Transection-->
+	<div id="Modal_Info_Transection" tabindex="-1" aria-hidden="true"
+		class="fixed top-0 left-0 right-0 z-50 items-center justify-center hidden w-full overflow-x-hidden overflow-y-auto md:inset-0 h-modal md:h-full">
+		<div class="relative w-full h-full max-w-3xl p-4 md:h-auto">
+			<!-- Modal content -->
+			<div class="relative p-4 bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5">
+				<!-- Modal header -->
+				<div class="flex items-center justify-between pb-4 mb-4 border-b rounded-t sm:mb-5 dark:border-gray-600">
+					<h3 class="text-lg font-semibold text-gray-900 dark:text-white" id="Modal_Info_Transection_ID">
+						Modal_Info_Transection
+					</h3>
+					<button type="button" id="btn_Modal_Info_Transection_toggle"
+						class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+						data-modal-toggle="Modal_Info_Transection">
+						<svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+							<path fill-rule="evenodd"
+								d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+								clip-rule="evenodd"></path>
+						</svg>
+						<span class="sr-only">Close modal</span>
+					</button>
+
+				</div>
+				<!-- Modal body -->
+				<div class="flex flex-col px-8">
+					<div class="p-4 text-lg font-semibold text-gray-900 dark:text-white" id="Modal_Info_Transection_Card_id">
+						xxxxx
+					</div>
+					<template id="template_Info_Transection_Content">
+						<li class="mb-10 ml-12">
+							<span
+								class="absolute flex items-center justify-center w-12 h-12 bg-blue-100 rounded-full -left-6 ring-8 ring-white dark:ring-gray-900 dark:bg-blue-900">
+								<img class="rounded-full shadow-lg" name="system_user_img" src="" />
+							</span>
+							<div class="items-center justify-between p-4 bg-white border border-gray-200 rounded-lg shadow-sm sm:flex dark:bg-gray-700 dark:border-gray-600">
+								<div class="flex flex-col">
+									<div name="time_line_type"></div>
+									<a href="#" class="font-semibold text-blue-600 dark:text-blue-500 hover:underline" name="system_user_name">xxxx</a>
+									<span class="bg-gray-100 text-gray-800 text-xs font-normal mr-2 px-2.5 py-0.5 rounded dark:bg-gray-600 dark:text-gray-300"
+										name="gate_name">xxxx</span>
+									<time class="mb-1 text-xs font-normal text-gray-400 " name="date_time">just now</time>
+
+								</div>
+								<div>
+									<div class="flex flex-row gap-1" name="image_trans">
+
+
+									</div>
+								</div>
+							</div>
+						</li>
+					</template>
+					<ol class="relative border-l-4 border-gray-200 dark:border-gray-700" id="Modal_Info_Transection_Content_time_line">
+
+					</ol>
+					<div class="text-lg font-semibold text-gray-900 dark:text-white" id="Modal_Info_Transection_parked">
+						xxxxx
+					</div>
+
+					<div class="flex justify-between mt-2">
+						<button type="button" class="w-full border-blue-500 btn_block text_danger" data-modal-toggle="Modal_Info_Transection">
+							<i class="fa fa-arrow-right-from-bracket"></i>
+							<span class="ml-2">กลับ</span>
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	{% include '_footer.html' %}
+</body>
+{% include '_script.html' %}
+
+<script>
+	const DOCUMENT_DATA = {};
+	async function load_document(value) {
+		const _reply = await fetchApi("/api/document/?document=" + value, "get", null, "json");
+		debug(_reply);
+		if (_reply.success) {
+			const App_Configurations = _reply.data.App_Configurations;
+			return App_Configurations.value;
+		}
+		return null
+	}
+
+	async function get_radio_select(name) {
+		var ele = document.getElementsByName(name);
+
+		for (i = 0; i < ele.length; i++) {
+			if (ele[i].checked)
+				return ele[i].value
+		}
+		return "";
+	}
+
+	async function get_header_document(f = null) {
+		if (f) {
+			const date_time = moment().format("DD/MM/YYYY HH:mm");
+			const logo_path = location.protocol + '//' + location.host;
+			let header_report = DOCUMENT_DATA.header_report;
+			if (header_report == null) {
+				header_report = await load_document("header_report");
+				DOCUMENT_DATA.header_report = header_report;
+				//debug(header_report)
+			}
+			if (header_report) {
+				header_report = header_report.replace('src="/static', `src="${logo_path}/static`);
+				header_report = header_report.replace('[date_time]', `ข้อมูล เวลา(${date_time})`);
+				header_report = header_report.replace('[title]', "รายงาน");
+				header_report = header_report.replace('[header]', f.name);
+				header_report = header_report.replace('[sub_header]', f.table_date_range);
+
+			}
+			const header_document = header_report;
+
+			return header_document;
+		} else {
+			return "";
+		}
+	}
+
+	async function get_footer_document(f = null) {
+		if (f) {
+			const date_time = moment().format("DD/MM/YYYY HH:mm");
+			const logo_path = location.protocol + '//' + location.host;
+
+			let footer_report = DOCUMENT_DATA.footer_report;
+			if (footer_report == null) {
+				footer_report = await load_document("footer_report");
+				DOCUMENT_DATA.footer_report = footer_report;
+				//debug(header_report)
+			}
+			if (footer_report) {
+				footer_report = footer_report.replace('[name]', '{{user.name}}');
+				footer_report = footer_report.replace('src="/static', `src="${logo_path}/static`);
+			}
+			const footer_document = footer_report;
+
+			return footer_document;
+		} else {
+			return "";
+		}
+	}
+
+</script>
+
+
+<script>
+
+	async function build_transection_report_system_user_table(date_range = null) {
+		const select_data = await get_radio_select('list_report_radio_system_user');
+		//debug(select_data);
+		if (typeof build_transection_report_system_user_table.table_date_range == 'undefined') {
+			build_transection_report_system_user_table.table_date_range = date_range;
+			return;
+		}
+		if (date_range) { build_transection_report_system_user_table.table_date_range = date_range; }
+
+		const columns_table = [
+			{
+				data: "group_in",
+				title: "ทางเข้า",
+				//orderable: true,
+				render: function (data, type, row) {
+					if (select_data == "by_system_user_out") {
+						return "ทั้งหมด";
+					}
+					return data;
+				}
+
+			},
+			{
+				data: "group_out",
+				title: "ทางออก",
+				//orderable: true,
+				render: function (data, type, row) {
+					if (select_data == "by_system_user_in") {
+						return "ทั้งหมด";
+					}
+					if (!data) {
+						return "ยังอยู่ในลานจอด"
+					} else {
+						return data;
+					}
+				}
+
+			},
+			{
+				data: "count_transaction",
+				title: "จำนวนรายการ IN",
+				render: function (data, type, row) {
+
+					return data;
+				}
+			},
+			{
+				data: "count_out_log",
+				title: "จำนวนรายการ OUT",
+
+			},
+
+			{
+				data: "count_acc_log",
+				title: "จำนวนรายการมีค่าบริการ",
+			},
+			{
+				data: "total_amount",
+				title: "รวมค่าบริการ",
+			},
+
+
+		];
+
+		//debug(columns_table)
+		headers = await get_headers();
+
+		const header_document = await get_header_document(build_transection_report_system_user_table);
+		const footer_document = await get_footer_document(build_transection_report_system_user_table);
+
+		transection_table = $("#transection_report_system_user_table").DataTable({
+			dom: '<"top"iBf>rt<"bottom"lp><"clear">',
+			buttons: [
+				{
+					text: 'อัปเดทข้อมูล',
+					className: 'p-2  text-blue-500 hover:text-blue-700',
+					action: function (e, dt, node, config) {
+						this.ajax.reload();
+					}
+				},
+				{
+					extend: 'print',
+					footer: true,
+					autoPrint: false,
+					customize: function (win) {
+						$(win.document.body)
+							.css('font-size', '10pt')
+							.prepend(header_document);
+
+						$(win.document.body)
+							.css('font-size', '10pt')
+							.append(footer_document);
+
+						$(win.document.body).find('table')
+							.addClass('compact border')
+							.css('font-size', 'inherit');
+					},
+				},
+				{
+					extend: 'excelHtml5',
+					footer: true,
+					title: 'Report',
+					text: '<i class="fa fa-table fainfo" aria-hidden="true" ></i>',
+					titleAttr: 'Export Excel',
+					"oSelectorOpts": { filter: 'applied', order: 'current' },
+					exportOptions: {
+						//columns: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14,],
+						modifier: {
+							page: 'all'
+						},
+						format: {
+							header: function (data, columnIdx) {
+								if (columnIdx == 1) {
+									//return 'column_1_header';
+									return data;
+								}
+								else {
+									return data;
+								}
+							}
+						}
+					}
+				},
+				"csv",
+				//'excel',
+				//"print",
+				"colvis",
+			],
+			language: {
+				"infoEmpty": "ไม่มีรายการข้อมูล",
+				"info": "แสดง หน้าข้อมูล _PAGE_ ใน _PAGES_ จากทั้งหมด _TOTAL_ รายการ",
+			},
+			columnDefs: columnDefs,
+			destroy: true,
+			autoWidth: true,
+			lengthMenu: lengthMenu,
+			pageLength: PAGE_LENGTH,
+			scrollY: "50vh",
+			scrollCollapse: true,
+			sScrollX: "100%",
+			//paging: false,
+			columns: columns_table,
+			order: [[0, "desc"]],
+			processing: true,
+			serverSide: true,
+			search: {
+				return: true,
+			},
+			//searching: false,
+			select: false,
+			ajax: {
+				headers: headers,
+				type: "GET",
+				url: `/api/transaction_record/report_system_user/datatable`,
+				data: function (d) {
+					d.table = "transection_table";
+					d.date_range = build_transection_report_system_user_table.table_date_range;
+					d.data_filter = select_data;
+
+				},
+				error: function (xhr, textStatus, errorThrown) {
+
+					//window.location.reload();
+				},
+			},
+			footerCallback: function (row, data, start, end, display) {
+				let api = this.api();
+				const rows = api.rows().data();
+				let sum_gate_in = 0;
+				let sum_gate_out = 0;
+				let sum_acc_log = 0;
+				let sum_amount = 0;
+				//debug(rows)
+				for (let i = 0; i < rows.length; i++) {
+					const t = rows[i];
+					const amount = t.total_amount == null ? 0 : t.total_amount;
+					sum_gate_in += t.count_transaction;
+					sum_gate_out += t.count_out_log;
+					sum_acc_log += t.count_acc_log;
+					sum_amount += amount;
+				}
+
+				$(api.column(1).footer()).html(`${rows.length} รายการ รวม :`);
+				$(api.column(2).footer()).html(sum_gate_in);
+				$(api.column(3).footer()).html(sum_gate_out);
+				$(api.column(4).footer()).html(sum_acc_log);
+				$(api.column(5).footer()).html(sum_amount);
+
+
+			},
+		});
+
+	}
+	$('#build_transection_report_system_user_table').on('length.dt', function (e, settings, len) {
+		PAGE_LENGTH = len;
+		localStorage.setItem('PAGE_LENGTH', len);
+	});
+
+	build_transection_report_system_user_table();
+</script>
+
+<script>
+
+	async function build_transection_report_table(date_range = null) {
+		const select_data = await get_radio_select('list_report_radio');
+		//debug(select_data);
+		if (typeof build_transection_report_table.table_date_range == 'undefined') {
+			build_transection_report_table.table_date_range = date_range;
+			return;
+		}
+		if (date_range) { build_transection_report_table.table_date_range = date_range; }
+
+		const columns_table = [
+			{
+				data: "group_in",
+				title: "ทางเข้า",
+				//orderable: true,
+				render: function (data, type, row) {
+					if (select_data == "by_gate_out") {
+						return "ทั้งหมด";
+					}
+					return data;
+				}
+
+			},
+			{
+				data: "group_out",
+				title: "ทางออก",
+				//orderable: true,
+				render: function (data, type, row) {
+					if (select_data == "by_gate_in") {
+						return "ทั้งหมด";
+					}
+					if (!data) {
+						return "ยังอยู่ในลานจอด"
+					} else {
+						return data;
+					}
+				}
+
+			},
+			{
+				data: "count_transaction",
+				title: "จำนวนรายการ IN",
+				render: function (data, type, row) {
+
+					return data;
+				}
+			},
+			{
+				data: "count_out_log",
+				title: "จำนวนรายการ OUT",
+
+			},
+
+			{
+				data: "count_acc_log",
+				title: "จำนวนรายการมีค่าบริการ",
+			},
+			{
+				data: "total_amount",
+				title: "รวมค่าบริการ",
+			},
+
+
+		];
+
+		//debug(columns_table)
+		headers = await get_headers();
+
+		const header_document = await get_header_document(build_transection_report_table);
+		const footer_document = await get_footer_document(build_transection_report_table);
+
+		transection_table = $("#transection_report_table").DataTable({
+			dom: '<"top"iBf>rt<"bottom"lp><"clear">',
+			buttons: [
+				{
+					text: 'อัปเดทข้อมูล',
+					className: 'p-2  text-blue-500 hover:text-blue-700',
+					action: function (e, dt, node, config) {
+						this.ajax.reload();
+					}
+				},
+				{
+					extend: 'print',
+					autoPrint: false,
+					footer: true,
+					customize: function (win) {
+						$(win.document.body)
+							.css('font-size', '10pt')
+							.prepend(header_document);
+
+						$(win.document.body)
+							.css('font-size', '10pt')
+							.append(footer_document);
+
+						$(win.document.body).find('table')
+							.addClass('compact border')
+							.css('font-size', 'inherit');
+					},
+				},
+				{
+					extend: 'excelHtml5',
+					footer: true,
+					title: 'Report',
+					text: '<i class="fa fa-table fainfo" aria-hidden="true" ></i>',
+					titleAttr: 'Export Excel',
+					"oSelectorOpts": { filter: 'applied', order: 'current' },
+					exportOptions: {
+						//columns: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14,],
+						modifier: {
+							page: 'all'
+						},
+						format: {
+							header: function (data, columnIdx) {
+								if (columnIdx == 1) {
+									//return 'column_1_header';
+									return data;
+								}
+								else {
+									return data;
+								}
+							}
+						}
+					}
+				},
+				"csv",
+				//'excel',
+				//"print",
+				"colvis",
+			],
+			language: {
+				"infoEmpty": "ไม่มีรายการข้อมูล",
+				"info": "แสดง หน้าข้อมูล _PAGE_ ใน _PAGES_ จากทั้งหมด _TOTAL_ รายการ",
+			},
+			columnDefs: columnDefs,
+			destroy: true,
+			autoWidth: true,
+			lengthMenu: lengthMenu,
+			pageLength: PAGE_LENGTH,
+			scrollY: "50vh",
+			scrollCollapse: true,
+			sScrollX: "100%",
+			//paging: false,
+			columns: columns_table,
+			order: [[0, "desc"]],
+			processing: true,
+			serverSide: true,
+			search: {
+				return: true,
+			},
+			//searching: false,
+			select: false,
+			ajax: {
+				headers: headers,
+				type: "GET",
+				url: `/api/transaction_record/report/datatable`,
+				data: function (d) {
+					d.table = "transection_table";
+					d.date_range = build_transection_report_table.table_date_range;
+					d.data_filter = select_data;
+
+				},
+				error: function (xhr, textStatus, errorThrown) {
+					window.location.reload();
+				},
+			},
+			footerCallback: function (row, data, start, end, display) {
+				let api = this.api();
+				const rows = api.rows().data();
+				let sum_gate_in = 0;
+				let sum_gate_out = 0;
+				let sum_acc_log = 0;
+				let sum_amount = 0;
+				//debug(rows)
+				for (let i = 0; i < rows.length; i++) {
+					const t = rows[i];
+					const amount = t.total_amount == null ? 0 : t.total_amount;
+					sum_gate_in += t.count_transaction;
+					sum_gate_out += t.count_out_log;
+					sum_acc_log += t.count_acc_log;
+					sum_amount += amount;
+				}
+
+				$(api.column(1).footer()).html(`${rows.length} รายการ รวม :`);
+				$(api.column(2).footer()).html(sum_gate_in);
+				$(api.column(3).footer()).html(sum_gate_out);
+				$(api.column(4).footer()).html(sum_acc_log);
+				$(api.column(5).footer()).html(sum_amount);
+
+
+			},
+		});
+
+	}
+	$('#build_transection_report_table').on('length.dt', function (e, settings, len) {
+		PAGE_LENGTH = len;
+		localStorage.setItem('PAGE_LENGTH', len);
+	});
+
+	//build_transection_report_table();
+</script>
+
+<script>
+	let PAGE_LENGTH = 10;
+	debug('PAGE_LENGTH : ' + localStorage.getItem('PAGE_LENGTH'));
+	if (localStorage.getItem('PAGE_LENGTH') == undefined) {
+		localStorage.setItem('PAGE_LENGTH', 10);
+	} else {
+		PAGE_LENGTH = localStorage.getItem('PAGE_LENGTH');
+	}
+
+	const API_DATA = "/api/transaction_record/"
+	let transection_table = null;
+	let current_system_user_id = 0;
+	async function build_transection_table(date_range = null) {
+		const select_data = await get_radio_select('list-radio');
+		//debug(select_data);
+		if (typeof build_transection_table.table_date_range == 'undefined') {
+			build_transection_table.table_date_range = date_range;
+			return;
+		}
+		if (date_range) { build_transection_table.table_date_range = date_range; }
+
+		const columns_table = [
+			{
+				data: "in_images_path",
+				title: "รูปรายการ",
+				orderable: false,
+				render: function (data, type) {
+					if (data) {
+						const in_images_paths = data.split(",");
+						return `<a href="${in_images_paths[0]}" target = "_blank" ><img class="duration-500 ease-in rounded-md max-h-10 hover:scale-150" src="${in_images_paths[0]}"> </a>`;
+					} else {
+						return "";
+					}
+				},
+			},
+			{
+				data: "Transaction_Record.id",
+				title: "จัดการ",
+				orderable: false,
+				render: function (data, type, row) {
+					if (row.out_date_time == null) {
+						return `<div class="inline-flex border border-blue-600 rounded-md shadow-sm" role="group">
+								<a class="text-blue-500 btn_tool" onclick="info_transection_show(${data})"> <i class="fas fa-circle-question"></i></a>
+								<a class="text-red-500 btn_tool" onclick="close_transection(${data})"><i class="far fa-pen-to-square"></i></a>
+							
+							</div>`;
+					} else {
+						return `<div class="inline-flex border border-blue-600 rounded-md shadow-sm" role="group">
+								<a class="text-blue-500 btn_tool" onclick="info_transection_show(${data})"> <i class="fas fa-circle-question"></i></a>
+							
+							</div>`;
+					}
+				},
+			},
+			{
+				data: "Transaction_Record.id",
+				title: "เลขรายการ",
+				render: function (data, type) {
+					return String(data).padStart(6, "0");
+				},
+			},
+			{
+				data: "Transaction_Record.card_id",
+				title: "เลขบัตร",
+				render: function (data, type) {
+					return data;
+				},
+			},
+			{
+				data: "in_log_license",
+				title: "ทะเบียน",
+				render: function (data, type) {
+					return data;
+				},
+			},
+
+			{
+				data: "in_date_time",
+				title: "วัน-เวลา-เข้า",
+				render: function (data, type) {
+					const _d = dateTimeToStr(data, "YYYY/MM/DD@HH:mm:ss");
+					const datetime = _d.split("@");
+					const warp_datatime = `<div class="flex flex-col gap-1">
+						<div class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">${datetime[0]}</div>
+											<div class="bg-yellow-100 text-yellow-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-yellow-300 border border-yellow-300">${datetime[1]}</div>
+						</div>`
+					return warp_datatime;
+				},
+			},
+			{
+				data: "in_gate_name",
+				title: "ทางเข้า",
+				render: function (data, type) {
+					return data;
+				},
+			},
+			{
+				data: "in_log_system_user",
+				title: "ผู้ทำรายการทางเข้า",
+				render: function (data, type) {
+					return data;
+				},
+			},
+			{
+				data: "out_date_time",
+				title: "วัน-เวลา-ออก",
+				render: function (data, type) {
+					const _d = dateTimeToStr(data, "YYYY/MM/DD@HH:mm:ss");
+					if (_d == "") {
+						return `<span class="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">ยังอยู่ในลานจอด</span>`;
+					}
+					const datetime = _d.split("@");
+					const warp_datatime = `<div class="flex flex-col gap-1"><div class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">${datetime[0]}</div>
+											
+											<div class="bg-yellow-100 text-yellow-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-yellow-300 border border-yellow-300">${datetime[1]}</div>
+					</div>`
+					return warp_datatime;
+				},
+			},
+			{
+				data: "out_gate_name",
+				title: "ทางออก",
+				render: function (data, type) {
+					return data;
+				},
+			},
+			{
+				data: "out_log_system_user",
+				title: "ผู้ทำรายการทางออก",
+				render: function (data, type) {
+					return data;
+				},
+			},
+			{
+				data: "Transaction_Record.parked",
+				title: "เวลาอยู่ในพื้นที่",
+				render: function (data, type, row) {
+					if (data) {
+						const duration = sec_to_duration(data);
+						return `<i class="nav-icon fa fa-clock text-info"></i> <span class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">${duration}</span>`;
+
+					} else {
+						return `<i class="nav-icon fa fa-clock text-info"></i> <span class="bg-yellow-100 text-yellow-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300">${time_ref(row.in_date_time, row.out_date_time)}</span>`;
+					}
+				},
+			},
+			{
+				data: "Transaction_Record.status",
+				title: "สถานะ",
+				render: function (data, type) {
+					if (data == "SUCCESS") {
+						return `<i class="text-green-500 nav-icon fa fa-circle-check"></i> <span class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">${data}</span>`;
+
+					}
+					else if (data == "CLOSE") {
+						return `<i class="text-orange-500 nav-icon fa fa-circle-xmark"></i> <span class="bg-orange-100 text-orange-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-orange-900 dark:text-orange-300">${data}</span>`;
+
+					}
+					else {
+						return data;
+
+					}
+				},
+			},
+			{
+				data: "Transaction_Record.type",
+				title: "ประเภท",
+				render: function (data, type) {
+					return data;
+				},
+			},
+			{
+				data: "Service_Fees_name",
+				title: "แบบค่าบริการ",
+				render: function (data, type) {
+					return String(data).padStart(5, "0");
+				},
+			},
+			{
+				data: "amount",
+				title: "ค่าบริการ",
+				render: function (data, type) {
+					if (data > 0) {
+						return `<i class="text-green-500 fa fa-money-bill-1-wave"></i> <span class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">${data}</span>`;
+					}
+					return "";
+				},
+			},
+
+		];
+
+		//debug(columns_table)
+		headers = await get_headers();
+
+		const header_document = await get_header_document(build_transection_table);
+		const footer_document = await get_footer_document(build_transection_table);
+
+		transection_table = $("#transection_table").DataTable({
+			dom: '<"top"iBf>rt<"bottom"lp><"clear">',
+			buttons: [
+				{
+					text: 'อัปเดทข้อมูล',
+					className: 'p-2  text-blue-500 hover:text-blue-700',
+					action: function (e, dt, node, config) {
+						this.ajax.reload();
+					}
+				},
+				{
+					extend: 'print',
+					footer: true,
+					autoPrint: false,
+					exportOptions: {
+						columns: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14,]
+					},
+					customize: function (win) {
+						$(win.document.body)
+							.css('font-size', '10pt')
+							.prepend(header_document);
+
+						$(win.document.body)
+							.css('font-size', '10pt')
+							.append(footer_document);
+
+						$(win.document.body).find('table')
+							.addClass('compact border')
+							.css('font-size', 'inherit');
+					},
+				},
+				{
+					extend: 'excelHtml5',
+					footer: true,
+					title: 'Report',
+					text: '<i class="fa fa-table fainfo" aria-hidden="true" ></i>',
+					titleAttr: 'Export Excel',
+					"oSelectorOpts": { filter: 'applied', order: 'current' },
+					exportOptions: {
+						columns: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14,],
+						modifier: {
+							page: 'all'
+						},
+						format: {
+							header: function (data, columnIdx) {
+								if (columnIdx == 1) {
+									//return 'column_1_header';
+									return data;
+								}
+								else {
+									return data;
+								}
+							}
+						}
+					}
+				},
+				"csv",
+				//'excel',
+				//"print",
+				"colvis",
+			],
+			language: {
+				"infoEmpty": "ไม่มีรายการข้อมูล",
+				"info": "แสดง หน้าข้อมูล _PAGE_ ใน _PAGES_ จากทั้งหมด _TOTAL_ รายการ",
+			},
+			columnDefs: columnDefs,
+			destroy: true,
+			autoWidth: true,
+			lengthMenu: lengthMenu,
+			pageLength: PAGE_LENGTH,
+			scrollY: "50vh",
+			scrollCollapse: true,
+			sScrollX: "100%",
+			//paging: false,
+			columns: columns_table,
+			order: [[0, "desc"]],
+			processing: true,
+			serverSide: true,
+			search: {
+				return: true,
+			},
+			//searching: false,
+			select: false,
+			ajax: {
+				headers: headers,
+				type: "GET",
+				url: `${API_DATA}datatable`,
+				data: function (d) {
+					d.table = "transection_table";
+					d.date_range = build_transection_table.table_date_range;
+					d.data_filter = select_data;
+
+				},
+				error: function (xhr, textStatus, errorThrown) {
+					window.location.reload();
+				},
+			},
+		});
+
+	}
+	$('#transection_table').on('length.dt', function (e, settings, len) {
+		PAGE_LENGTH = len;
+		localStorage.setItem('PAGE_LENGTH', len);
+	});
+
+	//build_transection_table();
+
+	async function info_transection_show(id) {
+		const _reply = await fetchApi("/api/transaction_record/?id=" + id, "get", null, "json");
+		if (_reply.success) {
+			const d = _reply.data;
+			debug(d)
+			const Modal_Info_Transection_Content_time_line = document.getElementById("Modal_Info_Transection_Content_time_line");
+			document.getElementById("Modal_Info_Transection_ID").innerHTML = "หมายเลขรายการ : " + String(d.Transaction_Record.id).padStart(10, "0");
+
+			const _d = dateTimeToStr(d.In_Log.date_time, "YYYY/MM/DD@HH:mm:ss");
+			const datetime = _d.split("@");
+			const warp_datatime = `<div class="flex gap-1 mr-12">
+				<div class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">${datetime[0]}</div>
+				<div class="bg-yellow-100 text-yellow-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-yellow-300 border border-yellow-300">${datetime[1]}</div>
+					</div>`
+
+			document.getElementById("Modal_Info_Transection_Card_id").innerHTML = "หมายเลขบัตร : " + d.Transaction_Record.card_id + "  " + warp_datatime;
+
+			Modal_Info_Transection_Content_time_line.innerHTML = "";
+			const temp = document.getElementById("template_Info_Transection_Content");
+
+			const _c_in = temp.content.cloneNode(true);
+			let license = d.In_Log.license;
+			if (!license) {
+				license = "-";
+			}
+
+			_c_in.querySelectorAll('[name="system_user_img"]')[0].src = d.In_System_User.pictureUrl;
+			_c_in.querySelectorAll('[name="time_line_type"]')[0].innerHTML = "ทำรายการเข้า :" + `<span class="bg-yellow-100 text-yellow-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-yellow-300 border border-yellow-300">ทะเบียน:${license}</span>`;
+			_c_in.querySelectorAll('[name="date_time"]')[0].innerText = moment(d.In_Log.date_time);
+			_c_in.querySelectorAll('[name="system_user_name"]')[0].innerText = d.In_System_User.name;
+			_c_in.querySelectorAll('[name="gate_name"]')[0].innerText = d.In_Gateway.name;
+
+			const _images = d.In_Log.images_path.split(",");
+			//debug(_images)
+			const image_trans = `
+								<a href="${_images[0]}" target = "_blank" ><img src="${_images[0]}" loading="lazy" class="w-1/2 p-1 rounded-lg" /></a>
+								<a href="${_images[1]}" target = "_blank" ><img  src="${_images[1]}" loading="lazy" class="w-1/2 p-1 rounded-lg" /></a>
+								`
+			_c_in.querySelectorAll('[name="image_trans"]')[0].innerHTML = image_trans;
+
+			Modal_Info_Transection_Content_time_line.appendChild(_c_in);
+
+			if (d.Transaction_Record.parked) {
+				const _c_in = temp.content.cloneNode(true);
+
+				_c_in.querySelectorAll('[name="system_user_img"]')[0].src = d.Out_System_User.pictureUrl;
+				_c_in.querySelectorAll('[name="time_line_type"]')[0].innerHTML = "ทำรายการออก"
+				_c_in.querySelectorAll('[name="date_time"]')[0].innerText = moment(d.Out_Log.date_time);
+				_c_in.querySelectorAll('[name="system_user_name"]')[0].innerText = d.Out_System_User.name;
+				_c_in.querySelectorAll('[name="gate_name"]')[0].innerText = d.Out_Gateway.name;
+
+				const _images = d.Out_Log.images_path.split(",");
+				debug(_images)
+				const image_trans = `
+								<a href="${_images[0]}" target = "_blank" ><img src="${_images[0]}" loading="lazy" class="w-1/2 p-1 rounded-lg" /></a>
+								<a href="${_images[1]}" target = "_blank" ><img  src="${_images[1]}" loading="lazy" class="w-1/2 p-1 rounded-lg" /></a>
+								`
+				_c_in.querySelectorAll('[name="image_trans"]')[0].innerHTML = image_trans;
+				Modal_Info_Transection_Content_time_line.appendChild(_c_in);
+
+				document.getElementById("Modal_Info_Transection_parked").innerHTML = `<i class="nav-icon fa-2x fa fa-clock text-info"></i> <span class="bg-green-100 text-green-800 text-md font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">${sec_to_duration(d.Transaction_Record.parked)}</span>`;
+
+
+			} else {
+				document.getElementById("Modal_Info_Transection_parked").innerHTML = `<i class="nav-icon fa-2x fa fa-clock text-info"></i> <span class="bg-red-100 text-red-800 text-md font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">${moment(d.In_Log.date_time).fromNow()}</span>`;
+
+			}
+
+			document.getElementById("btn_Modal_Info_Transection_toggle").click();
+
+		}
+
+	}
+
+
+	async function close_transection(id) {
+		const { value: remak } = await Swal.fire({
+			background: "#1F2937",
+			title: 'ปิดรายการ',
+			text: "เมื่อทำการปิดรายการข้อมูลไม่สามารถยกเลิกได้โปรดใช้ความระวังในการดำเนินการ !",
+			input: 'text',
+			inputValue: "",
+			inputPlaceholder:
+				'หมายเหตุเพื่อใช้ตรวจสอบ',
+			confirmButtonText:
+				'ยืนยัน <i class="fa fa-arrow-right"></i>',
+			showCancelButton: true,
+			inputValidator: (result) => {
+				return !result && 'กรุณาป้อนหมายเหตุเพื่อใช้ตรวจสอบ'
+			}
+		})
+
+		if (remak) {
+			const formData = new FormData();
+			formData.append("id", id);
+			formData.append("value", `close=${remak}`);
+
+			const _reply = await fetchApi("/api/transaction_record/set", "post", formData, "json");
+			if (_reply.success) {
+				build_transection_table();
+			}
+		}
+	}
+
+</script>
+
+<script>
+
+	async function build_transection_acc_table(date_range = null) {
+
+		if (typeof build_transection_acc_table.table_date_range == 'undefined') {
+			build_transection_acc_table.table_date_range = date_range;
+			return;
+		}
+		if (date_range) { build_transection_acc_table.table_date_range = date_range; }
+
+		const columns_table = [
+			//{
+			//	data: "Account_Record.id",
+			//	title: "จัดการ",
+			//	orderable: false,
+			//	render: function (data, type, row) {
+			//		return `<div class="inline-flex border border-blue-600 rounded-md shadow-sm" role="group">
+			//					<a class="btn_tool" onclick="remove_item(${data})"><i class="far fa-trash-alt"></i></a>
+			//					<a class="btn_tool" onclick="manager_system_user(${data})"> <i class="fas fa-user-edit"></i></a>
+			//				</div>`;
+			//	},
+			//},
+			{
+				data: "Account_Record.id",
+				title: "เลขรายการ",
+				render: function (data, type) {
+					return String(data).padStart(6, "0");
+				},
+			},
+			{
+				data: "Transaction_Record.card_id",
+				title: "เลขบัตร",
+				render: function (data, type) {
+
+					return data;
+				},
+			},
+			{
+				data: "Account_Record.no",
+				title: "เลขใบเสร็จ",
+				render: function (data, type) {
+					return String(data).padStart(6, "0");
+				},
+			},
+			{
+				data: "system_user_by",
+				title: "ผู้ทำรายการ",
+			},
+
+			{
+				data: "Account_Record.date_time",
+				title: "วัน-เวลา",
+				render: function (data, type) {
+					const _d = dateTimeToStr(data, "YYYY/MM/DD@HH:mm:ss");
+					const datetime = _d.split("@");
+					const warp_datatime = `<div class="flex flex-col gap-1"><div class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">${datetime[0]}</div>
+											<div class="bg-yellow-100 text-yellow-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-yellow-300 border border-yellow-300">${datetime[1]}</div>
+					</div>`
+					return warp_datatime;
+				},
+			},
+
+			{
+				data: "Account_Record.type",
+				title: "ประเภทการชำระ",
+				render: function (data, type) {
+
+					return data;
+				},
+			},
+
+			{
+				data: "Transaction_Record.id",
+				title: "หมายเลขการทำรายการ",
+				render: function (data, type) {
+					return `<a role=button onclick="info_transection_show(${data})"  class="inline-flex items-center font-medium text-blue-600 dark:text-blue-500 hover:underline">
+						${String(data).padStart(6, "0")}
+						<svg aria-hidden="true" class="w-5 h-5 ml-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+						</a>`;
+
+				},
+			},
+			{
+				data: "Service_Fees.name",
+				title: "แบบการคิดค่าบริการ",
+				render: function (data, type) {
+
+					return data;
+				},
+			},
+
+			{
+				data: "Account_Record.amount",
+				title: "ค่าบริการ",
+				render: function (data, type) {
+					if (data > 0) {
+						return (data * 0.97).toFixed(2);
+					}
+					return 0;
+				},
+			},
+			{
+				data: "Account_Record.discount",
+				title: "ส่วนลด",
+				render: function (data, type) {
+					if (data > 0) {
+						return data.toFixed(2);
+					}
+					return 0;
+				},
+			},
+			{
+				data: "Account_Record.amount",
+				title: "ภาษีมูลค่าเพื่ม<br>(vat.)",
+				render: function (data, type) {
+					if (data > 0) {
+						return (data * 0.03).toFixed(2);
+					}
+					return 0;
+				},
+			},
+			{
+				data: "Account_Record.amount",
+				title: "ค่าบริการ+vat",
+				render: function (data, type) {
+					if (data > 0) {
+						return data.toFixed(2);
+					}
+					return 0;
+				},
+			},
+			{
+				data: "Account_Record.pay",
+				title: "รับเงิน",
+				render: function (data, type) {
+					if (data > 0) {
+						return `<i class="text-green-500 fa fa-money-bill-1-wave"></i> <span class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">${data}</span>`;
+					}
+					return 0;
+				},
+			},
+			{
+				data: "Account_Record.pay",
+				title: "เงินทอน",
+				render: function (data, type, row) {
+					if (data > 0) {
+						const chang = (data - row.Account_Record.amount);
+						return `<i class="text-red-500 fa fa-money-bill-1-wave"></i> <span class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">${chang}</span>`;
+					}
+					return 0;
+				},
+			},
+
+		];
+
+		//debug(columns_table)
+		headers = await get_headers();
+		const header_document = await get_header_document(build_transection_acc_table);
+		const footer_document = await get_footer_document(build_transection_acc_table);
+		$("#transection_acc_table").DataTable({
+
+			//dom: "Blfip",
+			dom: '<"top"iBf>rt<"bottom"lp><"clear">',
+			buttons: [
+				{
+					text: 'อัปเดทข้อมูล',
+					className: 'p-2  text-blue-500 hover:text-blue-700',
+					action: function (e, dt, node, config) {
+						this.ajax.reload();
+					}
+				},
+				{
+					extend: 'print',
+					footer: true,
+					autoPrint: false,
+					exportOptions: {
+						//columns: [1, 2, 3, 4, 5, 6, 7]
+					},
+					customize: function (win) {
+						$(win.document.body)
+							.css('font-size', '10pt')
+							.prepend(header_document);
+
+						$(win.document.body)
+							.css('font-size', '10pt')
+							.append(footer_document);
+
+						$(win.document.body).find('table')
+							.addClass('compact border')
+							.css('font-size', 'inherit');
+					},
+				},
+				{
+					extend: 'excelHtml5',
+					footer: true,
+					title: 'Report',
+					text: '<i class="fa fa-table fainfo" aria-hidden="true" ></i>',
+					titleAttr: 'Export Excel',
+					"oSelectorOpts": { filter: 'applied', order: 'current' },
+					exportOptions: {
+						//columns: [1, 2, 3, 4, 5, 6, 7],
+						modifier: {
+							page: 'all'
+						},
+						format: {
+							header: function (data, columnIdx) {
+								if (columnIdx == 1) {
+									//return 'column_1_header';
+									return data;
+								}
+								else {
+									return data;
+								}
+							}
+						}
+					}
+				},
+				"csv",
+				//'excel',
+				//"print",
+				"colvis",
+			],
+
+			columnDefs: columnDefs,
+			destroy: true,
+			autoWidth: false,
+			lengthMenu: lengthMenu,
+			pageLength: PAGE_LENGTH,
+			scrollY: "50vh",
+			scrollCollapse: true,
+			sScrollX: "100%",
+			// "paging": false
+			columns: columns_table,
+			dataset: [],
+			order: [[0, "desc"]],
+			processing: true,
+			serverSide: true,
+			search: {
+				return: true,
+			},
+			ajax: {
+				headers: headers,
+				type: "GET",
+				url: `/api/account_record/datatable`,
+				data: function (d) {
+					d.table = "account_record";
+					d.date_range = build_transection_acc_table.table_date_range;
+
+				},
+				error: function (xhr, textStatus, errorThrown) {
+					//window.location.reload();
+					debug(textStatus)
+					toastMixin.fire({
+						title: textStatus,
+						icon: "error",
+					});
+
+				},
+			},
+
+			footerCallback: function (row, data, start, end, display) {
+				let api = this.api();
+				const rows = api.rows().data();
+				let sum_amount = 0;
+				let sum_pay = 0;
+				let sum_discount = 0;
+				for (let i = 0; i < rows.length; i++) {
+					const a = rows[i].Account_Record;
+					sum_amount += a.amount;
+					sum_pay += a.pay;
+					sum_discount += a.discount;
+				}
+
+				//$(api.column(1).footer()).html(`${rows.length} รายการ รวม :`);
+				const cols = 8
+				$(api.column(cols).footer()).html((sum_amount * 0.97).toFixed(2));
+				$(api.column(cols + 1).footer()).html((sum_discount).toFixed(2));
+				$(api.column(cols + 2).footer()).html((sum_amount * 0.07).toFixed(2));
+				$(api.column(cols + 3).footer()).html(sum_amount.toFixed(2));
+				$(api.column(cols + 4).footer()).html(sum_pay.toFixed(2));
+				$(api.column(cols + 5).footer()).html((sum_pay - sum_amount).toFixed(2));
+			},
+		});
+
+		$('#transection_acc_table').on('length.dt', function (e, settings, len) {
+			PAGE_LENGTH = len;
+			localStorage.setItem('PAGE_LENGTH', len);
+		});
+	}
+	//build_transection_acc_table();
+</script>
+
+<script>
+
+	async function build_transection_estamp_table(date_range = null) {
+		if (typeof build_transection_estamp_table.table_date_range == 'undefined') {
+			build_transection_estamp_table.table_date_range = date_range;
+			return;
+		}
+		if (date_range) { build_transection_estamp_table.table_date_range = date_range; }
+
+		const columns_table = [
+			{
+				data: "Estamp_Record_Log.id",
+				title: "เลขรายการ",
+				render: function (data, type) {
+					return String(data).padStart(6, "0");
+				},
+			},
+			{
+				data: "Transaction_Record.card_id",
+				title: "หมายเลขบัตร",
+				render: function (data, type) {
+					return String(data).padStart(6, "0");
+				},
+			},
+
+			{
+				data: "Estamp_Record_Log.date_time",
+				title: "วัน-เวลา",
+				render: function (data, type) {
+					const _d = dateTimeToStr(data, "YYYY/MM/DD@HH:mm:ss");
+					const datetime = _d.split("@");
+					const warp_datatime = `<div class="flex flex-col gap-1"><div class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">${datetime[0]}</div>
+											<div class="bg-yellow-100 text-yellow-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-yellow-300 border border-yellow-300">${datetime[1]}</div>
+					</div>`
+					return warp_datatime;
+				},
+			},
+
+			{
+				data: "Estamp_Device.device_name",
+				title: "Estamp_Device",
+				render: function (data, type) {
+
+					return data;
+				},
+			},
+
+			{
+				data: "Transaction_Record.id",
+				title: "หมายเลขการทำรายการ",
+				render: function (data, type) {
+					return `<a role=button onclick="info_transection_show(${data})"  class="inline-flex items-center font-medium text-blue-600 dark:text-blue-500 hover:underline">
+						${String(data).padStart(6, "0")}
+						<svg aria-hidden="true" class="w-5 h-5 ml-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+						</a>`;
+
+				},
+			},
+			{
+				data: "Service_Fees_0",
+				title: "แบบการคิดค่าบริการเดิม",
+				render: function (data, type) {
+
+					return data;
+				},
+			},
+			{
+				data: "Service_Fees_1",
+				title: "แบบการคิดค่าบริการ",
+				render: function (data, type) {
+
+					return data;
+				},
+			},
+
+			{
+				data: "System_User.name",
+				title: "ผู้ทำรายการ",
+
+			},
+
+		];
+
+		//debug(columns_table)
+		headers = await get_headers();
+		const header_document = await get_header_document(build_transection_estamp_table);
+		const footer_document = await get_footer_document(build_transection_estamp_table);
+		$("#transection_estamp_table").DataTable({
+
+			//dom: "Blfip",
+			dom: '<"top"iBf>rt<"bottom"lp><"clear">',
+			buttons: [
+				{
+					text: 'อัปเดทข้อมูล',
+					className: 'p-2  text-blue-500 hover:text-blue-700',
+					action: function (e, dt, node, config) {
+						this.ajax.reload();
+					}
+				},
+				{
+					extend: 'print',
+					footer: true,
+					autoPrint: false,
+					exportOptions: {
+						//columns: [1, 2, 3, 4, 5, 6, 7]
+					},
+					customize: function (win) {
+						$(win.document.body)
+							.css('font-size', '10pt')
+							.prepend(header_document);
+
+						$(win.document.body)
+							.css('font-size', '10pt')
+							.append(footer_document);
+
+						$(win.document.body).find('table')
+							.addClass('compact border')
+							.css('font-size', 'inherit');
+					},
+				},
+				{
+					extend: 'excelHtml5',
+					footer: true,
+					title: 'Report',
+					text: '<i class="fa fa-table fainfo" aria-hidden="true" ></i>',
+					titleAttr: 'Export Excel',
+					"oSelectorOpts": { filter: 'applied', order: 'current' },
+					exportOptions: {
+						//columns: [1, 2, 3, 4, 5, 6, 7],
+						modifier: {
+							page: 'all'
+						},
+						format: {
+							header: function (data, columnIdx) {
+								if (columnIdx == 1) {
+									//return 'column_1_header';
+									return data;
+								}
+								else {
+									return data;
+								}
+							}
+						}
+					}
+				},
+				"csv",
+				//'excel',
+				//"print",
+				"colvis",
+			],
+
+			columnDefs: columnDefs,
+			destroy: true,
+			autoWidth: false,
+			lengthMenu: lengthMenu,
+			pageLength: PAGE_LENGTH,
+			scrollY: "50vh",
+			scrollCollapse: true,
+			sScrollX: "100%",
+			// "paging": false
+			columns: columns_table,
+			dataset: [],
+			order: [[0, "desc"]],
+			processing: true,
+			serverSide: true,
+			search: {
+				return: true,
+			},
+			ajax: {
+				headers: headers,
+				type: "GET",
+				url: `/api/estamp_device/datatable`,
+				data: function (d) {
+					d.table = "Estamp_Record_Log";
+					d.date_range = build_transection_estamp_table.table_date_range;
+
+				},
+				error: function (xhr, textStatus, errorThrown) {
+					//window.location.reload();
+					debug(textStatus)
+					toastMixin.fire({
+						title: textStatus,
+						icon: "error",
+					});
+
+				},
+			},
+		});
+
+		$('#transection_estamp_table').on('length.dt', function (e, settings, len) {
+			PAGE_LENGTH = len;
+			localStorage.setItem('PAGE_LENGTH', len);
+		});
+	}
+
+	//build_transection_estamp_table();
+</script>
+
+
+
+<script>
+
+
+	$("#select_date_time_range_of_build_transection_report_system_user_table").daterangepicker({
+		ranges: {
+			วันนี้: [moment().hour(0).minute(0), moment().hour(23).minute(59)],
+			เมื่อวานนี้: [moment().hour(0).minute(0).subtract(1, "days"), moment().hour(23).minute(59).subtract(1, "days")],
+			"7 วันก่อน": [moment().subtract(6, "days"), moment()],
+			"30 วันก่อน": [moment().subtract(29, "days"), moment()],
+			เดือนนี้: [moment().startOf("month"), moment().endOf("month")],
+			เดือนก่อน: [moment().subtract(1, "month").startOf("month"), moment().subtract(1, "month").endOf("month")],
+			ปีนี้: [moment().startOf("year"), moment().endOf("year")],
+			ปีก่อน: [moment().subtract(1, "year").startOf("year"), moment().subtract(1, "year").endOf("year")],
+		},
+		timePicker24Hour: true,
+		timePicker: true,
+		timePickerIncrement: 1,
+		locale: {
+			format: "YYYY/MM/DD HH:mm",
+		},
+	});
+
+	$("#select_date_time_range_of_build_transection_report_table").daterangepicker({
+		ranges: {
+			วันนี้: [moment().hour(0).minute(0), moment().hour(23).minute(59)],
+			เมื่อวานนี้: [moment().hour(0).minute(0).subtract(1, "days"), moment().hour(23).minute(59).subtract(1, "days")],
+			"7 วันก่อน": [moment().subtract(6, "days"), moment()],
+			"30 วันก่อน": [moment().subtract(29, "days"), moment()],
+			เดือนนี้: [moment().startOf("month"), moment().endOf("month")],
+			เดือนก่อน: [moment().subtract(1, "month").startOf("month"), moment().subtract(1, "month").endOf("month")],
+			ปีนี้: [moment().startOf("year"), moment().endOf("year")],
+			ปีก่อน: [moment().subtract(1, "year").startOf("year"), moment().subtract(1, "year").endOf("year")],
+		},
+		timePicker24Hour: true,
+		timePicker: true,
+		timePickerIncrement: 1,
+		locale: {
+			format: "YYYY/MM/DD HH:mm",
+		},
+	});
+
+	$("#reservationtime").daterangepicker({
+		ranges: {
+			วันนี้: [moment().hour(0).minute(0), moment().hour(23).minute(59)],
+			เมื่อวานนี้: [moment().hour(0).minute(0).subtract(1, "days"), moment().hour(23).minute(59).subtract(1, "days")],
+			"7 วันก่อน": [moment().subtract(6, "days"), moment()],
+			"30 วันก่อน": [moment().subtract(29, "days"), moment()],
+			เดือนนี้: [moment().startOf("month"), moment().endOf("month")],
+			เดือนก่อน: [moment().subtract(1, "month").startOf("month"), moment().subtract(1, "month").endOf("month")],
+			ปีนี้: [moment().startOf("year"), moment().endOf("year")],
+			ปีก่อน: [moment().subtract(1, "year").startOf("year"), moment().subtract(1, "year").endOf("year")],
+		},
+		timePicker24Hour: true,
+		timePicker: true,
+		timePickerIncrement: 1,
+		locale: {
+			format: "YYYY/MM/DD HH:mm",
+		},
+	});
+
+	$("#reservationtime_acc").daterangepicker({
+		ranges: {
+			วันนี้: [moment().hour(0).minute(0), moment().hour(23).minute(59)],
+			เมื่อวานนี้: [moment().hour(0).minute(0).subtract(1, "days"), moment().hour(23).minute(59).subtract(1, "days")],
+			"7 วันก่อน": [moment().subtract(6, "days"), moment()],
+			"30 วันก่อน": [moment().subtract(29, "days"), moment()],
+			เดือนนี้: [moment().startOf("month"), moment().endOf("month")],
+			เดือนก่อน: [moment().subtract(1, "month").startOf("month"), moment().subtract(1, "month").endOf("month")],
+			ปีนี้: [moment().startOf("year"), moment().endOf("year")],
+			ปีก่อน: [moment().subtract(1, "year").startOf("year"), moment().subtract(1, "year").endOf("year")],
+		},
+		timePicker24Hour: true,
+		timePicker: true,
+		timePickerIncrement: 1,
+		locale: {
+			format: "YYYY/MM/DD HH:mm",
+		},
+	});
+
+	$("#reservationtime_estamp").daterangepicker({
+		ranges: {
+			วันนี้: [moment().hour(0).minute(0), moment().hour(23).minute(59)],
+			เมื่อวานนี้: [moment().hour(0).minute(0).subtract(1, "days"), moment().hour(23).minute(59).subtract(1, "days")],
+			"7 วันก่อน": [moment().subtract(6, "days"), moment()],
+			"30 วันก่อน": [moment().subtract(29, "days"), moment()],
+			เดือนนี้: [moment().startOf("month"), moment().endOf("month")],
+			เดือนก่อน: [moment().subtract(1, "month").startOf("month"), moment().subtract(1, "month").endOf("month")],
+			ปีนี้: [moment().startOf("year"), moment().endOf("year")],
+			ปีก่อน: [moment().subtract(1, "year").startOf("year"), moment().subtract(1, "year").endOf("year")],
+		},
+		timePicker24Hour: true,
+		timePicker: true,
+		timePickerIncrement: 1,
+		locale: {
+			format: "YYYY/MM/DD HH:mm",
+		},
+	});
+
+</script>
+
+
+</html>

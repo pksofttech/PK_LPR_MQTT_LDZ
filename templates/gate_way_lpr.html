@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html data-theme="dark">
+
+<head>
+    {% include '_meta.html' %}
+</head>
+
+<body class="dark:bg-base-100">
+    <!-- MAIN BODY -->
+    <div class="drawer lg:drawer-open ">
+        <input id="side-drawer" type="checkbox" class="drawer-toggle" />
+        <div class="relative flex flex-col px-2 drawer-content">
+            {% include '_nav_bar.html' %}
+            <!-- Page content here -->
+            <div class="p-2 rounded-lg bg-base-200">
+                <div class="grid gap-2 md:grid-cols-2">
+                    <!-- GATE IN FLEX -->
+                    <div class="flex flex-col p-4 border-2 border-red-600 rounded-lg" id="gate_in_page">
+
+                        <label class="block mb-2 text-2xl font-medium text-center text-gray-900 dark:text-white">
+                            IN <span id="info_config_gateway_in_name" />
+                        </label>
+                        <input type="text" id="plate_num_gate_in" readonly class="text-2xl text-center input input-bordered input-accent" placeholder="ยังไม่มีการทำารายการ">
+
+
+                        <div id="status_gate_in" class="p-2 text-sm font-medium text-center text-orange-600">no log</div>
+                        <div class="text-center">
+                            <label class="block text-sm font-medium text-center text-gray-900 dark:text-white">เวลาทำรายการ</label>
+                            <span id="date_time_gate_in" class=" badge badge-lg badge-accent badge-outline">ยังไม่มีการทำารายการ</span>
+                        </div>
+
+
+
+                        <div class="grid grid-cols-2 gap-2 p-4">
+                            <div class="rounded-lg">
+                                <img id="gate_in_image_01" src="/static/image/Image_not_available.png" alt="not image" class="rounded-lg" />
+                            </div>
+                            <div class="rounded-lg ">
+                                <img id="gate_in_image_02" src="/static/image/Image_not_available.png" alt="not image" class="rounded-lg" />
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-2">
+                            <div class="">
+                                <label class="block text-sm font-medium text-center text-gray-900 dark:text-white">ประเภท</label>
+                                <input id="gate_in_transition_type" type="text" readonly class="w-full text-2xl input input-bordered input-accent"
+                                    placeholder="ยังไม่มีการทำารายการ">
+                            </div>
+
+                        </div>
+
+                        <div class="overflow-x-auto">
+                            <table id="table_of_lpr_log_gate_in" class="table">
+                                <thead class="">
+                                    <tr>
+                                        <th scope="col" class="px-6 py-3">
+                                            Type
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            <span class="sr-only">Image</span>
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            LPR
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Time
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Status
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody_of_lpr_log_gate_in">
+
+                                </tbody>
+                                <template id="template_content_lpr_gate_in">
+                                    <tr class=" hover:bg-gray-50 dark:hover:bg-gray-600">
+                                        <td name="lpr_msg_type" class="">
+                                            MEMBER
+                                        </td>
+                                        <td class="">
+                                            <div class="flex items-center space-x-3">
+                                                <div class="avatar">
+                                                    <div name="images_path" class="w-12 h-12 mask mask-squircle">
+                                                        <img />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+
+                                        <td name="plate_num" class="">
+                                            plate_num
+                                        </td>
+
+                                        <td name="date_time" class="">
+                                            date_time
+                                        </td>
+                                        <td name="status" class="px-6 py-4">
+
+                                        </td>
+                                    </tr>
+                                </template>
+                            </table>
+                        </div>
+
+
+                    </div>
+                    <!-- ? **************************************************************************************************** -->
+                    <!-- GATE OUT FLEX -->
+                    <div class="flex flex-col p-4 border-2 border-blue-700 rounded-lg" id="gate_out_page">
+
+                        <label class="block mb-2 text-2xl font-medium text-center text-gray-900 dark:text-white">OUT
+                            <span id="info_config_gateway_out_name"></label>
+
+                        <input type="text" id="plate_num_gate_out" readonly class="text-2xl text-center input input-bordered input-accent" placeholder="ยังไม่มีการทำารายการ">
+
+
+                        <div id="status_gate_out" class="p-2 text-sm font-medium text-center text-orange-600">no log</div>
+                        <div class="text-center">
+                            <label class="block text-sm font-medium text-center text-gray-900 dark:text-white">เวลาทำรายการ</label>
+                            <span id="date_time_gate_out" class=" badge badge-lg badge-accent badge-outline">ยังไม่มีการทำารายการ</span>
+                        </div>
+
+
+                        <div class="grid grid-cols-2 gap-2 p-4">
+                            <div class="rounded-lg">
+                                <img id="gate_out_image_01" src="/static/image/Image_not_available.png" alt="not image" class="rounded-lg" />
+                            </div>
+                            <div class="rounded-lg ">
+                                <img id="gate_out_image_02" src="/static/image/Image_not_available.png" alt="not image" class="rounded-lg" />
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-2">
+                            <div class="">
+                                <label class="block text-sm font-medium text-center text-gray-900 dark:text-white">ประเภท</label>
+                                <input id="gate_out_transition_type" type="text" readonly class="w-full text-2xl input input-bordered input-accent"
+                                    placeholder="ยังไม่มีการทำารายการ">
+                            </div>
+
+                        </div>
+
+
+                        <div class="overflow-x-auto">
+                            <table id="table_of_lpr_log_gate_out" class="table">
+                                <thead class="">
+                                    <tr>
+                                        <th scope="col" class="px-6 py-3">
+                                            Type
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            <span class="sr-only">Image</span>
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            LPR
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Time
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Status
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody_of_lpr_log_gate_out">
+
+                                </tbody>
+
+                            </table>
+                        </div>
+                    </div>
+
+                    <template id="template_content_lpr_gate">
+                        <tr class=" hover:bg-gray-50 dark:hover:bg-gray-600">
+                            <td name="lpr_msg_type" class="">
+                                MEMBER
+                            </td>
+                            <td class="">
+                                <div class="flex items-center space-x-3">
+                                    <div class="avatar">
+                                        <div name="images_path" class="w-12 h-12 mask mask-squircle">
+                                            <img />
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+
+                            <td name="plate_num" class="">
+                                plate_num
+                            </td>
+
+                            <td name="date_time" class="">
+                                date_time
+                            </td>
+                            <td name="status" class="px-6 py-4">
+
+                            </td>
+                        </tr>
+                    </template>
+                    <dialog id="modal_dialog_lpr_gateout" class="modal">
+                        <form method="dialog" class="w-11/12 max-w-5xl modal-box">
+                            <h3 class="text-lg font-bold">Hello!</h3>
+                            <p class="py-4">Click the button below to close</p>
+                            <div class="modal-action">
+                                <!-- if there is a button, it will close the modal -->
+                                <button class="btn">Close</button>
+                            </div>
+                        </form>
+                    </dialog>
+
+                </div>
+                <div class="flex items-center gap-4 p-2">
+                    <a class="p-4 link link-warning" href="/station_config">
+                        <i class="fa-solid fa-gears"></i>
+                        Gate Config
+                    </a>
+                    <button class="btn btn-sm btn-outline btn-error" onclick="test_lpr_in()">Test LPR_IN</button>
+                    <button class="btn btn-sm btn-outline btn-error" onclick="test_lpr_out()">Test LPR_OUT</button>
+                </div>
+
+            </div>
+
+        </div>
+
+        {% include '_side_menu_bar.html' %}
+    </div>
+
+
+    {% include '_footer.html' %}
+
+    <!-- Slip Card -->
+    <div class="hidden">
+        <div id="slip_print_div">
+            <div class="w-full max-w-md p-4 bg-white border border-black rounded-lg shadow sm:p-8 >
+                <div class=" flex items-center justify-center gap-4 ">
+                <img class=" w-16 h-16 rounded-full " src=" /static/data_base/image/app_configurations/app_configurations_image.jpg">
+                <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white">PKS@PARKING</h5>
+            </div>
+            <div class="flow-root text-black">
+                <ul role="list">
+
+                    <li class="py-2">
+                        <div class="flex items-center space-x-4">
+                            <div class="flex-1 min-w-0">
+                                <p class="text-sm font-medium truncate">หมายเลขรายการ</p>
+                                <p class="text-sm truncate">Transaction Number</p>
+                            </div>
+                            <div class="inline-flex items-center text-base font-semibold ">[transaction_id]</div>
+                        </div>
+                    </li>
+
+                    <li class="py-2">
+                        <div class="flex items-center space-x-4">
+                            <div class="flex-1 min-w-0">
+                                <p class="text-sm font-medium truncate">หมายเลขบัตร</p>
+                                <p class="text-sm truncate">card Number</p>
+                            </div>
+                            <div class="inline-flex items-center text-base font-semibold ">[card_id]</div>
+                        </div>
+                    </li>
+
+                    <li class="py-2">
+                        <div class="flex items-center space-x-4">
+                            <div class="flex-1 min-w-0">
+                                <p class="text-sm font-medium truncate">เวลาเข้า</p>
+                            </div>
+                            <div class="inline-flex items-center text-base font-semibold ">[in_time]</div>
+                        </div>
+                    </li>
+
+                    <li class="py-3 sm:py-4">
+                        <div class="flex items-center space-x-4">
+                            <div class="flex-1 min-w-0">
+                                <p class="text-sm font-medium truncate">เวลาออก</p>
+                            </div>
+                            <div class="inline-flex items-center text-base font-semibold ">[out_time]</div>
+                        </div>
+                    </li>
+
+                    <li class="py-2">
+                        <div class="flex items-center space-x-4">
+                            <div class="flex-1 min-w-0">
+                                <p class="text-sm font-medium truncate">เวลาจอด</p>
+                            </div>
+                            <div class="inline-flex items-center text-base font-semibold ">[parked]</div>
+                        </div>
+                    </li>
+
+                    <li class="py-2">
+                        <div class="flex items-center space-x-4">
+                            <div class="flex-1 min-w-0">
+                                <p class="text-sm font-medium truncate">รับเงิน</p>
+                            </div>
+                            <div class="inline-flex items-center text-base font-semibold ">[pay]</div>
+                        </div>
+                    </li>
+
+                    <li class="py-2">
+                        <div class="flex items-center space-x-4">
+                            <div class="flex-1 min-w-0">
+                                <p class="text-sm font-medium truncate">ค่าบริการ</p>
+                            </div>
+                            <div class="inline-flex items-center text-base font-semibold ">[amount]</div>
+                        </div>
+                    </li>
+
+                    <li class="py-2">
+                        <div class="flex items-center space-x-4">
+                            <div class="flex-1 min-w-0">
+                                <p class="text-sm font-medium truncate">เงินทอน</p>
+                            </div>
+                            <div class="inline-flex items-center text-base font-semibold ">[trun]</div>
+                        </div>
+                    </li>
+
+                </ul>
+                <div class="font-bold text-center text-md ">[service_fee]</div>
+                <div class="font-bold text-center text-md ">***ขอบคุณ***</div>
+            </div>
+        </div>
+    </div>
+    <!-- Slip Card -->
+    <template id="confirm_gate_in">
+        <swal-title>
+            <div id="swal_title_gate_in">ยืนยันทำรายการ?</div>
+
+        </swal-title>
+        <swal-icon type="question"></swal-icon>
+        <swal-html>
+            <div class="flex flex-col text-blue-500">
+                <div class="p-2 card color_widget_theme_bg">
+                    <div class="flex flex-row gap-1">
+                        <img id="gate_in_ip_camera_01" alt="..." loading="lazy" class="w-1/2 p-1 rounded-lg" />
+                        <img id="gate_in_ip_camera_02" alt="..." loading="lazy" class="w-1/2 p-1 rounded-lg" />
+                    </div>
+                    <div class="">
+                        <div class="text-xl text-center" id="confirm_gate_in_name"></div>
+                        <div class="text-xl text-center" id="confirm_card_member_type_name"></div>
+                        <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                            <tbody>
+                                <tr class="">
+                                    <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap d">
+                                        หมายเลขบัตร
+                                    </th>
+                                    <td class="px-6 py-4" id="confirm_gate_in_card_id">
+                                        Loading...
+                                    </td>
+                                </tr>
+                                <tr class="">
+                                    <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap d">
+                                        ทะเบียนรถ
+                                    </th>
+                                    <td class="px-6 py-4" id="confirm_gate_in_license_id">
+                                        Loading...
+                                    </td>
+                                </tr>
+                                <tr class="">
+                                    <th scope=" row" class="px-6 py-4 font-medium whitespace-nowrap d">
+                                        วัน-เวลา
+                                    </th>
+                                    <td class="px-6 py-4 text-orange-500" id="confirm_gate_in_time">
+                                        Loading...
+                                    </td>
+                                </tr>
+                                <tr class="">
+                                    <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap d">
+                                        รูปแบบค่าบริการ
+                                    </th>
+                                    <td class="px-6 py-4" id="confirm_gate_in_service_fee_name">
+                                        Loading...
+                                    </td>
+                                </tr>
+                                <tr class="">
+                                    <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap d">
+                                        หมายเหตุ
+                                    </th>
+                                    <td class="px-6 py-4" id="confirm_gate_in_remark">
+                                        Loading...
+                                    </td>
+                                </tr>
+
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <p>Successfully by {{user.name}}</p>
+
+                </div>
+
+            </div>
+        </swal-html>
+        <swal-button type="confirm">
+            ตกลง
+        </swal-button>
+        <swal-button type="cancel">
+            ยกเลิก
+        </swal-button>
+        <swal-button type="deny">
+            แก้ไข
+        </swal-button>
+        <swal-param name="allowEscapeKey" value="false" />
+        <swal-param name="allowOutsideClick" value="false" />
+
+        <swal-function-param name="didOpen" value="popup => console.log(popup)" />
+    </template>
+
+    <template id="confirm_gate_out_process">
+        <swal-title>
+            ยืนยันทำรายการ?
+        </swal-title>
+        <swal-icon type="question" color="#3073A9"></swal-icon>
+        <swal-html>
+            <div class="flex flex-col text-blue-500">
+                <div class="p-2 card color_widget_theme_bg">
+                    <div class="flex flex-col gap-2 m-8">
+                        <div>
+                            <p>Service fee</p>
+                            <div id="services_fee_profile" class="p-2 text-3xl font-bold text-blue-800 bg-blue-100 rounded dark:bg-blue-200 dark:text-blue-800">000</div>
+                        </div>
+                        <div>
+                            <p>ค่าบริการ</p>
+                            <div id="amount_input_parked_price" class="p-2 text-3xl font-bold text-blue-800 bg-blue-100 rounded dark:bg-blue-200 dark:text-blue-800">000</div>
+                        </div>
+                        <div class="">
+                            <label for="input_parked_price" class="block w-full mx-auto mb-2 text-2xl font-medium text-center text-orange-400">รับเงิน</label>
+                            <input placeholder="000 บาท" type="number" id="pay_input_parked_price" name="input_parked_price " autocomplete="off"
+                                onkeypress="event_key_pass_swal(event)" class="text-3xl text-center text_box_form">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </swal-html>
+        <swal-button type="confirm">
+            ตกลง
+        </swal-button>
+        <swal-button type="cancel">
+            ยกเลิก
+        </swal-button>
+        <swal-button type="deny">
+            กลับไปตรวจสอบ
+        </swal-button>
+        <swal-param name="allowEscapeKey" value="false" />
+        <swal-param name="allowOutsideClick" value="false" />
+
+        <swal-function-param name="didOpen" value="popup => console.log(popup)" />
+    </template>
+
+</body>
+
+{% include '_script.html' %}
+<link rel="stylesheet" type="text/css" href="/static/plugins/printJS/print.min.css">
+<script src="/static/plugins/printJS/print.min.js"></script>
+
+<script type="text/javascript">
+    let SERVICES_FEES_LIST = null;
+    const GATE_IN = {
+        id: null,
+        name: "",
+        plate_num: document.getElementById("plate_num_gate_in"),
+        date_time: document.getElementById("date_time_gate_in"),
+        status: document.getElementById("status_gate_in"),
+        image01: document.getElementById("gate_in_image_01"),
+        image02: document.getElementById("gate_in_image_02"),
+        transition_type: document.getElementById("gate_in_transition_type"),
+
+    };
+    const GATE_OUT = {
+        id: null,
+        name: "",
+        plate_num: document.getElementById("plate_num_gate_out"),
+        date_time: document.getElementById("date_time_gate_out"),
+        status: document.getElementById("status_gate_out"),
+        image01: document.getElementById("gate_out_image_01"),
+        image02: document.getElementById("gate_out_image_02"),
+        transition_type: document.getElementById("gate_out_transition_type"),
+    };
+
+    let TRANSACTION = {};
+
+
+    async function set_localStorage() {
+        let set_default = null;
+        if (localStorage.getItem('GATE_IN_ID') === null) {
+            localStorage.setItem('GATE_IN_ID', 1);
+            set_default = true;
+        }
+        if (localStorage.getItem('GATE_OUT_ID') === null) {
+            set_default = true;
+            localStorage.setItem('GATE_OUT_ID', 1);
+        }
+        if (localStorage.getItem('GATE_MODE') === null) {
+            set_default = true;
+            localStorage.setItem('GATE_MODE', "IN");
+        }
+        if (localStorage.getItem('GATE_IN_SERVICES_FEE') === null) {
+            set_default = true;
+            localStorage.setItem('GATE_IN_SERVICES_FEE', 1);
+        }
+        if (set_default) {
+            await Swal.fire({
+                background: "#343A40",
+                title: 'กำหนดค่าบริการเริ่มต้น',
+                text: "กำหนดค่าบริการเริ่มต้นหากต้องการเปลื่ยนไปที่ส่วนกำหนดค่า",
+                confirmButtonText: 'OK',
+            })
+        }
+
+    }
+    set_localStorage();
+    async function setting_gate_way() {
+        try {
+            print_info(success_text("---------------------------- Setting ----------------------------)"));
+            let _result = await fetchApi("/api/service_fees/", "get", null, "json");
+            if (_result.success) {
+                SERVICES_FEES_LIST = _result.data;
+                debug(SERVICES_FEES_LIST)
+                let services_fees_list_option = "<option value=0>ค่าบริการตามประเภทบัตร</option>";
+                const _services_fees_list_option_id = localStorage.getItem('GATE_IN_SERVICES_FEE');
+                await SERVICES_FEES_LIST.forEach((value, index, array) => {
+                    //print_info(value);
+                    const _t_op = `<option value=${value.Service_Fees.id}>${value.Service_Fees.name}</option>`;
+                    services_fees_list_option += _t_op;
+                    if (value.Service_Fees.id == _services_fees_list_option_id) {
+                        GATE_IN.default_service = value.Service_Fees;
+                    }
+                })
+
+            } else {
+                await Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...Service_Fees ไม่ถูกต้อง',
+                    text: _result.msg,
+                    footer: 'ข้อผิดพลาด การเชื่อมต่อระบบ!'
+                });
+            }
+
+            _result = await fetchApi("/api/function/gateway_list/?id=" + localStorage.getItem('GATE_IN_ID'), "get", null, "json");
+            if (_result.success) {
+                print_info(_result.data);
+                const _gateway_in = _result.data[0].GateWay;
+                const _parking_in = _result.data[0].Parking_Lot;
+                GATE_IN.id = _gateway_in.id;
+                GATE_IN.name = _gateway_in.name;
+
+                document.getElementById("info_config_gateway_in_name").innerHTML = GATE_IN.name;
+
+            } else {
+                await Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...GATE_IN_ID ไม่ถูกต้อง',
+                    text: _result.msg,
+                    footer: 'ข้อผิดพลาด การเชื่อมต่อระบบ!'
+                });
+            }
+            _result = await fetchApi("/api/function/gateway_list/?id=" + localStorage.getItem('GATE_OUT_ID'), "get", null, "json");
+            if (_result.success) {
+                const _gateway_out = _result.data[0].GateWay;
+                const _parking_out = _result.data[0].Parking_Lot;
+                PARKING_OUT_NAME = _parking_out.name;
+                GATE_OUT.id = _gateway_out.id;
+                GATE_OUT.name = _gateway_out.name;
+
+                document.getElementById("info_config_gateway_out_name").innerHTML = GATE_OUT.name;
+
+            } else {
+                await Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...GATE_OUT_ID ไม่ถูกต้อง',
+                    text: _result.msg,
+                    footer: 'ข้อผิดพลาด การเชื่อมต่อระบบ!'
+                });
+            }
+            const value = "SLIP_OUT";
+            const _reply = await fetchApi("/api/document/?document=" + value, "get", null, "json");
+            debug(_reply);
+            if (_reply.success) {
+                const App_Configurations = _reply.data.App_Configurations;
+                document.getElementById("slip_print_div").innerHTML = App_Configurations.value;
+            }
+
+        } catch (error) {
+            await Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: error.message,
+                footer: 'ข้อผิดพลาด การตั้งค่าระบบ!'
+            })
+            //window.location.reload();
+        }
+    }
+
+    setting_gate_way();
+</script>
+
+
+<script>
+
+    const TABLE_ROW = 5;
+    function update_table_lpr_log_in(params) {
+
+        const _table = document.getElementById("table_of_lpr_log_gate_in");
+        const _tbody = document.getElementById("tbody_of_lpr_log_gate_in");
+        const temp = document.getElementById("template_content_lpr_gate");
+        if (_table.rows.length > TABLE_ROW) {
+            _table.deleteRow(-1);
+        }
+        const _c = temp.content.cloneNode(true);
+        _c.querySelectorAll('[name="lpr_msg_type"]')[0].innerText = params.lpr_msg_type;
+        _c.querySelectorAll('[name="plate_num"]')[0].innerText = params.plate_num;
+        _c.querySelectorAll('[name="date_time"]')[0].innerText = params.date_time;
+        _c.querySelectorAll('[name="images_path"]')[0].innerHTML = `<img src="${params.images_path_01}" class="rounded-lg"> `;
+        _c.querySelectorAll('[name="status"]')[0].innerHTML = params.status;
+        _tbody.insertBefore(_c, _tbody.firstChild);
+    }
+
+    function update_table_lpr_log_out(params) {
+
+        const _table = document.getElementById("table_of_lpr_log_gate_out");
+        const _tbody = document.getElementById("tbody_of_lpr_log_gate_out");
+        const temp = document.getElementById("template_content_lpr_gate");
+        if (_table.rows.length > TABLE_ROW) {
+            _table.deleteRow(-1);
+        }
+        const _c = temp.content.cloneNode(true);
+        _c.querySelectorAll('[name="lpr_msg_type"]')[0].innerText = params.lpr_msg_type;
+        _c.querySelectorAll('[name="plate_num"]')[0].innerText = params.plate_num;
+        _c.querySelectorAll('[name="date_time"]')[0].innerText = params.date_time;
+        _c.querySelectorAll('[name="images_path"]')[0].innerHTML = `<img src="${params.images_path_01}" class="rounded-lg"> `;
+        _c.querySelectorAll('[name="status"]')[0].innerHTML = params.status;
+        _tbody.insertBefore(_c, _tbody.firstChild);
+    }
+    function event_handler_ws(e) {
+        const func = e.func;
+        const params = e.params;
+        if (func == "lpr_event") {
+            debug(params);
+            if (GATE_IN.name == params.gate_name) {
+                GATE_IN.plate_num.value = params.plate_num;
+                GATE_IN.date_time.innerHTML = params.date_time;
+                GATE_IN.status.innerHTML = params.status;
+                GATE_IN.image01.src = params.images_path_01;
+                GATE_IN.image02.src = params.images_path_02;
+                GATE_IN.transition_type.value = params.lpr_msg_type;
+
+
+                update_table_lpr_log_in(params);
+            }
+
+            if (GATE_OUT.name == params.gate_name) {
+                GATE_OUT.plate_num.value = params.plate_num;
+                GATE_OUT.date_time.innerHTML = params.date_time;
+                GATE_OUT.status.innerHTML = params.status;
+                GATE_OUT.image01.src = params.images_path_01;
+                GATE_OUT.image02.src = params.images_path_02;
+                GATE_OUT.transition_type.value = params.lpr_msg_type;
+
+                update_table_lpr_log_out(params);
+
+            }
+        }
+    }
+    ws_event_subscription = event_handler_ws;
+</script>
+
+<script type="text/javascript">
+    async function test_lpr_in() {
+        const { value: plate_num } = await Swal.fire({
+            title: 'Input plate Number',
+            input: 'text',
+            inputValue: "15-3418",
+            inputLabel: 'Plate Number for test',
+            inputPlaceholder: '15-3418'
+        })
+
+        if (plate_num) {
+            debug("test_lpr_in");
+            const formData = new FormData();
+            formData.append("on_test", true);
+            formData.append("cam_id", "in");
+            formData.append("plate_num", plate_num);
+
+            const _result = await fetchApi("/lpr/", "post", formData, "json");
+
+            debug(_result);
+        }
+
+
+    }
+    async function test_lpr_out() {
+        const { value: plate_num } = await Swal.fire({
+            title: 'Input plate Number',
+            input: 'text',
+            inputValue: "15-3418",
+            inputLabel: 'Plate Number for test',
+            inputPlaceholder: '15-3418'
+        })
+
+        if (plate_num) {
+            debug("test_lpr_in");
+            const formData = new FormData();
+            formData.append("on_test", true);
+            formData.append("cam_id", "out");
+            formData.append("plate_num", plate_num);
+
+            const _result = await fetchApi("/lpr/", "post", formData, "json");
+
+            debug(_result);
+        }
+
+
+    }
+
+</script>
+
+</html>

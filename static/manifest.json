@@ -1,0 +1,15 @@
+{
+    "name": "PARK_POS",
+    "short_name": "PKM",
+    "start_url": ".",
+    "theme_color": "#4287f5",
+    "background_color": "#ffffff",
+    "display": "standalone",
+    "icons": [
+        {
+            "src": "/static/data_base/image/default/system.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}
