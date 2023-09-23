@@ -543,7 +543,7 @@ async def set_databases(max=1000):
 
 
 async def init_db():
-    return
+    # return
     await set_databases(10)
     async with _async_session_maker() as db:
         pass
